@@ -50,10 +50,7 @@ public class BienMapper implements Mapper<BienDTO, Bien>{
                 bien.getAnimaux(),
                 bien.getDescription(),
                 coordonneeMapper.toDTO(bien.getCoordonnee()),
-                personneMapper.toDTO(bien.getAppartient()),
-                bien.getDe_reservation().stream()
-                        .map((reservation -> reservationMapper.toDTO(reservation)))
-                        .collect(Collectors.toList())
+                personneMapper.toDTO(bien.getAppartient())
         );
     }
 
@@ -77,9 +74,6 @@ public class BienMapper implements Mapper<BienDTO, Bien>{
         bien.setDescription(bienDTO.getDescription());
         bien.setCoordonnee(coordorRepository.getOne(bienDTO.getCoordonnee().getId()));
         bien.setAppartient(personneReposytory.getOne(bienDTO.getAppartient().getId()));
-        bien.setDe_reservation(reservationReposytory.findAllById(bienDTO.getDe_reservation().stream()
-        .map(reservationDTO -> reservationDTO.getId())
-        .collect(Collectors.toList())));
         return bien ;
     }
 }

@@ -25,5 +25,4 @@ public class BienDTO implements IdentifiedDTO<Integer>{
     private String description;
     private CoordonneeDTO coordonnee;
     private PersonneSimplifierDTO appartient;
-    private List<ReservationDTO> de_reservation;
 }

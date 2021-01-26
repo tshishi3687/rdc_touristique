@@ -2,6 +2,8 @@ package com.example.rdc_touristique.business.service;
 
 import com.example.rdc_touristique.business.dto.ServiceDTO;
 import com.example.rdc_touristique.business.mapper.Mapper;
+import com.example.rdc_touristique.business.mapper.ServiceMapper;
+import com.example.rdc_touristique.data_access.repository.CoordonneeRepository;
 import com.example.rdc_touristique.data_access.repository.ServiceRepository;
 import com.example.rdc_touristique.exeption.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,13 +19,16 @@ public class ServiceService implements CrudService<ServiceDTO, Integer> {
     private Mapper<ServiceDTO, com.example.rdc_touristique.data_access.entity.Service> serviceMapper;
     @Autowired
     private ServiceRepository serviceRepository;
+    @Autowired
+    private CoordonneeRepository coordorRepository;
 
     @Override
     public void creat(ServiceDTO toCreat) throws ElementAlreadyExistsException {
         if (serviceRepository.existsById(toCreat.getId()))
             throw new ServiceExisteExeption(toCreat.getId());
-
-        serviceRepository.save(serviceMapper.toEntity(toCreat));
+        com.example.rdc_touristique.data_access.entity.Service entity = serviceMapper.toEntity(toCreat);
+        coordorRepository.save(entity.getCoordonnee());
+        serviceRepository.save(entity);
     }
 
     @Override

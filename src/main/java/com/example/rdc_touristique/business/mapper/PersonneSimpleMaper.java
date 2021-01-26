@@ -27,9 +27,10 @@ public class PersonneSimpleMaper implements Mapper<PersonneSimpleDTO, Personne>{
                 personne.getNom(),
                 personne.getPrenom(),
                 personne.getDdn(),
-                personne.getMdp(),
+                null,
                 personne.getTelephone(),
-                personne.getEmail()
+                personne.getEmail(),
+                personne.getStatus()
         );
     }
 
@@ -45,7 +46,7 @@ public class PersonneSimpleMaper implements Mapper<PersonneSimpleDTO, Personne>{
         personne.setDdn(personneSimpleDTO.getDdn());
         personne.setMdp(personneSimpleDTO.getMdp());
         personne.setTelephone(personneSimpleDTO.getTelephone());
-        personne.setEmail(personne.getEmail());
+        personne.setEmail(personneSimpleDTO.getEmail());
         return personne;
     }
 }

@@ -18,4 +18,5 @@ public class PersonneSimpleDTO implements IdentifiedDTO<Integer>{
     private String mdp;
     private int telephone;
     private String email;
+    private String status;
 }

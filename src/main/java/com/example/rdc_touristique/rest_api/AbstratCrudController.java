@@ -1,6 +1,7 @@
 package com.example.rdc_touristique.rest_api;
 
 import com.example.rdc_touristique.business.dto.IdentifiedDTO;
+import com.example.rdc_touristique.business.dto.PersonneSimpleDTO;
 import com.example.rdc_touristique.business.service.CrudService;
 import com.example.rdc_touristique.exeption.ElementAlreadyExistsException;
 import com.example.rdc_touristique.exeption.ElementFoundException;
@@ -15,15 +16,16 @@ import java.util.List;
 
 public abstract class AbstratCrudController<DTO extends IdentifiedDTO<ID>,ID> implements CrudController<DTO, ID> {
 
-    private final CrudService<DTO, ID> service;
+    protected final CrudService<DTO, ID> service;
 
     public AbstratCrudController(CrudService<DTO, ID> service){this.service = service;}
 
     // CREATE - POST > http://localhost:8081/?
     @PostMapping
-    @ResponseStatus(HttpStatus.CREATED)
+    @ResponseStatus(HttpStatus.OK)
     public void create(@RequestBody @Valid DTO dto) throws ElementAlreadyExistsException {
         service.creat(dto);
+
     }
 
     // READ_ONE - GET > http://localhost:8081/?/{id}
@@ -31,6 +33,8 @@ public abstract class AbstratCrudController<DTO extends IdentifiedDTO<ID>,ID> im
     public ResponseEntity<DTO> getOne(@PathVariable ID id) throws ElementFoundException, FoundExeption {
         return ResponseEntity.ok( service.readOne(id) );
     }
+
+
 
     // READ_ALL - GET > http://localhost:8081/?
     @GetMapping

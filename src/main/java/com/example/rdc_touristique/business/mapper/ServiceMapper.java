@@ -43,7 +43,7 @@ public class ServiceMapper implements Mapper<ServiceDTO, Service>{
         service.setId(serviceDTO.getId());
         service.setNom(serviceDTO.getNom());
         service.setType(typeRepository.getOne(serviceDTO.getType().getId()));
-        service.setCoordonnee(coordorRepository.getOne(serviceDTO.getCoordonnee().getId()));
+        service.setCoordonnee(coordonneeMapper.toEntity(serviceDTO.getCoordonnee()));
 
         return service;
     }

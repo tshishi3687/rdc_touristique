@@ -3,8 +3,11 @@ package com.example.rdc_touristique.rest_api;
 import com.example.rdc_touristique.business.dto.BienDTO;
 import com.example.rdc_touristique.business.dto.ServiceDTO;
 import com.example.rdc_touristique.business.service.CrudService;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import com.example.rdc_touristique.exeption.ElementAlreadyExistsException;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
 
 @RestController
 @RequestMapping("service")

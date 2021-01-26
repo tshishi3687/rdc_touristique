@@ -1,9 +1,6 @@
 package com.example.rdc_touristique.data_access.entity;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 
@@ -12,6 +9,7 @@ import javax.persistence.*;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@ToString
 public class Ville {
 
     @Id
@@ -25,8 +23,7 @@ public class Ville {
     private int nhabitant;
 
     @OneToOne
-    @MapsId
-    @JoinColumn(name = "id")
+    @JoinColumn(name = "province")
     private Province province;
 
     @Column

@@ -38,6 +38,9 @@ public class Personne {
     @Column
     private String email;
 
+    @Column
+    private String status;
+
     @OneToMany(mappedBy = "appartient")
     private List<Bien> bien;
 

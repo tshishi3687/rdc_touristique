@@ -8,7 +8,9 @@ import com.example.rdc_touristique.exeption.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -33,6 +35,24 @@ public class PersonneService implements CrudService<PersonneSimpleDTO, Integer> 
                 .orElseThrow(()-> new PersonneSimpleFoundExeption(integer));
 
         return personneMapper.toDTO(entity);
+    }
+
+    @Transactional
+    public PersonneSimpleDTO seloguer(PersonneSimpleDTO personne) {
+        Optional<Personne> user = personneReposytory.findByEmail(personne.getEmail());
+        if(user.isPresent()){
+            if(user.get().getMdp().equals(personne.getMdp()))
+                return personneMapper.toDTO(user.get());
+        }
+        return null;
+    }
+
+    private PersonneSimpleDTO selonEmail(PersonneSimpleDTO personne){
+        Optional<Personne> user = personneReposytory.findByEmail(personne.getEmail());
+        if(user.isPresent())
+            return personneMapper.toDTO(user.get());
+
+        return null;
     }
 
     @Override

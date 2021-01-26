@@ -23,7 +23,7 @@ public class VilleService implements CrudService<VilleDTO, Integer> {
     public void creat(VilleDTO toCreat) throws ElementAlreadyExistsException {
         if (villeRepository.existsById(toCreat.getId()))
             throw new VilleExisteExeption(toCreat.getId());
-
+        System.out.println(villeMapper.toEntity(toCreat));
         villeRepository.save(villeMapper.toEntity(toCreat));
     }
 
