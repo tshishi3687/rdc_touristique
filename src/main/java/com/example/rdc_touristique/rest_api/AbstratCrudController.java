@@ -1,7 +1,6 @@
 package com.example.rdc_touristique.rest_api;
 
 import com.example.rdc_touristique.business.dto.IdentifiedDTO;
-import com.example.rdc_touristique.business.dto.PersonneSimpleDTO;
 import com.example.rdc_touristique.business.service.CrudService;
 import com.example.rdc_touristique.exeption.ElementAlreadyExistsException;
 import com.example.rdc_touristique.exeption.ElementFoundException;

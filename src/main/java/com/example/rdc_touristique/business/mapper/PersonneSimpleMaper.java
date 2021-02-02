@@ -47,6 +47,7 @@ public class PersonneSimpleMaper implements Mapper<PersonneSimpleDTO, Personne>{
         personne.setMdp(personneSimpleDTO.getMdp());
         personne.setTelephone(personneSimpleDTO.getTelephone());
         personne.setEmail(personneSimpleDTO.getEmail());
+        personne.setStatus("cilent");
         return personne;
     }
 }

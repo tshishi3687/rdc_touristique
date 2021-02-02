@@ -47,12 +47,13 @@ public class PersonneService implements CrudService<PersonneSimpleDTO, Integer> 
         return null;
     }
 
-    private PersonneSimpleDTO selonEmail(PersonneSimpleDTO personne){
+    @Transactional
+    public boolean selonEmail(PersonneSimpleDTO personne){
         Optional<Personne> user = personneReposytory.findByEmail(personne.getEmail());
         if(user.isPresent())
-            return personneMapper.toDTO(user.get());
+            return true;
 
-        return null;
+        return false;
     }
 
     @Override

@@ -1,10 +1,7 @@
 package com.example.rdc_touristique.business.dto;
-
 import lombok.*;
 
-import java.awt.*;
-import java.sql.Blob;
-
+@Builder
 @Getter
 @Setter
 @NoArgsConstructor
@@ -13,8 +10,9 @@ import java.sql.Blob;
 public class Lien_photoDTO implements IdentifiedDTO<Integer>{
 
     private Integer id;
-    private byte[] image;
+    private ImageModelDTO image;
     private ProvinceDTO province;
     private VilleDTO ville;
     private BienDTO bien;
+
 }

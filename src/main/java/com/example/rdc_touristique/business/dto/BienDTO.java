@@ -21,7 +21,6 @@ public class BienDTO implements IdentifiedDTO<Integer>{
     private int nwc;
     private int superficie;
     private String aladisposition;
-    private String animaux;
     private String description;
     private CoordonneeDTO coordonnee;
     private PersonneSimplifierDTO appartient;

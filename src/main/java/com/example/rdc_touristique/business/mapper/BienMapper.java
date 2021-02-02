@@ -47,7 +47,6 @@ public class BienMapper implements Mapper<BienDTO, Bien>{
                 bien.getNwc(),
                 bien.getSuperficie(),
                 bien.getAladisposition(),
-                bien.getAnimaux(),
                 bien.getDescription(),
                 coordonneeMapper.toDTO(bien.getCoordonnee()),
                 personneMapper.toDTO(bien.getAppartient())
@@ -70,9 +69,8 @@ public class BienMapper implements Mapper<BienDTO, Bien>{
         bien.setNwc(bienDTO.getNwc());
         bien.setSuperficie(bienDTO.getSuperficie());
         bien.setAladisposition(bienDTO.getAladisposition());
-        bien.setAnimaux(bienDTO.getAnimaux());
         bien.setDescription(bienDTO.getDescription());
-        bien.setCoordonnee(coordorRepository.getOne(bienDTO.getCoordonnee().getId()));
+        bien.setCoordonnee(coordonneeMapper.toEntity(bienDTO.getCoordonnee()));
         bien.setAppartient(personneReposytory.getOne(bienDTO.getAppartient().getId()));
         return bien ;
     }

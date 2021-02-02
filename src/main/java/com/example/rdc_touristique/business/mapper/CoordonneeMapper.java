@@ -3,7 +3,6 @@ package com.example.rdc_touristique.business.mapper;
 import com.example.rdc_touristique.business.dto.CoordonneeDTO;
 import com.example.rdc_touristique.business.dto.VilleDTO;
 import com.example.rdc_touristique.data_access.entity.Coordonnee;
-import com.example.rdc_touristique.data_access.entity.Type_bien;
 import com.example.rdc_touristique.data_access.entity.Ville;
 import com.example.rdc_touristique.data_access.repository.VilleRepository;
 import org.springframework.beans.factory.annotation.Autowired;

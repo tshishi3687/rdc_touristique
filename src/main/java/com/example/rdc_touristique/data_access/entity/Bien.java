@@ -48,9 +48,6 @@ public class Bien {
     private String aladisposition;
 
     @Column
-    private String animaux;
-
-    @Column
     private String description;
 
 

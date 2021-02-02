@@ -3,13 +3,16 @@ package com.example.rdc_touristique.business.service;
 import com.example.rdc_touristique.business.dto.Lien_photoDTO;
 import com.example.rdc_touristique.business.mapper.Mapper;
 import com.example.rdc_touristique.data_access.entity.Lien_photo;
-import com.example.rdc_touristique.data_access.repository.Lien_photoRepository;
+import com.example.rdc_touristique.data_access.repository.*;
 import com.example.rdc_touristique.exeption.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.zip.Deflater;
 
 @Service
 public class Lien_photoService implements CrudService<Lien_photoDTO, Integer> {
@@ -18,13 +21,27 @@ public class Lien_photoService implements CrudService<Lien_photoDTO, Integer> {
     private Mapper<Lien_photoDTO, Lien_photo> lien_photoMapper;
     @Autowired
     private Lien_photoRepository lien_photoRepository;
+    @Autowired
+    private ImageRepository imageRepository;
+    @Autowired
+    private ProvinceRepository provinceRepository;
+    @Autowired
+    private VilleRepository villeRepository;
+    @Autowired
+    private BienRepository bienRepository;
 
     @Override
     public void creat(Lien_photoDTO toCreat) throws ElementAlreadyExistsException {
         if (lien_photoRepository.existsById(toCreat.getId()))
             throw new Lien_photoExisteExeption(toCreat.getId());
 
-        lien_photoRepository.save(lien_photoMapper.toEntity(toCreat));
+        Lien_photo entity = lien_photoMapper.toEntity(toCreat);
+        imageRepository.save(entity.getImage());
+        provinceRepository.save(entity.getProvince());
+        villeRepository.save(entity.getVille());
+        bienRepository.save(entity.getBien());
+
+        lien_photoRepository.save(entity);
     }
 
     @Override

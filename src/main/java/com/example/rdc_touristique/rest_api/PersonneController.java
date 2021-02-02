@@ -20,4 +20,9 @@ public class PersonneController extends AbstratCrudController<PersonneSimpleDTO,
     public PersonneSimpleDTO getUser(@RequestBody PersonneSimpleDTO dto)  {
         return ((PersonneService)service).seloguer(dto);
     }
+    @PostMapping("/email")
+    @ResponseStatus(HttpStatus.OK)
+    public boolean getEmail(@RequestBody PersonneSimpleDTO dto)  {
+        return ((PersonneService)service).selonEmail(dto);
+    }
 }
