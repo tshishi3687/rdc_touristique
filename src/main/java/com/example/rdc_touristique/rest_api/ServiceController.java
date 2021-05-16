@@ -8,6 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
 
 @RestController
 @RequestMapping("service")
@@ -15,4 +16,7 @@ public class ServiceController  extends AbstratCrudController<ServiceDTO, Intege
     public ServiceController(CrudService<ServiceDTO, Integer> service) {
         super(service);
     }
+
+//    @PostMapping("/ville")
+//    public List<ServiceDTO> getAllByVille
 }

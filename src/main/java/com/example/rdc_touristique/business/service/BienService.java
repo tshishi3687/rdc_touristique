@@ -29,8 +29,6 @@ public class BienService implements CrudService<BienDTO, Integer> {
     private CoordonneeRepository coordorRepository;
     @Autowired
     private Mapper<PersonneSimplifierDTO, Personne> personneMapper;
-    @Autowired
-    private PersonneReposytory personneReposytory;
 
     @Transactional
     public List<BienDTO> selonLaPersonne(PersonneSimplifierDTO personne) {

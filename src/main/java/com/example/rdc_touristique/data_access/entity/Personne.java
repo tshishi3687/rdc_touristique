@@ -44,6 +44,6 @@ public class Personne {
     @OneToMany(mappedBy = "appartient")
     private List<Bien> bien;
 
-    @OneToMany(mappedBy = "reserver_par")
+    @OneToMany(mappedBy = "reserverPar")
     private List<Reservation> reservation;
 }

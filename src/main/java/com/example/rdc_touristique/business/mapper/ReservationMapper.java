@@ -2,6 +2,7 @@ package com.example.rdc_touristique.business.mapper;
 
 import com.example.rdc_touristique.business.dto.BienDTO;
 import com.example.rdc_touristique.business.dto.PersonneSimpleDTO;
+import com.example.rdc_touristique.business.dto.PersonneSimplifierDTO;
 import com.example.rdc_touristique.business.dto.ReservationDTO;
 import com.example.rdc_touristique.data_access.entity.Bien;
 import com.example.rdc_touristique.data_access.entity.Personne;
@@ -34,7 +35,7 @@ public class ReservationMapper implements Mapper<ReservationDTO, Reservation>{
                 reservation.getDdd(),
                 reservation.getNpersonne(),
                 bienMapper.toDTO(reservation.getBien_reserve()),
-                personneMapper.toDTO(reservation.getReserver_par())
+                personneMapper.toDTO(reservation.getReserverPar())
         );
     }
 
@@ -47,10 +48,10 @@ public class ReservationMapper implements Mapper<ReservationDTO, Reservation>{
         reservation.setId(reservationDTO.getId());
         reservation.setDdj(reservationDTO.getDdj());
         reservation.setDda(reservationDTO.getDda());
-        reservation.setDda(reservationDTO.getDdd());
+        reservation.setDdd(reservationDTO.getDdd());
         reservation.setNpersonne(reservationDTO.getNpersonne());
         reservation.setBien_reserve(bienRepository.getOne(reservationDTO.getBien_reserve().getId()));
-        reservation.setReserver_par(personneReposytory.getOne(reservationDTO.getReserver_par().getId()));
-        return null;
+        reservation.setReserverPar(personneReposytory.getOne(reservationDTO.getReserverPar().getId()));
+        return reservation;
     }
 }

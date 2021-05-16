@@ -37,6 +37,6 @@ public class Reservation {
 
     @ManyToOne
     @JoinColumn(name = "reserver_par")
-    private Personne reserver_par;
+    private Personne reserverPar;
 
 }

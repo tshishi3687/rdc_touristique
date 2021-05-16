@@ -5,6 +5,15 @@ import com.example.rdc_touristique.business.dto.ImageModelDTO;
 import com.example.rdc_touristique.data_access.entity.ImageModel;
 import org.springframework.stereotype.Component;
 
+import javax.imageio.ImageIO;
+import javax.imageio.stream.FileImageOutputStream;
+import java.io.File;
+import java.io.FileFilter;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
 @Component
 public class ImageModelMapper implements Mapper<ImageModelDTO, ImageModel>{
 
@@ -14,9 +23,7 @@ public class ImageModelMapper implements Mapper<ImageModelDTO, ImageModel>{
             return null;
         return new ImageModelDTO(
                 imageModel.getId(),
-                imageModel.getName(),
-                imageModel.getType(),
-                imageModel.getPicByte()
+                imageModel.getImage()
         );
     }
 
@@ -24,12 +31,10 @@ public class ImageModelMapper implements Mapper<ImageModelDTO, ImageModel>{
     public ImageModel toEntity(ImageModelDTO imageModelDTO) {
         if (imageModelDTO == null)
             return null;
-
-        ImageModel imageModel = new ImageModel();
-        imageModel.setId(imageModelDTO.getId());
-        imageModel.setName(imageModelDTO.getName());
-        imageModel.setType(imageModelDTO.getType());
-        imageModel.setPicByte(imageModelDTO.getPicByte());
-        return null;
+        ImageModel img = new ImageModel();
+        img.setId(imageModelDTO.getId());
+        img.setImage(imageModelDTO.getImage());
+        return img;
     }
+
 }

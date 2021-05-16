@@ -5,36 +5,24 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import javax.imageio.ImageIO;
 import javax.persistence.*;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 @Entity
 @Getter
 @Setter
 @Table(name = "image_table")
 public class ImageModel {
-
-    public ImageModel() {
-        super();
-    }
-    public ImageModel(String name, String type, byte[] picByte) {
-        this.name = name;
-        this.type = type;
-        this.picByte = picByte;
-    }
-
     @Id
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-
-    @Column(name = "name")
-    private String name;
-
-    @Column(name = "type")
-    private String type;
-
-    @Column(name = "picbyte")
-    @Lob
-    private byte[] picByte;
-
+    @Column
+    private String image;
 }

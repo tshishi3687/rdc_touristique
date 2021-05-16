@@ -13,8 +13,6 @@ import org.springframework.context.annotation.ComponentScan;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
-@SpringBootApplication
-@ComponentScan("com.example.rdc_touristique")
 public class BientTest {
     public static void main(String[] args) throws ElementAlreadyExistsException {
 
@@ -46,8 +44,8 @@ public class BientTest {
         );
 
         Type_bienDTO type_bienDTO = new Type_bienDTO(
-            1,
-            "Maison"
+                1,
+                "Maison"
         );
 
         LocalDate date = LocalDate.now();
@@ -58,21 +56,22 @@ public class BientTest {
 
         );
 
-        BienDTO bienDTO = new BienDTO(
-            0,
-            type_bienDTO,
-            222,
-                2,
-                2,
-                2,
-                2,
-                2,
-                2,
-                "fffff",
-                "gggggggggggg",
-                coordonnee,
-                personneSimpleDTO
-        );
-        serv.creat(bienDTO);
+//        BienDTO bienDTO = new BienDTO(
+//            0,
+//            type_bienDTO,
+//            222,
+//                2,
+//                2,
+//                2,
+//                2,
+//                2,
+//                2,
+//                "fffff",
+//                "gggggggggggg",
+//                coordonnee,
+//                personneSimpleDTO
+//        );
+//        serv.creat(bienDTO);
+//    }
     }
 }

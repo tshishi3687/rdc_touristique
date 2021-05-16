@@ -8,10 +8,8 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
-public class ImageModelDTO {
+public class ImageModelDTO implements IdentifiedDTO<Integer> {
 
-    private int id;
-    private String name;
-    private String type;
-    private byte[] picByte;
+    private Integer id;
+    private String image;
 }

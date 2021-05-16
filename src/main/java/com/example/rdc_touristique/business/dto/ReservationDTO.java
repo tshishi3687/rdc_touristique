@@ -17,5 +17,5 @@ public class ReservationDTO implements IdentifiedDTO<Integer>{
     private LocalDate ddd;
     private int npersonne;
     private BienDTO bien_reserve;
-    private PersonneSimpleDTO reserver_par;
+    private PersonneSimpleDTO reserverPar;
 }
