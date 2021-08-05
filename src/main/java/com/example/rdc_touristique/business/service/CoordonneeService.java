@@ -8,6 +8,8 @@ import com.example.rdc_touristique.exeption.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.security.NoSuchAlgorithmException;
+import java.security.spec.InvalidKeySpecException;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -20,7 +22,7 @@ public class CoordonneeService implements CrudService<CoordonneeDTO, Integer> {
 
 
     @Override
-    public void creat(CoordonneeDTO toCreat) throws ElementAlreadyExistsException {
+    public void creat(CoordonneeDTO toCreat) throws ElementAlreadyExistsException, NoSuchAlgorithmException, InvalidKeySpecException {
         if(coordonneeRepository.existsById(toCreat.getId()))
             throw new CoordonneeExisteExeption(toCreat.getId());
 
@@ -43,7 +45,7 @@ public class CoordonneeService implements CrudService<CoordonneeDTO, Integer> {
     }
 
     @Override
-    public void update(CoordonneeDTO toUpdate) throws CoordonneeFoundExeption {
+    public void update(CoordonneeDTO toUpdate) throws CoordonneeFoundExeption, NoSuchAlgorithmException, InvalidKeySpecException {
         if( !coordonneeRepository.existsById( toUpdate.getId() ))
             throw new CoordonneeFoundExeption(toUpdate.getId());
 

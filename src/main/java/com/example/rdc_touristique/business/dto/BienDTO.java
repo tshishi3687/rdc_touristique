@@ -1,7 +1,10 @@
 package com.example.rdc_touristique.business.dto;
 
+import com.example.rdc_touristique.data_access.entity.Action;
 import lombok.*;
 
+import javax.persistence.Column;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Getter
@@ -24,4 +27,6 @@ public class BienDTO implements IdentifiedDTO<Integer>{
     private String description;
     private CoordonneeDTO coordonnee;
     private PersonneSimplifierDTO appartient;
+    private LocalDateTime dateCreation;
+    private int superid;
 }

@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 
 @Entity
 @Getter
@@ -37,4 +38,10 @@ public class Coordonnee {
 
     @Column
     private int telephone;
+
+    @Column
+    private LocalDateTime dateCreation;
+
+    @Column
+    private int superid;
 }

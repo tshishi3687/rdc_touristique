@@ -13,6 +13,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.security.NoSuchAlgorithmException;
+import java.security.spec.InvalidKeySpecException;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -40,7 +42,7 @@ public class ServiceService implements CrudService<ServiceDTO, Integer> {
 //    }
 
     @Override
-    public void creat(ServiceDTO toCreat) throws ElementAlreadyExistsException {
+    public void creat(ServiceDTO toCreat) throws ElementAlreadyExistsException, NoSuchAlgorithmException, InvalidKeySpecException {
         if (serviceRepository.existsById(toCreat.getId()))
             throw new ServiceExisteExeption(toCreat.getId());
         com.example.rdc_touristique.data_access.entity.Service entity = serviceMapper.toEntity(toCreat);
@@ -64,7 +66,7 @@ public class ServiceService implements CrudService<ServiceDTO, Integer> {
     }
 
     @Override
-    public void update(ServiceDTO toUpdate) throws ServiceFoundExeption {
+    public void update(ServiceDTO toUpdate) throws ServiceFoundExeption, NoSuchAlgorithmException, InvalidKeySpecException {
         if( !serviceRepository.existsById( toUpdate.getId() ))
             throw new ServiceFoundExeption(toUpdate.getId());
 

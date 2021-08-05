@@ -7,6 +7,7 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
@@ -40,6 +41,12 @@ public class Personne {
 
     @Column
     private String status;
+
+    @Column
+    private LocalDateTime dateCreation;
+
+    @Column
+    private int superid;
 
     @OneToMany(mappedBy = "appartient")
     private List<Bien> bien;

@@ -1,13 +1,18 @@
 package com.example.rdc_touristique.business.service;
 
+import com.example.rdc_touristique.business.dto.ProvinceDTO;
 import com.example.rdc_touristique.business.dto.VilleDTO;
 import com.example.rdc_touristique.business.mapper.Mapper;
+import com.example.rdc_touristique.data_access.entity.Province;
 import com.example.rdc_touristique.data_access.entity.Ville;
 import com.example.rdc_touristique.data_access.repository.VilleRepository;
 import com.example.rdc_touristique.exeption.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.security.NoSuchAlgorithmException;
+import java.security.spec.InvalidKeySpecException;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -20,12 +25,14 @@ public class VilleService implements CrudService<VilleDTO, Integer> {
     private VilleRepository villeRepository;
 
     @Override
-    public void creat(VilleDTO toCreat) throws ElementAlreadyExistsException {
-        if (villeRepository.existsById(toCreat.getId()))
+    public void creat(VilleDTO toCreat) throws ElementAlreadyExistsException, NoSuchAlgorithmException, InvalidKeySpecException {
+        if (villeRepository.existsById(toCreat.getId())) {
             throw new VilleExisteExeption(toCreat.getId());
-        System.out.println(villeMapper.toEntity(toCreat));
-        villeRepository.save(villeMapper.toEntity(toCreat));
+        }
+            villeRepository.save(villeMapper.toEntity(toCreat));
     }
+
+
 
     @Override
     public VilleDTO readOne(Integer integer) throws VilleFoundExeption {
@@ -43,7 +50,7 @@ public class VilleService implements CrudService<VilleDTO, Integer> {
     }
 
     @Override
-    public void update(VilleDTO toUpdate) throws VilleFoundExeption {
+    public void update(VilleDTO toUpdate) throws VilleFoundExeption, NoSuchAlgorithmException, InvalidKeySpecException {
         if( !villeRepository.existsById( toUpdate.getId() ))
             throw new VilleFoundExeption(toUpdate.getId());
 

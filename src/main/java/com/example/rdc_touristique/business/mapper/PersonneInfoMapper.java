@@ -11,6 +11,8 @@ import com.example.rdc_touristique.data_access.repository.ReservationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.security.NoSuchAlgorithmException;
+import java.security.spec.InvalidKeySpecException;
 import java.util.stream.Collectors;
 
 @Component
@@ -50,7 +52,16 @@ public class PersonneInfoMapper implements Mapper<PersonneInfoDTO, Personne>{
         Personne personne = new Personne();
         personne.setId(personneInfoDTO.getId());
         personne.setBien(personneInfoDTO.getBien().stream()
-                    .map(bienDTO -> bienDTOMapper.toEntity(bienDTO))
+                    .map(bienDTO -> {
+                        try {
+                            return bienDTOMapper.toEntity(bienDTO);
+                        } catch (NoSuchAlgorithmException e) {
+                            e.printStackTrace();
+                        } catch (InvalidKeySpecException e) {
+                            e.printStackTrace();
+                        }
+                        return null;
+                    })
                     .collect(Collectors.toList()));
         personne.setReservation(reservationRepository.findAllById(personneInfoDTO.getReservation()
                 .stream()

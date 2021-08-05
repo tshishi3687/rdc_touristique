@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 
 @Entity
 @Getter
@@ -20,5 +21,11 @@ public class Type_bien {
 
     @Column
     private String nom;
+
+    @Column
+    private LocalDateTime dateCreation;
+
+    @Column
+    private int superid;
 
 }

@@ -2,6 +2,8 @@ package com.example.rdc_touristique.business.dto;
 
 import lombok.*;
 
+import java.time.LocalDateTime;
+
 @Getter
 @Setter
 @NoArgsConstructor
@@ -11,6 +13,8 @@ public class ServiceDTO implements IdentifiedDTO<Integer>{
 
     private Integer id;
     private String nom;
-    private TypeDTO type;
+    private Type_serviceDTO type;
     private CoordonneeDTO coordonnee;
+    private LocalDateTime dateCreation;
+    private int superid;
 }

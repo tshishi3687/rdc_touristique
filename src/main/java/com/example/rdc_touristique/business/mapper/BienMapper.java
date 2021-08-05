@@ -2,13 +2,13 @@ package com.example.rdc_touristique.business.mapper;
 
 import com.example.rdc_touristique.business.dto.*;
 import com.example.rdc_touristique.data_access.entity.*;
-import com.example.rdc_touristique.data_access.repository.CoordonneeRepository;
-import com.example.rdc_touristique.data_access.repository.PersonneReposytory;
-import com.example.rdc_touristique.data_access.repository.ReservationRepository;
-import com.example.rdc_touristique.data_access.repository.Type_bienRepository;
+import com.example.rdc_touristique.data_access.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.security.NoSuchAlgorithmException;
+import java.security.spec.InvalidKeySpecException;
+import java.time.LocalDateTime;
 import java.util.stream.Collectors;
 
 @Component
@@ -25,11 +25,7 @@ public class BienMapper implements Mapper<BienDTO, Bien>{
     @Autowired
     private Type_bienRepository type_bienRepository;
     @Autowired
-    private CoordonneeRepository coordorRepository;
-    @Autowired
     private PersonneReposytory personneReposytory;
-    @Autowired
-    private ReservationRepository reservationReposytory;
 
     @Override
     public BienDTO toDTO(Bien bien) {
@@ -49,12 +45,14 @@ public class BienMapper implements Mapper<BienDTO, Bien>{
                 bien.getAladisposition(),
                 bien.getDescription(),
                 coordonneeMapper.toDTO(bien.getCoordonnee()),
-                personneMapper.toDTO(bien.getAppartient())
+                personneMapper.toDTO(bien.getAppartient()),
+                bien.getDateCreation(),
+                bien.getSuperid()
         );
     }
 
     @Override
-    public Bien toEntity(BienDTO bienDTO) {
+    public Bien toEntity(BienDTO bienDTO) throws NoSuchAlgorithmException, InvalidKeySpecException {
         if (bienDTO==null)
             return null;
 
@@ -72,6 +70,8 @@ public class BienMapper implements Mapper<BienDTO, Bien>{
         bien.setDescription(bienDTO.getDescription());
         bien.setCoordonnee(coordonneeMapper.toEntity(bienDTO.getCoordonnee()));
         bien.setAppartient(personneReposytory.getOne(bienDTO.getAppartient().getId()));
+        bien.setDateCreation(LocalDateTime.now());
+        bien.setSuperid(bienDTO.getSuperid());
         return bien ;
     }
 }

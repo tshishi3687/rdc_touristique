@@ -6,33 +6,31 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 
 @Entity
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class Lien_photo {
+public class Action {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @ManyToOne
-    @JoinColumn(name = "img")
-    private ImageModel image;
+    @Column
+    private LocalDateTime date;
 
-    @ManyToOne
-    @JoinColumn(name = "province")
-    private Province province;
+    @Column
+    private String className;
 
-    @ManyToOne
-    @JoinColumn(name = "ville")
-    private Ville ville;
+    @Column
+    private int idClasse;
 
-    @ManyToOne
-    @JoinColumn(name = "bien")
-    private Bien bien;
+    @Column
+    private String action;
 
-
+    @Column
+    private String description;
 }

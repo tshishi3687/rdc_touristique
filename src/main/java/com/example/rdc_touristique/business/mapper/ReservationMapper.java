@@ -2,7 +2,6 @@ package com.example.rdc_touristique.business.mapper;
 
 import com.example.rdc_touristique.business.dto.BienDTO;
 import com.example.rdc_touristique.business.dto.PersonneSimpleDTO;
-import com.example.rdc_touristique.business.dto.PersonneSimplifierDTO;
 import com.example.rdc_touristique.business.dto.ReservationDTO;
 import com.example.rdc_touristique.data_access.entity.Bien;
 import com.example.rdc_touristique.data_access.entity.Personne;

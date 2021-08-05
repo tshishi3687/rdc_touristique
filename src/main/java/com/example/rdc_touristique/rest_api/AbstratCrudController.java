@@ -2,6 +2,7 @@ package com.example.rdc_touristique.rest_api;
 
 import com.example.rdc_touristique.business.dto.IdentifiedDTO;
 import com.example.rdc_touristique.business.service.CrudService;
+import com.example.rdc_touristique.exeption.ActionFoundExeption;
 import com.example.rdc_touristique.exeption.ElementAlreadyExistsException;
 import com.example.rdc_touristique.exeption.ElementFoundException;
 import com.example.rdc_touristique.exeption.FoundExeption;
@@ -11,6 +12,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.io.IOException;
+import java.security.NoSuchAlgorithmException;
+import java.security.spec.InvalidKeySpecException;
 import java.util.List;
 
 public abstract class AbstratCrudController<DTO extends IdentifiedDTO<ID>,ID> implements CrudController<DTO, ID> {
@@ -22,7 +26,7 @@ public abstract class AbstratCrudController<DTO extends IdentifiedDTO<ID>,ID> im
     // CREATE - POST > http://localhost:8081/?
     @PostMapping
     @ResponseStatus(HttpStatus.OK)
-    public void create(@RequestBody @Valid DTO dto) throws ElementAlreadyExistsException {
+    public void create(@RequestBody @Valid DTO dto) throws ElementAlreadyExistsException, IOException, NoSuchAlgorithmException, InvalidKeySpecException, ActionFoundExeption {
         service.creat(dto);
 
     }
@@ -44,14 +48,14 @@ public abstract class AbstratCrudController<DTO extends IdentifiedDTO<ID>,ID> im
 
     // UPDATE - PUT > http://localhost:8081/?
     @PutMapping
-    public ResponseEntity<String> update(@RequestBody DTO dto) throws ElementFoundException, FoundExeption {
+    public ResponseEntity<String> update(@RequestBody DTO dto) throws ElementFoundException, FoundExeption, NoSuchAlgorithmException, InvalidKeySpecException {
         service.update(dto);
         return ResponseEntity.ok("Un élément a été modifié" );
     }
 
     // DELETE - DELETE > http://localhost:8081/?/{id}
     @DeleteMapping("/{id}")
-    public ResponseEntity<DTO> delete(@PathVariable ID id) throws ElementFoundException, FoundExeption {
+    public ResponseEntity<DTO> delete(@PathVariable ID id) throws ElementFoundException, FoundExeption, NoSuchAlgorithmException, InvalidKeySpecException {
         DTO dto = service.readOne(id);
         service.delete(id);
         return ResponseEntity.ok(dto);

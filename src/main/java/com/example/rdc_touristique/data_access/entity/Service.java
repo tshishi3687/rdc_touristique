@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 
 @Entity
 @Getter
@@ -28,4 +29,10 @@ public class Service {
     @ManyToOne
     @JoinColumn(name = "coordonnee")
     private Coordonnee coordonnee;
+
+    @Column
+    private LocalDateTime dateCreation;
+
+    @Column
+    private int superid;
 }

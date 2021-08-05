@@ -1,14 +1,15 @@
 package com.example.rdc_touristique.business.dto;
 
 import lombok.*;
+import org.springframework.web.multipart.MultipartFile;
 
+@Builder
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
-public class TypeDTO implements IdentifiedDTO<Integer>{
-
+public class imageModelTDTO implements IdentifiedDTO<Integer>{
     private Integer id;
-    private String nomtype;
+    private String nom_photo;
 }

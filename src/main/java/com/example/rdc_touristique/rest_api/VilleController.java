@@ -1,10 +1,14 @@
 package com.example.rdc_touristique.rest_api;
 
-import com.example.rdc_touristique.business.dto.BienDTO;
 import com.example.rdc_touristique.business.dto.VilleDTO;
 import com.example.rdc_touristique.business.service.CrudService;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import com.example.rdc_touristique.business.service.VilleService;
+import com.example.rdc_touristique.exeption.ElementAlreadyExistsException;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.*;
+
+import java.security.NoSuchAlgorithmException;
+import java.security.spec.InvalidKeySpecException;
 
 @RestController
 @RequestMapping("ville")
@@ -12,4 +16,5 @@ public class VilleController extends AbstratCrudController<VilleDTO, Integer>{
     public VilleController(CrudService<VilleDTO, Integer> service) {
         super(service);
     }
+
 }

@@ -8,6 +8,8 @@ import com.example.rdc_touristique.exeption.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.security.NoSuchAlgorithmException;
+import java.security.spec.InvalidKeySpecException;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -20,7 +22,7 @@ public class Type_bienService implements CrudService<Type_bienDTO, Integer> {
     private Type_bienRepository type_bienRepository;
 
     @Override
-    public void creat(Type_bienDTO toCreat) throws ElementAlreadyExistsException {
+    public void creat(Type_bienDTO toCreat) throws ElementAlreadyExistsException, NoSuchAlgorithmException, InvalidKeySpecException {
         if (type_bienRepository.existsById(toCreat.getId()))
             throw new Type_bienExisteExeption(toCreat.getId());
 
@@ -43,7 +45,7 @@ public class Type_bienService implements CrudService<Type_bienDTO, Integer> {
     }
 
     @Override
-    public void update(Type_bienDTO toUpdate) throws Type_bienFoundExeption {
+    public void update(Type_bienDTO toUpdate) throws Type_bienFoundExeption, NoSuchAlgorithmException, InvalidKeySpecException {
         if( !type_bienRepository.existsById( toUpdate.getId() ))
             throw new Type_bienFoundExeption(toUpdate.getId());
 

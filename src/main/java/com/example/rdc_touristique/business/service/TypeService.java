@@ -1,6 +1,6 @@
 package com.example.rdc_touristique.business.service;
 
-import com.example.rdc_touristique.business.dto.TypeDTO;
+import com.example.rdc_touristique.business.dto.Type_serviceDTO;
 import com.example.rdc_touristique.business.mapper.Mapper;
 import com.example.rdc_touristique.data_access.entity.Type;
 import com.example.rdc_touristique.data_access.repository.TypeRepository;
@@ -8,19 +8,21 @@ import com.example.rdc_touristique.exeption.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.security.NoSuchAlgorithmException;
+import java.security.spec.InvalidKeySpecException;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-public class TypeService implements CrudService<TypeDTO, Integer> {
+public class TypeService implements CrudService<Type_serviceDTO, Integer> {
 
     @Autowired
-    private Mapper<TypeDTO, Type> typeMapper;
+    private Mapper<Type_serviceDTO, Type> typeMapper;
     @Autowired
     private TypeRepository typeRepository;
 
     @Override
-    public void creat(TypeDTO toCreat) throws ElementAlreadyExistsException {
+    public void creat(Type_serviceDTO toCreat) throws ElementAlreadyExistsException, NoSuchAlgorithmException, InvalidKeySpecException {
         if (typeRepository.existsById(toCreat.getId()))
             throw new TypeExisteExeption(toCreat.getId());
 
@@ -28,7 +30,7 @@ public class TypeService implements CrudService<TypeDTO, Integer> {
     }
 
     @Override
-    public TypeDTO readOne(Integer integer) throws TypeFoundExeption {
+    public Type_serviceDTO readOne(Integer integer) throws TypeFoundExeption {
         Type entity = typeRepository.findById(integer)
                 .orElseThrow(()-> new TypeFoundExeption(integer));
 
@@ -36,14 +38,14 @@ public class TypeService implements CrudService<TypeDTO, Integer> {
     }
 
     @Override
-    public List<TypeDTO> readAll() {
+    public List<Type_serviceDTO> readAll() {
         return typeRepository.findAll().stream()
                 .map(typeMapper::toDTO)
                 .collect(Collectors.toList());
     }
 
     @Override
-    public void update(TypeDTO toUpdate) throws TypeFoundExeption {
+    public void update(Type_serviceDTO toUpdate) throws TypeFoundExeption, NoSuchAlgorithmException, InvalidKeySpecException {
         if( !typeRepository.existsById( toUpdate.getId() ))
             throw new TypeFoundExeption(toUpdate.getId());
 

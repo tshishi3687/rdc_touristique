@@ -1,28 +1,61 @@
 package com.example.rdc_touristique.data_access.entity;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import javax.imageio.ImageIO;
 import javax.persistence.*;
-import java.awt.image.BufferedImage;
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
+import java.time.LocalDateTime;
 
 @Entity
-@Getter
-@Setter
 @Table(name = "image_table")
 public class ImageModel {
+    public ImageModel() {
+        super();
+    }
+    public ImageModel(String name, String type, byte[] picByte, int superid) {
+        this.name = name;
+        this.type = type;
+        this.picByte = picByte;
+        this.superid = superid;
+    }
     @Id
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Long id;
+    @Column(name = "name")
+    private String name;
+    @Column(name = "type")
+    private String type;
+    //image bytes can have large lengths so we specify a value
+    //which is more than the default length for picByte column
+    @Column(name = "picByte", length = 1000)
+    @Lob
+    private byte[] picByte;
+
     @Column
-    private String image;
+    @Getter
+    @Setter
+    private int superid;
+
+    @Column
+    private LocalDateTime dateCreation;
+
+    public String getName() {
+        return name;
+    }
+    public void setName(String name) {
+        this.name = name;
+    }
+    public String getType() {
+        return type;
+    }
+    public void setType(String type) {
+        this.type = type;
+    }
+    public byte[] getPicByte() {
+        return picByte;
+    }
+    public void setPicByte(byte[] picByte) {
+        this.picByte = picByte;
+    }
 }

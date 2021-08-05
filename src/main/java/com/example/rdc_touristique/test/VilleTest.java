@@ -22,10 +22,7 @@ public class VilleTest {
         VilleService serv = ctx.getBean(VilleService.class);
 
 
-        ProvinceDTO pro = new ProvinceDTO(
-                1,
-                "Bas-Uele","Formant la partie ouest de l'Uélé, ou l'Uélé occidental, le Bas-Uele est un espace faiblement peuplé et sa population, fortement dispersée, vit au milieu de ressources naturelles convoitées. "
-        );
+
 
 
 

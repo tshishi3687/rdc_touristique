@@ -22,11 +22,11 @@ public class ProvinceTest {
 
 
 
-      ProvinceDTO pro = new ProvinceDTO(
-              0,
-              "Equateur",
-              "La province de l'Équateur est depuis 2015 une province de la république démocratique du Congo à la suite de l'éclatement de la province historique de l'Équateur2. Les principaux centres urbains sont Lukolela, Bikoro, Basankusu, Bolomba, Bomongo, Irebu, Makanza et la ville de Mbandaka. "
-      );
+//      ProvinceDTO pro = new ProvinceDTO(
+//              0,
+//              "Equateur",
+//              "La province de l'Équateur est depuis 2015 une province de la république démocratique du Congo à la suite de l'éclatement de la province historique de l'Équateur2. Les principaux centres urbains sont Lukolela, Bikoro, Basankusu, Bolomba, Bomongo, Irebu, Makanza et la ville de Mbandaka. "
+//      );
 
       // test Creat
 //        serv.creat(pro);

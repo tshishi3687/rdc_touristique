@@ -3,6 +3,7 @@ package com.example.rdc_touristique.data_access.entity;
 import lombok.*;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 
 @Entity
 @Getter @Setter
@@ -19,4 +20,10 @@ public class Province {
 
     @Column
     private String description;
+
+    @Column
+    private LocalDateTime dateCreation;
+
+    @Column
+    private int superid;
 }

@@ -8,6 +8,8 @@ import com.example.rdc_touristique.data_access.repository.VilleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDateTime;
+
 @Component
 public class CoordonneeMapper implements Mapper<CoordonneeDTO, Coordonnee>{
     @Autowired
@@ -26,7 +28,9 @@ public class CoordonneeMapper implements Mapper<CoordonneeDTO, Coordonnee>{
                 coordonnee.getRue(),
                 coordonnee.getNum(),
                 coordonnee.getEmail(),
-                coordonnee.getTelephone()
+                coordonnee.getTelephone(),
+                coordonnee.getDateCreation(),
+                coordonnee.getSuperid()
         );
     }
 
@@ -43,6 +47,7 @@ public class CoordonneeMapper implements Mapper<CoordonneeDTO, Coordonnee>{
           coordonnee.setNum(coordonneeDTO.getNum());
           coordonnee.setEmail(coordonneeDTO.getEmail());
           coordonnee.setTelephone(coordonneeDTO.getTelephone());
+          coordonnee.setDateCreation(LocalDateTime.now());
         return coordonnee;
     }
 }

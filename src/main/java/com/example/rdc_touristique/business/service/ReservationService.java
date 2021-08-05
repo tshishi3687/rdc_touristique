@@ -1,8 +1,10 @@
 package com.example.rdc_touristique.business.service;
 
+import com.example.rdc_touristique.business.dto.BienDTO;
 import com.example.rdc_touristique.business.dto.PersonneSimpleDTO;
 import com.example.rdc_touristique.business.dto.ReservationDTO;
 import com.example.rdc_touristique.business.mapper.Mapper;
+import com.example.rdc_touristique.data_access.entity.Bien;
 import com.example.rdc_touristique.data_access.entity.Personne;
 import com.example.rdc_touristique.data_access.entity.Reservation;
 import com.example.rdc_touristique.data_access.repository.ReservationRepository;
@@ -11,6 +13,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.security.NoSuchAlgorithmException;
+import java.security.spec.InvalidKeySpecException;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -25,15 +30,40 @@ public class ReservationService implements CrudService<ReservationDTO, Integer> 
     private Mapper<PersonneSimpleDTO, Personne> personneMapper;
 
     @Transactional
-    public List<ReservationDTO> selonLaPer(PersonneSimpleDTO personne){
-        List<Reservation> liestReservation = reservationRepository.findAllByReserverPar(personneMapper.toEntity(personne));
+    public List<ReservationDTO> selonLaPer(PersonneSimpleDTO personne) throws NoSuchAlgorithmException, InvalidKeySpecException {
+        personne.setMdp("salut123456789");
         return reservationRepository.findAllByReserverPar(personneMapper.toEntity(personne)).stream()
                 .map(reservationMapper::toDTO)
                 .collect(Collectors.toList());
     }
 
+//    @Transactional
+//    public boolean verifDate(ReservationDTO reservationDTO) throws ReservationFoundExeption, NoSuchAlgorithmException, InvalidKeySpecException {
+//        List<Reservation> liestReservation = reservationRepository.findAllByBAndBien_reserve(bienMapper.toEntity(reservationDTO.getBien_reserve()));
+//
+//        if(reservationDTO.getDdd().isBefore(reservationDTO.getDda()) || reservationDTO.getDda().isBefore(LocalDate.now()))
+//            return false;
+//
+//
+//        for (int i=0;i< liestReservation.size();i++){
+//            // Range covers other ?
+//            Reservation reservation = liestReservation.get(i);
+//            Reservation reservation2 = liestReservation.get(i+1);
+//            // Range covers other ?
+//            if((reservationDTO.getDda().isAfter(reservation.getDda()) && reservationDTO.getDda().isBefore(reservation.getDdd())) || reservationDTO.getDda().isEqual(reservation.getDda()) || reservationDTO.getDda().isEqual(reservation.getDdd()) || reservationDTO.getDdd().isEqual(reservation2.getDda()))
+//            {
+//
+//            }else{
+//                return true;
+//            }
+//        }
+//
+//        return false;
+//
+//    }
+
     @Override
-    public void creat(ReservationDTO toCreat) throws ElementAlreadyExistsException {
+    public void creat(ReservationDTO toCreat) throws ElementAlreadyExistsException, NoSuchAlgorithmException, InvalidKeySpecException {
         if (reservationRepository.existsById(toCreat.getId())) {
             throw new ReservationExisteExeption(toCreat.getId());
         }
@@ -56,7 +86,7 @@ public class ReservationService implements CrudService<ReservationDTO, Integer> 
     }
 
     @Override
-    public void update(ReservationDTO toUpdate) throws ReservationFoundExeption {
+    public void update(ReservationDTO toUpdate) throws ReservationFoundExeption, NoSuchAlgorithmException, InvalidKeySpecException {
         if( !reservationRepository.existsById( toUpdate.getId() ))
             throw new ReservationFoundExeption(toUpdate.getId());
 

@@ -7,6 +7,7 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Entity
 @Getter
@@ -38,5 +39,8 @@ public class Reservation {
     @ManyToOne
     @JoinColumn(name = "reserver_par")
     private Personne reserverPar;
+
+    @Column
+    private LocalDateTime dateCreation;
 
 }

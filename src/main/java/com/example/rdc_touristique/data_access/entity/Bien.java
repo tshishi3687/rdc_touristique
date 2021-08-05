@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
@@ -59,6 +60,12 @@ public class Bien {
     @JoinColumn(name = "appartient")
     private Personne appartient;
 
+    @Column
+    private LocalDateTime dateCreation;
+
     @OneToMany(mappedBy = "bien_reserve")
     private List<Reservation> de_reservation;
+
+    @Column
+    private int superid;
 }

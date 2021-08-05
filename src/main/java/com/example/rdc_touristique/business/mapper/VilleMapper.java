@@ -8,6 +8,8 @@ import com.example.rdc_touristique.data_access.repository.ProvinceRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDateTime;
+
 @Component
 public class VilleMapper implements Mapper<VilleDTO, Ville>{
     @Autowired
@@ -25,7 +27,9 @@ public class VilleMapper implements Mapper<VilleDTO, Ville>{
                 ville.getNom_ville(),
                 ville.getNhabitant(),
                 provinceMapper.toDTO(ville.getProvince()),
-                ville.getDesciption()
+                ville.getDesciption(),
+                ville.getDateCreation(),
+                ville.getSuperid()
 
         );
     }
@@ -41,6 +45,8 @@ public class VilleMapper implements Mapper<VilleDTO, Ville>{
         ville.setNhabitant(villeDTO.getNhabitant());
         ville.setProvince(provinceRepository.getOne(villeDTO.getProvince().getId()));
         ville.setDesciption(villeDTO.getDescription());
+        ville.setDateCreation(LocalDateTime.now());
+        ville.setSuperid(0);
 
         return ville;
     }
