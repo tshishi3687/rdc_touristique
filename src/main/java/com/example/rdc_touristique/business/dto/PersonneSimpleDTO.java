@@ -21,6 +21,6 @@ public class PersonneSimpleDTO implements IdentifiedDTO<Integer>{
     private int telephone;
     private String email;
     private String status;
-    private LocalDateTime dateCreation;
-    private int superid;
+//    private LocalDateTime dateCreation;
+//    private int superid;
 }

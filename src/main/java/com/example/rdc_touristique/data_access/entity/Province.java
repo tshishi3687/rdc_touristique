@@ -21,9 +21,9 @@ public class Province {
     @Column
     private String description;
 
-    @Column
-    private LocalDateTime dateCreation;
-
-    @Column
-    private int superid;
+//    @Column
+//    private LocalDateTime dateCreation;
+//
+//    @Column
+//    private int superid;
 }

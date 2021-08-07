@@ -16,6 +16,6 @@ public class VilleDTO implements IdentifiedDTO<Integer>{
     private Integer nhabitant;
     private ProvinceDTO province;
     private String description;
-    private LocalDateTime dateCreation;
-    private int superid;
+//    private LocalDateTime dateCreation;
+//    private int superid;
 }

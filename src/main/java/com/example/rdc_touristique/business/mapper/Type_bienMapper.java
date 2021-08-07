@@ -16,9 +16,9 @@ public class Type_bienMapper implements Mapper<Type_bienDTO, Type_bien>{
 
         return new Type_bienDTO(
                 type_bien.getId(),
-                type_bien.getNom(),
-                type_bien.getDateCreation(),
-                type_bien.getSuperid()
+                type_bien.getNom()
+//                type_bien.getDateCreation(),
+//                type_bien.getSuperid()
         );
     }
 
@@ -30,8 +30,8 @@ public class Type_bienMapper implements Mapper<Type_bienDTO, Type_bien>{
         Type_bien type_bien = new Type_bien();
         type_bien.setId(type_bienDTO.getId());
         type_bien.setNom(type_bienDTO.getNom());
-        type_bien.setDateCreation(LocalDateTime.now());
-        type_bien.setSuperid(0);
+//        type_bien.setDateCreation(LocalDateTime.now());
+//        type_bien.setSuperid(0);
 
         return type_bien;
     }

@@ -2,21 +2,23 @@ package com.example.rdc_touristique.data_access.entity;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.stereotype.Component;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "image_table")
-public class ImageModel {
-    public ImageModel() {
+@Table(name = "imagesBien")
+@Component
+public class ImageBien {
+    public ImageBien() {
         super();
     }
-    public ImageModel(String name, String type, byte[] picByte, int superid) {
+    public ImageBien(String name, String type, byte[] picByte, Bien bienid) {
         this.name = name;
         this.type = type;
         this.picByte = picByte;
-        this.superid = superid;
+        this.bienid = bienid;
     }
     @Id
     @Column(name = "id")
@@ -32,13 +34,16 @@ public class ImageModel {
     @Lob
     private byte[] picByte;
 
-    @Column
-    @Getter
-    @Setter
-    private int superid;
+    @ManyToOne
+    private Bien bienid = new Bien();
 
-    @Column
-    private LocalDateTime dateCreation;
+    public Bien getBienid() {
+        return bienid;
+    }
+
+    public void setBienid(Bien bienid) {
+        this.bienid = bienid;
+    }
 
     public String getName() {
         return name;
@@ -58,4 +63,5 @@ public class ImageModel {
     public void setPicByte(byte[] picByte) {
         this.picByte = picByte;
     }
+
 }

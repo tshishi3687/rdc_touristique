@@ -22,10 +22,10 @@ public class Type_bien {
     @Column
     private String nom;
 
-    @Column
-    private LocalDateTime dateCreation;
-
-    @Column
-    private int superid;
+//    @Column
+//    private LocalDateTime dateCreation;
+//
+//    @Column
+//    private int superid;
 
 }

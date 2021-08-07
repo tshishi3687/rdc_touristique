@@ -30,9 +30,9 @@ public class Ville {
     @Column
     private String desciption;
 
-    @Column
-    private LocalDateTime dateCreation;
-
-    @Column
-    private int superid;
+//    @Column
+//    private LocalDateTime dateCreation;
+//
+//    @Column
+//    private int superid;
 }

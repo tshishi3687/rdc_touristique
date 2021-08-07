@@ -18,6 +18,7 @@ import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Timer;
 import java.util.stream.Collectors;
 
 @Service
@@ -39,6 +40,7 @@ public class BienService implements CrudService<BienDTO, Integer> {
     private Mapper<ActionDTO, Action> actionMapper;
     @Autowired
     private final ActionDTO  actionDTO = new ActionDTO();
+    private Timer timer;
 
     @Transactional
     public List<BienDTO> selonLaPersonne(PersonneSimplifierDTO personne) throws NoSuchAlgorithmException, InvalidKeySpecException {
@@ -61,8 +63,9 @@ public class BienService implements CrudService<BienDTO, Integer> {
     }
 
     @Transactional
-    public int creatKey(BienDTO toCreat) throws BienExisteExeption, NoSuchAlgorithmException, InvalidKeySpecException {
+    public int creatKey(BienDTO toCreat) throws BienExisteExeption, NoSuchAlgorithmException, InvalidKeySpecException, InterruptedException {
 
+        System.out.println(toCreat);
         if (bienRepository.existsById(toCreat.getId()))
             throw new BienExisteExeption(toCreat.getId());
 
@@ -80,7 +83,8 @@ public class BienService implements CrudService<BienDTO, Integer> {
 
         Bien entity = bienMapper.toEntity(toCreat);
         coordorRepository.save(entity.getCoordonnee());
-        return bienMapper.toDTO(bienRepository.save(entity)).getSuperid();
+        return bienRepository.save(entity).getId();
+
     }
 
     @Override

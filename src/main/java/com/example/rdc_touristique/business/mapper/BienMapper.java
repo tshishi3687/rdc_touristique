@@ -46,8 +46,7 @@ public class BienMapper implements Mapper<BienDTO, Bien>{
                 bien.getDescription(),
                 coordonneeMapper.toDTO(bien.getCoordonnee()),
                 personneMapper.toDTO(bien.getAppartient()),
-                bien.getDateCreation(),
-                bien.getSuperid()
+                bien.getDateCreation()
         );
     }
 
@@ -71,7 +70,6 @@ public class BienMapper implements Mapper<BienDTO, Bien>{
         bien.setCoordonnee(coordonneeMapper.toEntity(bienDTO.getCoordonnee()));
         bien.setAppartient(personneReposytory.getOne(bienDTO.getAppartient().getId()));
         bien.setDateCreation(LocalDateTime.now());
-        bien.setSuperid(bienDTO.getSuperid());
         return bien ;
     }
 }

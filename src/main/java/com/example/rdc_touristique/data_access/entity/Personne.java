@@ -42,11 +42,11 @@ public class Personne {
     @Column
     private String status;
 
-    @Column
-    private LocalDateTime dateCreation;
+//    @Column
+//    private LocalDateTime dateCreation;
 
-    @Column
-    private int superid;
+//    @Column
+//    private int superid;
 
     @OneToMany(mappedBy = "appartient")
     private List<Bien> bien;

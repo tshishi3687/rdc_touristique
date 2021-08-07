@@ -28,5 +28,4 @@ public class BienDTO implements IdentifiedDTO<Integer>{
     private CoordonneeDTO coordonnee;
     private PersonneSimplifierDTO appartient;
     private LocalDateTime dateCreation;
-    private int superid;
 }

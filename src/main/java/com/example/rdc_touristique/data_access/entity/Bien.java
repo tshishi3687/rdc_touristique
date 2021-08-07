@@ -64,8 +64,9 @@ public class Bien {
     private LocalDateTime dateCreation;
 
     @OneToMany(mappedBy = "bien_reserve")
-    private List<Reservation> de_reservation;
+    private List<Reservation> deReservation;
 
-    @Column
-    private int superid;
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "BienID")
+    private List<ImageBien> Image;
 }

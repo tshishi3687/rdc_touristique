@@ -1,19 +1,26 @@
 package com.example.rdc_touristique.business.service;
 
+import com.example.rdc_touristique.business.dto.BienDTO;
 import com.example.rdc_touristique.business.dto.ImageModelDTO;
-import com.example.rdc_touristique.data_access.entity.ImageModel;
+import com.example.rdc_touristique.business.mapper.Mapper;
+import com.example.rdc_touristique.data_access.entity.Bien;
+import com.example.rdc_touristique.data_access.entity.ImageBien;
+import com.example.rdc_touristique.data_access.repository.BienRepository;
+import com.example.rdc_touristique.data_access.repository.CoordonneeRepository;
 import com.example.rdc_touristique.data_access.repository.ImageRepository;
 import com.example.rdc_touristique.exeption.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.transaction.Transactional;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.util.ArrayList;
+import java.security.NoSuchAlgorithmException;
+import java.security.spec.InvalidKeySpecException;
 import java.util.List;
 import java.util.Optional;
 import java.util.zip.DataFormatException;
@@ -21,12 +28,18 @@ import java.util.zip.Deflater;
 import java.util.zip.Inflater;
 
 @Service
+@Component
 public class ImageModelService implements CrudService<ImageModelDTO, Integer>{
 
 
     @Autowired
-    ImageRepository imageRepository;
-    private ResponseEntity.BodyBuilder rest[];
+    private ImageRepository imageRepository;
+    @Autowired
+    private BienRepository bienRepository;
+    @Autowired
+    private Mapper<BienDTO, Bien> bienMapper;
+    @Autowired
+    private CoordonneeRepository coordorRepository;
 
     @Override
     public void creat(ImageModelDTO toDTO) throws ElementAlreadyExistsException {
@@ -54,28 +67,27 @@ public class ImageModelService implements CrudService<ImageModelDTO, Integer>{
     }
 
     @Transactional
-    public ResponseEntity.BodyBuilder uploadImage(List<MultipartFile> file, int superid) throws IOException {
-        System.out.println(superid);
+    public ResponseEntity.BodyBuilder uploadImage(List<MultipartFile> file, int id) throws IOException, NoSuchAlgorithmException, InvalidKeySpecException {
+
         for (MultipartFile multipartFile : file) {
-            ImageModel img = new ImageModel(multipartFile.getOriginalFilename(), multipartFile.getContentType(),
-                    compressBytes(multipartFile.getBytes()), superid);
+            ImageBien img = new ImageBien();
+            img.setName(multipartFile.getOriginalFilename());
+            img.setType(multipartFile.getContentType());
+            img.setPicByte(compressBytes(multipartFile.getBytes()));
+            img.setBienid(bienRepository.getOne(id));
             imageRepository.save(img);
         }
+
         return ResponseEntity.status(HttpStatus.OK);
     }
 
-    @Transactional
-    public ImageModel getImage(String imageName) throws IOException{
-        final Optional<ImageModel> retrievedImage = imageRepository.findByName(imageName);
-        ImageModel img = new ImageModel(retrievedImage.get().getName(), retrievedImage.get().getType(),
-                decompressBytes(retrievedImage.get().getPicByte()), imageRepository.findByName(imageName).get().getSuperid());
-        return img;
-    }
-
-    @Transactional
-    public List<ImageModel> getAllBySuperid(int id) throws IOException{
-        return new ArrayList<>(imageRepository.findBySuperid(id));
-    }
+//    @Transactional
+//    public ImageBien getImage(Long imageName) {
+//        final Optional<ImageBien> retrievedImage = imageRepository.findByName(imageName);
+//        ImageBien img = new ImageBien(retrievedImage.get().getName(), retrievedImage.get().getType(),
+//                decompressBytes(retrievedImage.get().getPicByte()), bienMapper.toDTO(imageRepository.getOne(imageName).getBien()));
+//        return img;
+//    }
 
     // compress the image bytes before storing it in the database
     private static byte[] compressBytes(byte[] data) {
@@ -90,7 +102,7 @@ public class ImageModelService implements CrudService<ImageModelDTO, Integer>{
         }
         try {
             outputStream.close();
-        } catch (IOException e) {
+        } catch (IOException ignored) {
         }
         System.out.println("Compressed Image Byte Size - " + outputStream.toByteArray().length);
         return outputStream.toByteArray();

@@ -13,7 +13,7 @@ public class Type_bienDTO implements IdentifiedDTO<Integer>{
 
     private Integer id;
     private String nom;
-    private LocalDateTime dateCreation;
-    private int superid;
+//    private LocalDateTime dateCreation;
+//    private int superid;
 
 }

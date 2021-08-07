@@ -26,9 +26,9 @@ public class PersonneSimpleMaper implements Mapper<PersonneSimpleDTO, Personne>{
                 null,
                 personne.getTelephone(),
                 personne.getEmail(),
-                personne.getStatus(),
-                personne.getDateCreation(),
-                personne.getSuperid()
+                personne.getStatus()
+//                personne.getDateCreation(),
+//                personne.getSuperid()
         );
     }
 
@@ -46,8 +46,8 @@ public class PersonneSimpleMaper implements Mapper<PersonneSimpleDTO, Personne>{
         personne.setTelephone(personneSimpleDTO.getTelephone());
         personne.setEmail(personneSimpleDTO.getEmail());
         personne.setStatus("client");
-        personne.setDateCreation(LocalDateTime.now());
-        personne.setSuperid(0);
+//        personne.setDateCreation(LocalDateTime.now());
+//        personne.setSuperid(0);
         return personne;
     }
 

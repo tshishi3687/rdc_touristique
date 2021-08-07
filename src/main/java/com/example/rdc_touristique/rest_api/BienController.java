@@ -29,7 +29,7 @@ public class BienController extends AbstratCrudController<BienDTO, Integer> {
 
     @PostMapping("/creatt")
     @ResponseStatus(HttpStatus.OK)
-    public int creatBient(@RequestBody BienDTO bienDTO) throws BienExisteExeption, NoSuchAlgorithmException, InvalidKeySpecException {
+    public int creatBient(@RequestBody BienDTO bienDTO) throws BienExisteExeption, NoSuchAlgorithmException, InvalidKeySpecException, InterruptedException {
         return ((BienService)service).creatKey(bienDTO);
     }
 }
