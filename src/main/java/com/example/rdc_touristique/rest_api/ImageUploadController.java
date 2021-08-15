@@ -10,13 +10,9 @@ import com.example.rdc_touristique.business.dto.ImageModelDTO;
 import com.example.rdc_touristique.business.service.CrudService;
 import com.example.rdc_touristique.business.service.ImageModelService;
 import com.example.rdc_touristique.data_access.entity.ImageBien;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity.BodyBuilder;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 @RestController
@@ -27,10 +23,16 @@ public class ImageUploadController extends AbstratCrudController<ImageModelDTO, 
     }
 
     @PostMapping("/upload")
+    @ResponseStatus(HttpStatus.OK)
     public BodyBuilder uplaodImage(@RequestParam("imageFile") List<MultipartFile> file, @RequestParam("bien")int bienDTO) throws IOException, NoSuchAlgorithmException, InvalidKeySpecException {
         return ((ImageModelService)service).uploadImage(file, bienDTO);
     }
 
+    @PostMapping("/all")
+    @ResponseStatus(HttpStatus.OK)
+    public List<ImageBien> allImageByBienid(@RequestBody BienDTO bien){
+        return ((ImageModelService)service).getImage(bien);
+    }
 
 //    @GetMapping(path = { "/get/{imageName}" })
 //    public ImageBien getImage(@PathVariable("imageName") String imageName) throws IOException {

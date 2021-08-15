@@ -21,6 +21,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.zip.DataFormatException;
@@ -81,13 +82,24 @@ public class ImageModelService implements CrudService<ImageModelDTO, Integer>{
         return ResponseEntity.status(HttpStatus.OK);
     }
 
-//    @Transactional
-//    public ImageBien getImage(Long imageName) {
-//        final Optional<ImageBien> retrievedImage = imageRepository.findByName(imageName);
-//        ImageBien img = new ImageBien(retrievedImage.get().getName(), retrievedImage.get().getType(),
-//                decompressBytes(retrievedImage.get().getPicByte()), bienMapper.toDTO(imageRepository.getOne(imageName).getBien()));
-//        return img;
-//    }
+
+    @Transactional
+    public List<ImageBien> getImage(BienDTO bien) {
+        if(bien == null)
+            return null;
+
+        List<ImageBien> listBien = imageRepository.findAllByBienid(bienRepository.getOne(bien.getId()));
+        List<ImageBien> newListImageBien = new ArrayList<>();
+
+        for (ImageBien imageBien : listBien) {
+            ImageBien imgg = new ImageBien();
+            imgg.setName(imageBien.getName());
+            imgg.setType(imageBien.getType());
+            imgg.setPicByte(decompressBytes(imageBien.getPicByte()));
+            newListImageBien.add(imgg);
+        }
+        return newListImageBien;
+    }
 
     // compress the image bytes before storing it in the database
     private static byte[] compressBytes(byte[] data) {
@@ -119,8 +131,7 @@ public class ImageModelService implements CrudService<ImageModelDTO, Integer>{
                 outputStream.write(buffer, 0, count);
             }
             outputStream.close();
-        } catch (IOException ioe) {
-        } catch (DataFormatException e) {
+        } catch (IOException | DataFormatException ignored) {
         }
         return outputStream.toByteArray();
     }
