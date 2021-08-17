@@ -26,6 +26,7 @@ public class ImageBien {
     private Long id;
     @Column(name = "name")
     private String name;
+
     @Column(name = "type")
     private String type;
     //image bytes can have large lengths so we specify a value

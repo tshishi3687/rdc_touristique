@@ -9,13 +9,14 @@ import org.springframework.stereotype.Component;
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
 import java.time.LocalDateTime;
-import java.util.stream.Collectors;
 
 @Component
 public class BienMapper implements Mapper<BienDTO, Bien>{
 
     @Autowired
-    private Mapper<ReservationDTO, Reservation> reservationMapper;
+    private Mapper<DureeLocationDTO, DureeLocation> dureeLocationMapper;
+    @Autowired
+    private DureeLocationRepository dureeLocationRepository;
     @Autowired
     private Mapper<PersonneSimplifierDTO, Personne> personneMapper;
     @Autowired
@@ -35,6 +36,7 @@ public class BienMapper implements Mapper<BienDTO, Bien>{
         return new BienDTO(
                 bien.getId(),
                 type_bienMapper.toDTO(bien.getType()),
+                dureeLocationMapper.toDTO(bien.getDureeLocation()),
                 bien.getPrix(),
                 bien.getNpmin(),
                 bien.getNpmax(),
@@ -58,6 +60,7 @@ public class BienMapper implements Mapper<BienDTO, Bien>{
         Bien bien = new Bien();
         bien.setId(bienDTO.getId());
         bien.setType(type_bienRepository.getOne(bienDTO.getType_bien().getId()));
+        bien.setDureeLocation(dureeLocationRepository.getOne(bienDTO.getDureeLocation().getId()));
         bien.setPrix(bienDTO.getPrix());
         bien.setNpmin(bienDTO.getNpmin());
         bien.setNpmax(bienDTO.getNpmax());

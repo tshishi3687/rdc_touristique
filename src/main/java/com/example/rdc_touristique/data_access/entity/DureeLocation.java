@@ -6,20 +6,22 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
 
 @Entity
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class Type_bien {
-    
+
+public class DureeLocation {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @Column
-    private String nom;
+    @Column(name = "duree")
+    private String duree;
 
+    @Column(name = "desciption")
+    private String desciption;
 }

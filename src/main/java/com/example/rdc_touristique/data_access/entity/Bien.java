@@ -24,6 +24,10 @@ public class Bien {
     @JoinColumn(name = "type")
     private Type_bien type;
 
+    @ManyToOne
+    @JoinColumn(name = "dureeLocation")
+    private DureeLocation dureeLocation;
+
     @Column
     private int prix;
 

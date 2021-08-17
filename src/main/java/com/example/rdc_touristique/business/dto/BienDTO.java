@@ -1,6 +1,7 @@
 package com.example.rdc_touristique.business.dto;
 
 import com.example.rdc_touristique.data_access.entity.Action;
+import com.example.rdc_touristique.data_access.entity.DureeLocation;
 import lombok.*;
 
 import javax.persistence.Column;
@@ -16,6 +17,7 @@ public class BienDTO implements IdentifiedDTO<Integer>{
 
     private Integer id;
     private Type_bienDTO type_bien;
+    private DureeLocationDTO dureeLocation;
     private int prix;
     private int npmin;
     private int npmax;
