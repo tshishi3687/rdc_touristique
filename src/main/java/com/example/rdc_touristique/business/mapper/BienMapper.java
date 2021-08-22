@@ -27,6 +27,10 @@ public class BienMapper implements Mapper<BienDTO, Bien>{
     private Type_bienRepository type_bienRepository;
     @Autowired
     private PersonneReposytory personneReposytory;
+    @Autowired
+    private Mapper<AladispositionDTO, Aladisposition> aladispositionMapper;
+    @Autowired
+    private AladispositionRepository aladispositionRepository;
 
     @Override
     public BienDTO toDTO(Bien bien) {
@@ -37,6 +41,7 @@ public class BienMapper implements Mapper<BienDTO, Bien>{
                 bien.getId(),
                 type_bienMapper.toDTO(bien.getType()),
                 dureeLocationMapper.toDTO(bien.getDureeLocation()),
+                aladispositionMapper.toDTO(bien.getAladisposition()),
                 bien.getPrix(),
                 bien.getNpmin(),
                 bien.getNpmax(),
@@ -44,7 +49,6 @@ public class BienMapper implements Mapper<BienDTO, Bien>{
                 bien.getNsdb(),
                 bien.getNwc(),
                 bien.getSuperficie(),
-                bien.getAladisposition(),
                 bien.getDescription(),
                 coordonneeMapper.toDTO(bien.getCoordonnee()),
                 personneMapper.toDTO(bien.getAppartient()),
@@ -61,6 +65,7 @@ public class BienMapper implements Mapper<BienDTO, Bien>{
         bien.setId(bienDTO.getId());
         bien.setType(type_bienRepository.getOne(bienDTO.getType_bien().getId()));
         bien.setDureeLocation(dureeLocationRepository.getOne(bienDTO.getDureeLocation().getId()));
+        bien.setAladisposition(aladispositionMapper.toEntity(bienDTO.getAladisposition()));
         bien.setPrix(bienDTO.getPrix());
         bien.setNpmin(bienDTO.getNpmin());
         bien.setNpmax(bienDTO.getNpmax());
@@ -68,11 +73,10 @@ public class BienMapper implements Mapper<BienDTO, Bien>{
         bien.setNsdb(bienDTO.getNsdb());
         bien.setNwc(bienDTO.getNwc());
         bien.setSuperficie(bienDTO.getSuperficie());
-        bien.setAladisposition(bienDTO.getAladisposition());
         bien.setDescription(bienDTO.getDescription());
         bien.setCoordonnee(coordonneeMapper.toEntity(bienDTO.getCoordonnee()));
         bien.setAppartient(personneReposytory.getOne(bienDTO.getAppartient().getId()));
         bien.setDateCreation(LocalDateTime.now());
-        return bien ;
+        return bien;
     }
 }

@@ -8,6 +8,7 @@ import com.example.rdc_touristique.exeption.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
@@ -23,13 +24,18 @@ public class DureeLocationService implements CrudService<DureeLocationDTO, Integ
     private Mapper<DureeLocationDTO, DureeLocation> dureeLocationMapper;
 
     @Override
-    public void creat(DureeLocationDTO toDTO) throws ElementAlreadyExistsException, IOException, NoSuchAlgorithmException, InvalidKeySpecException, ActionFoundExeption {
+    public void creat(DureeLocationDTO toDTO) throws DureeLocationExisteExeption, NoSuchAlgorithmException, InvalidKeySpecException {
+        if(dureeLocationRepository.existsById(toDTO.getId()))
+            throw new DureeLocationExisteExeption(toDTO.getId());
 
+        dureeLocationRepository.save(dureeLocationMapper.toEntity(toDTO));
     }
 
     @Override
-    public DureeLocationDTO readOne(Integer integer) throws FoundExeption, BienFoundExeption, CoordonneeFoundExeption, Lien_photoFoundExeption, PersonneSimpleFoundExeption, ProvinceFoundExeption, ReservationFoundExeption, ServiceFoundExeption, Type_bienFoundExeption, TypeFoundExeption, VilleFoundExeption, ActionFoundExeption {
-        return null;
+    public DureeLocationDTO readOne(Integer integer) throws DureeLocationFoundExeption{
+        DureeLocation entity = dureeLocationRepository.findById(integer)
+                .orElseThrow(()-> new DureeLocationFoundExeption(integer));
+        return dureeLocationMapper.toDTO(entity);
     }
 
     @Override
@@ -40,12 +46,16 @@ public class DureeLocationService implements CrudService<DureeLocationDTO, Integ
     }
 
     @Override
-    public void update(DureeLocationDTO toUpdate) throws FoundExeption, BienFoundExeption, CoordonneeFoundExeption, Lien_photoFoundExeption, PersonneSimpleFoundExeption, ProvinceFoundExeption, ReservationFoundExeption, ServiceFoundExeption, Type_bienFoundExeption, TypeFoundExeption, VilleFoundExeption, NoSuchAlgorithmException, InvalidKeySpecException, ActionFoundExeption {
-
+    public void update(DureeLocationDTO toUpdate) throws DureeLocationFoundExeption, NoSuchAlgorithmException, InvalidKeySpecException {
+        if(!dureeLocationRepository.existsById(toUpdate.getId()))
+            throw new DureeLocationFoundExeption(toUpdate.getId());
+        dureeLocationRepository.save(dureeLocationMapper.toEntity(toUpdate));
     }
 
     @Override
-    public void delete(Integer toDelete) throws FoundExeption, BienFoundExeption, CoordonneeFoundExeption, Lien_photoFoundExeption, PersonneSimpleFoundExeption, ProvinceFoundExeption, ReservationFoundExeption, ServiceFoundExeption, Type_bienFoundExeption, TypeFoundExeption, VilleFoundExeption, ActionFoundExeption, NoSuchAlgorithmException, InvalidKeySpecException {
-
+    public void delete(Integer toDelete) throws DureeLocationFoundExeption {
+        if(!dureeLocationRepository.existsById(toDelete))
+            throw new DureeLocationFoundExeption(toDelete);
+        dureeLocationRepository.deleteById(toDelete);
     }
 }

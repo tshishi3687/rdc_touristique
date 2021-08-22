@@ -36,7 +36,7 @@ public class ImageBien {
     private byte[] picByte;
 
     @ManyToOne
-    private Bien bienid = new Bien();
+    private Bien bienid;
 
     public Bien getBienid() {
         return bienid;

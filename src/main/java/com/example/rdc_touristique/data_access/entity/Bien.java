@@ -28,6 +28,10 @@ public class Bien {
     @JoinColumn(name = "dureeLocation")
     private DureeLocation dureeLocation;
 
+    @OneToOne( cascade = CascadeType.ALL )
+    @JoinColumn( name="aladisposition", referencedColumnName = "id")
+    private Aladisposition aladisposition;
+
     @Column
     private int prix;
 
@@ -50,14 +54,11 @@ public class Bien {
     private int superficie;
 
     @Column
-    private String aladisposition;
-
-    @Column
     private String description;
 
 
     @ManyToOne
-    @JoinColumn(name = "coordonnee")
+    @JoinColumn(name = "coordonnee", referencedColumnName = "id")
     private Coordonnee coordonnee;
 
     @ManyToOne

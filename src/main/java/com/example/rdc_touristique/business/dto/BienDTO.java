@@ -18,6 +18,7 @@ public class BienDTO implements IdentifiedDTO<Integer>{
     private Integer id;
     private Type_bienDTO type_bien;
     private DureeLocationDTO dureeLocation;
+    private AladispositionDTO aladisposition;
     private int prix;
     private int npmin;
     private int npmax;
@@ -25,7 +26,6 @@ public class BienDTO implements IdentifiedDTO<Integer>{
     private int nsdb;
     private int nwc;
     private int superficie;
-    private String aladisposition;
     private String description;
     private CoordonneeDTO coordonnee;
     private PersonneSimplifierDTO appartient;

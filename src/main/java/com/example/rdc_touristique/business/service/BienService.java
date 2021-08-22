@@ -3,12 +3,10 @@ package com.example.rdc_touristique.business.service;
 import com.example.rdc_touristique.business.dto.*;
 import com.example.rdc_touristique.business.mapper.Mapper;
 import com.example.rdc_touristique.data_access.entity.Action;
+import com.example.rdc_touristique.data_access.entity.Aladisposition;
 import com.example.rdc_touristique.data_access.entity.Bien;
 import com.example.rdc_touristique.data_access.entity.Personne;
-import com.example.rdc_touristique.data_access.repository.ActionRepository;
-import com.example.rdc_touristique.data_access.repository.BienRepository;
-import com.example.rdc_touristique.data_access.repository.CoordonneeRepository;
-import com.example.rdc_touristique.data_access.repository.PersonneReposytory;
+import com.example.rdc_touristique.data_access.repository.*;
 import com.example.rdc_touristique.exeption.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -33,14 +31,15 @@ public class BienService implements CrudService<BienDTO, Integer> {
     @Autowired
     private Mapper<PersonneSimplifierDTO, Personne> personneMapper;
     @Autowired
-    private PersonneReposytory personneReposytory;
-    @Autowired
     private ActionRepository actionRepository;
     @Autowired
     private Mapper<ActionDTO, Action> actionMapper;
     @Autowired
     private final ActionDTO  actionDTO = new ActionDTO();
-    private Timer timer;
+    @Autowired
+    private AladispositionRepository aladispositionRepository;
+    @Autowired
+    private Mapper<AladispositionDTO, Aladisposition> aladispositionMapper;
 
     @Transactional
     public List<BienDTO> selonLaPersonne(PersonneSimplifierDTO personne) throws NoSuchAlgorithmException, InvalidKeySpecException {
@@ -65,7 +64,6 @@ public class BienService implements CrudService<BienDTO, Integer> {
     @Transactional
     public int creatKey(BienDTO toCreat) throws BienExisteExeption, NoSuchAlgorithmException, InvalidKeySpecException, InterruptedException {
 
-        System.out.println(toCreat);
         if (bienRepository.existsById(toCreat.getId()))
             throw new BienExisteExeption(toCreat.getId());
 
@@ -80,8 +78,8 @@ public class BienService implements CrudService<BienDTO, Integer> {
                 + " par " + toCreat.getAppartient().getNom() + "-" + toCreat.getAppartient().getPrenom());
         actionRepository.save(actionMapper.toEntity(actionDTO));
 
-
         Bien entity = bienMapper.toEntity(toCreat);
+        aladispositionRepository.save(entity.getAladisposition());
         coordorRepository.save(entity.getCoordonnee());
         return bienRepository.save(entity).getId();
 
