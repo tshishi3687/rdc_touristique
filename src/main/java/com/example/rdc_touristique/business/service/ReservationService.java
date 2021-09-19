@@ -31,7 +31,7 @@ public class ReservationService implements CrudService<ReservationDTO, Integer> 
 
     @Transactional
     public List<ReservationDTO> selonLaPer(PersonneSimpleDTO personne) throws NoSuchAlgorithmException, InvalidKeySpecException {
-        personne.setMdp("salut123456789");
+
         return reservationRepository.findAllByReserverPar(personneMapper.toEntity(personne)).stream()
                 .map(reservationMapper::toDTO)
                 .collect(Collectors.toList());

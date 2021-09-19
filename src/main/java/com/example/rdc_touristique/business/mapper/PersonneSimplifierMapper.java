@@ -1,6 +1,6 @@
 package com.example.rdc_touristique.business.mapper;
 
-import com.example.rdc_touristique.business.dto.IdentifiedDTO;
+
 import com.example.rdc_touristique.business.dto.PersonneSimplifierDTO;
 import com.example.rdc_touristique.data_access.entity.Personne;
 import org.springframework.stereotype.Component;

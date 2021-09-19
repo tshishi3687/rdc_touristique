@@ -1,8 +1,6 @@
 package com.example.rdc_touristique.business.dto;
 
 import lombok.*;
-
-import javax.persistence.Column;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
@@ -17,10 +15,6 @@ public class PersonneSimpleDTO implements IdentifiedDTO<Integer>{
     private String nom;
     private String prenom;
     private LocalDate ddn;
-    private String mdp;
-    private int telephone;
-    private String email;
-    private String status;
-//    private LocalDateTime dateCreation;
-//    private int superid;
+    private RollDTO roll;
+    private LocalDateTime ddj;
 }

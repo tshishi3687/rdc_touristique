@@ -29,13 +29,18 @@ public class BienMapper implements Mapper<BienDTO, Bien>{
     private PersonneReposytory personneReposytory;
     @Autowired
     private Mapper<AladispositionDTO, Aladisposition> aladispositionMapper;
-    @Autowired
-    private AladispositionRepository aladispositionRepository;
 
     @Override
     public BienDTO toDTO(Bien bien) {
         if (bien==null)
             return null;
+
+        int likes;
+        if((bien.getLikes()== null) || (bien.getLikes().size()<=0)){
+            likes = 0;
+        }else{
+            likes = bien.getLikes().size();
+        }
 
         return new BienDTO(
                 bien.getId(),
@@ -52,7 +57,8 @@ public class BienMapper implements Mapper<BienDTO, Bien>{
                 bien.getDescription(),
                 coordonneeMapper.toDTO(bien.getCoordonnee()),
                 personneMapper.toDTO(bien.getAppartient()),
-                bien.getDateCreation()
+                bien.getDateCreation(),
+                likes
         );
     }
 

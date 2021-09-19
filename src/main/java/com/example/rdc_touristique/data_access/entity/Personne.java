@@ -9,6 +9,7 @@ import javax.persistence.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Getter
@@ -30,27 +31,38 @@ public class Personne {
     @Column
     private LocalDate ddn;
 
-    @Column
-    private String mdp;
+    @ManyToOne
+    @JoinColumn(name = "roll", referencedColumnName = "id")
+    private Roll roll;
 
-    @Column
-    private int telephone;
+    @Column(name = "date_creation")
+    private LocalDateTime ddj;
 
-    @Column
-    private String email;
+    @OneToMany(mappedBy = "appartienA")
+    private List<AdressUser> adressUser;
 
-    @Column
-    private String status;
+    @OneToMany(mappedBy = "appartienA")
+    private List<ContactUser> contactUser;
 
-//    @Column
-//    private LocalDateTime dateCreation;
+    @OneToMany(mappedBy = "appartienA")
+    private List<PassWord> mdp;
 
-//    @Column
-//    private int superid;
+    @OneToMany(mappedBy = "appartienA")
+    private List<InfoBancaire> infoBancaires;
+
+    @OneToMany(mappedBy= "personneId")
+    private List<DocOfficiel> docOfficiels;
 
     @OneToMany(mappedBy = "appartient")
     private List<Bien> bien;
 
     @OneToMany(mappedBy = "reserverPar")
     private List<Reservation> reservation;
+
+    @ManyToMany
+    @JoinTable(
+            name = "personne_like_bien",
+            joinColumns = @JoinColumn(name = "PersonneID"),
+            inverseJoinColumns = @JoinColumn(name = "bienID"))
+    private List<Bien> likedBien;
 }

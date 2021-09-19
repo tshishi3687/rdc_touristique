@@ -8,6 +8,7 @@ import lombok.Setter;
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Getter
@@ -74,4 +75,7 @@ public class Bien {
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "BienID")
     private List<ImageBien> Image;
+
+    @ManyToMany(mappedBy = "likedBien")
+    private List<Personne> likes;
 }

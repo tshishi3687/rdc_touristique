@@ -14,12 +14,6 @@ import java.security.spec.InvalidKeySpecException;
 @Component
 public class ActionMapper implements Mapper<ActionDTO, Action> {
 
-
-    @Autowired
-    private Mapper<PersonneSimplifierDTO, Personne> personneMapper;
-
-    @Autowired
-    private PersonneReposytory personneReposytory;
     @Override
 
     public ActionDTO toDTO(Action action) {

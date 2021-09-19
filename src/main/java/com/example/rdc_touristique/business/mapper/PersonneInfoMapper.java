@@ -33,15 +33,16 @@ public class PersonneInfoMapper implements Mapper<PersonneInfoDTO, Personne>{
         if(personne==null)
             return null;
 
-        return new PersonneInfoDTO(
-                personne.getId(),
-                personne.getBien().stream()
-                .map((bien -> bienDTOMapper.toDTO(bien)))
-                .collect(Collectors.toList()),
-                personne.getReservation().stream()
-                .map((reservation -> reservationMapper.toDTO(reservation)))
-                .collect(Collectors.toList())
-        );
+        return null;
+//        return new PersonneInfoDTO(
+//                personne.getId(),
+//                personne.getBien().stream()
+//                .map((bien -> bienDTOMapper.toDTO(bien)))
+//                .collect(Collectors.toList()),
+//                personne.getReservation().stream()
+//                .map((reservation -> reservationMapper.toDTO(reservation)))
+//                .collect(Collectors.toList())
+//        );
     }
 
     @Override
@@ -55,9 +56,7 @@ public class PersonneInfoMapper implements Mapper<PersonneInfoDTO, Personne>{
                     .map(bienDTO -> {
                         try {
                             return bienDTOMapper.toEntity(bienDTO);
-                        } catch (NoSuchAlgorithmException e) {
-                            e.printStackTrace();
-                        } catch (InvalidKeySpecException e) {
+                        } catch (NoSuchAlgorithmException | InvalidKeySpecException e) {
                             e.printStackTrace();
                         }
                         return null;
@@ -65,10 +64,11 @@ public class PersonneInfoMapper implements Mapper<PersonneInfoDTO, Personne>{
                     .collect(Collectors.toList()));
         personne.setReservation(reservationRepository.findAllById(personneInfoDTO.getReservation()
                 .stream()
-                .map(reservationDTO -> reservationDTO.getId())
+                .map(ReservationDTO::getId)
                 .collect(Collectors.toList())))
         ;
 
-        return personne;
+        return null;
+//        return personne;
     }
 }

@@ -68,7 +68,7 @@ public class ImageModelService implements CrudService<ImageModelDTO, Integer>{
     }
 
     @Transactional
-    public ResponseEntity.BodyBuilder uploadImage(List<MultipartFile> file, int id) throws IOException, NoSuchAlgorithmException, InvalidKeySpecException {
+    public ResponseEntity.BodyBuilder uploadImage(List<MultipartFile> file, int id) throws IOException{
 
         for (MultipartFile multipartFile : file) {
             ImageBien img = new ImageBien();

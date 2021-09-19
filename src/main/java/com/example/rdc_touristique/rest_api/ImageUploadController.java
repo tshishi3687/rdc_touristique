@@ -24,7 +24,7 @@ public class ImageUploadController extends AbstratCrudController<ImageModelDTO, 
 
     @PostMapping("/upload")
     @ResponseStatus(HttpStatus.OK)
-    public BodyBuilder uplaodImage(@RequestParam("imageFile") List<MultipartFile> file, @RequestParam("bien")int bienDTO) throws IOException, NoSuchAlgorithmException, InvalidKeySpecException {
+    public BodyBuilder uplaodImage(@RequestParam("imageFile") List<MultipartFile> file, @RequestParam("bien")int bienDTO) throws IOException{
         return ((ImageModelService)service).uploadImage(file, bienDTO);
     }
 
@@ -33,15 +33,5 @@ public class ImageUploadController extends AbstratCrudController<ImageModelDTO, 
     public List<ImageBien> allImageByBienid(@RequestBody BienDTO bien){
         return ((ImageModelService)service).getImage(bien);
     }
-
-//    @GetMapping(path = { "/get/{imageName}" })
-//    public ImageBien getImage(@PathVariable("imageName") String imageName) throws IOException {
-//        return ((ImageModelService)service).getImage(imageName);
-//    }
-
-//    @GetMapping(path = "getall")
-//    public List<ImageModel> getAllbySuperid(int id) throws IOException {
-//        return ((ImageModelService)service).getAllBySuperid(id);
-//    }
 
 }
