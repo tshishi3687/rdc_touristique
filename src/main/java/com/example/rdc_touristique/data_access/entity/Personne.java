@@ -9,7 +9,6 @@ import javax.persistence.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Set;
 
 @Entity
 @Getter
@@ -56,8 +55,8 @@ public class Personne {
     @OneToMany(mappedBy = "appartient")
     private List<Bien> bien;
 
-    @OneToMany(mappedBy = "reserverPar")
-    private List<Reservation> reservation;
+    @OneToMany(mappedBy = "faitPar")
+    private List<Demande> demande;
 
     @ManyToMany
     @JoinTable(

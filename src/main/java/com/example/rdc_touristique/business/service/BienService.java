@@ -96,7 +96,7 @@ public class BienService implements CrudService<BienDTO, Integer> {
 
     @Override
     public List<BienDTO> readAll() {
-        return bienRepository.findAll().stream()
+        return bienRepository.findByOrderByIdDesc().stream()
                 .map(bienMapper::toDTO)
                 .collect(Collectors.toList());
     }

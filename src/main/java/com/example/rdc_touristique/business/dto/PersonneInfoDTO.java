@@ -16,7 +16,7 @@ public class PersonneInfoDTO implements IdentifiedDTO<Integer>{
 
     private Integer id;
     private List<BienDTO> bien;
-    private List<ReservationDTO> reservation;
+    private List<DemandeDTO> reservation;
     private List<InfoBancaire> infoBancaires;
     private List<DocOfficiel> docOfficiels;
     private List<AdressUser> adressUser;

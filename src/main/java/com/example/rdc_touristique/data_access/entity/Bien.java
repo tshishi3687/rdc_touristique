@@ -8,7 +8,6 @@ import lombok.Setter;
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Set;
 
 @Entity
 @Getter
@@ -69,11 +68,10 @@ public class Bien {
     @Column
     private LocalDateTime dateCreation;
 
-    @OneToMany(mappedBy = "bien_reserve")
-    private List<Reservation> deReservation;
+    @OneToMany(mappedBy = "bienDemandee")
+    private List<Demande> deDemande;
 
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name = "BienID")
+    @OneToMany(mappedBy = "bienid",cascade = CascadeType.ALL)
     private List<ImageBien> Image;
 
     @ManyToMany(mappedBy = "likedBien")

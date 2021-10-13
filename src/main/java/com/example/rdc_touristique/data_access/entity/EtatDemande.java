@@ -6,25 +6,18 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
 
-@Entity()
+@Entity
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class Type {
+public class EtatDemande {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
     @Column
-    private String nomtype;
-
-    @Column
-    private LocalDateTime dateCreation;
-
-    @Column
-    private int superid;
+    private String etat;
 }

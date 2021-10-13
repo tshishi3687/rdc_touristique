@@ -14,14 +14,14 @@ import java.time.LocalDateTime;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class Reservation {
+public class Demande {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @Column
-    private LocalDate ddj;
+    @Column(name = "date_creation")
+    private LocalDateTime ddj;
 
     @Column
     private LocalDate dda;
@@ -33,14 +33,15 @@ public class Reservation {
     private int npersonne;
 
     @ManyToOne
+    @JoinColumn(name = "etat_demande")
+    private EtatDemande etatDemande;
+
+    @ManyToOne
     @JoinColumn(name = "bien_reserve")
-    private Bien bien_reserve;
+    private Bien bienDemandee;
 
     @ManyToOne
     @JoinColumn(name = "reserver_par")
-    private Personne reserverPar;
-
-    @Column
-    private LocalDateTime dateCreation;
+    private Personne faitPar;
 
 }

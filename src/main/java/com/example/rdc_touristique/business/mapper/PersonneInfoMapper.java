@@ -2,12 +2,12 @@ package com.example.rdc_touristique.business.mapper;
 
 import com.example.rdc_touristique.business.dto.BienDTO;
 import com.example.rdc_touristique.business.dto.PersonneInfoDTO;
-import com.example.rdc_touristique.business.dto.ReservationDTO;
+import com.example.rdc_touristique.business.dto.DemandeDTO;
 import com.example.rdc_touristique.data_access.entity.Bien;
 import com.example.rdc_touristique.data_access.entity.Personne;
-import com.example.rdc_touristique.data_access.entity.Reservation;
+import com.example.rdc_touristique.data_access.entity.Demande;
 import com.example.rdc_touristique.data_access.repository.BienRepository;
-import com.example.rdc_touristique.data_access.repository.ReservationRepository;
+import com.example.rdc_touristique.data_access.repository.DemandeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -21,11 +21,11 @@ public class PersonneInfoMapper implements Mapper<PersonneInfoDTO, Personne>{
     @Autowired
     private Mapper<BienDTO, Bien> bienDTOMapper;
     @Autowired
-    private Mapper<ReservationDTO, Reservation> reservationMapper;
+    private Mapper<DemandeDTO, Demande> reservationMapper;
     @Autowired
     private BienRepository bienRepository;
     @Autowired
-    private ReservationRepository reservationRepository;
+    private DemandeRepository demandeRepository;
 
 
     @Override
@@ -62,9 +62,9 @@ public class PersonneInfoMapper implements Mapper<PersonneInfoDTO, Personne>{
                         return null;
                     })
                     .collect(Collectors.toList()));
-        personne.setReservation(reservationRepository.findAllById(personneInfoDTO.getReservation()
+        personne.setDemande(demandeRepository.findAllById(personneInfoDTO.getReservation()
                 .stream()
-                .map(ReservationDTO::getId)
+                .map(DemandeDTO::getId)
                 .collect(Collectors.toList())))
         ;
 

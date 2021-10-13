@@ -4,6 +4,7 @@ import lombok.*;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Getter @Setter
@@ -20,6 +21,10 @@ public class Province {
 
     @Column
     private String description;
+
+    @OneToMany(mappedBy = "provinceID")
+    private List<ImageProvince> imageProvinces;
+
 
 //    @Column
 //    private LocalDateTime dateCreation;
