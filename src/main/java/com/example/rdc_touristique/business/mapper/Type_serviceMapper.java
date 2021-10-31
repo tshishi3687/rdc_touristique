@@ -16,8 +16,7 @@ public class Type_serviceMapper implements Mapper<Type_serviceDTO, Type>{
         return new Type_serviceDTO(
                 type.getId(),
                 type.getNomtype(),
-                type.getDateCreation(),
-                type.getSuperid()
+                type.getDateCreation()
         );
     }
 
@@ -30,7 +29,6 @@ public class Type_serviceMapper implements Mapper<Type_serviceDTO, Type>{
         type.setId(typeServiceDTO.getId());
         type.setNomtype(typeServiceDTO.getNomtype());
         type.setDateCreation(LocalDateTime.now());
-        type.setSuperid(0);
         return type;
     }
 }

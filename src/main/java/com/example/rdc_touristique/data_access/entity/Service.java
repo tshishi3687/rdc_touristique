@@ -32,7 +32,4 @@ public class Service {
 
     @Column
     private LocalDateTime dateCreation;
-
-    @Column
-    private int superid;
 }

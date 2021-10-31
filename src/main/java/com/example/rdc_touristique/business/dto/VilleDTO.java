@@ -12,7 +12,7 @@ import java.time.LocalDateTime;
 public class VilleDTO implements IdentifiedDTO<Integer>{
 
     private Integer id;
-    private String nom_ville;
+    private String nomVille;
     private Integer nhabitant;
     private ProvinceDTO province;
     private String description;

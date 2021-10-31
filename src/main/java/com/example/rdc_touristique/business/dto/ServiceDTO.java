@@ -16,5 +16,4 @@ public class ServiceDTO implements IdentifiedDTO<Integer>{
     private Type_serviceDTO type;
     private CoordonneeDTO coordonnee;
     private LocalDateTime dateCreation;
-    private int superid;
 }

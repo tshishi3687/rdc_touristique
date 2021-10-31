@@ -101,6 +101,13 @@ public class ImageModelService implements CrudService<ImageModelDTO, Integer>{
         return newListImageBien;
     }
 
+    @Transactional
+    public void deleteImageBien(BienDTO bienDTO) throws NoSuchAlgorithmException, InvalidKeySpecException, BienExisteExeption {
+        if(!bienRepository.existsById(bienDTO.getId()))
+            throw new BienExisteExeption(bienDTO.getId());
+        imageRepository.deleteAllByBienid(bienMapper.toEntity(bienDTO));
+    }
+
     // compress the image bytes before storing it in the database
     private static byte[] compressBytes(byte[] data) {
         Deflater deflater = new Deflater();

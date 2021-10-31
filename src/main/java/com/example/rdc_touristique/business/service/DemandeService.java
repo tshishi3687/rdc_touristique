@@ -80,4 +80,10 @@ public class DemandeService implements CrudService<DemandeDTO, Integer> {
 
         demandeRepository.deleteById(toDelete);
     }
+
+//    @Transactional
+//    public void deleteDemande(DemandeDTO demandeDTO) throws ReservationFoundExeption {
+//        if( !demandeRepository.existsById(demandeDTO.getId()))
+//            throw new ReservationFoundExeption(demandeDTO.getId());
+//    }
 }

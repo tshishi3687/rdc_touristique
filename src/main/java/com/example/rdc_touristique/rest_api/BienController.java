@@ -6,6 +6,7 @@ import com.example.rdc_touristique.business.dto.PersonneSimplifierDTO;
 import com.example.rdc_touristique.business.service.BienService;
 import com.example.rdc_touristique.business.service.CrudService;
 import com.example.rdc_touristique.exeption.BienExisteExeption;
+import com.example.rdc_touristique.exeption.BienFoundExeption;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
@@ -32,10 +33,17 @@ public class BienController extends AbstratCrudController<BienDTO, Integer> {
     public int creatBient(@RequestBody BienDTO bienDTO) throws BienExisteExeption, NoSuchAlgorithmException, InvalidKeySpecException, InterruptedException {
         return ((BienService)service).creatKey(bienDTO);
     }
+
     @GetMapping("/bien_likes")
     public int count_like(@RequestBody BienDTO toDTO) throws Exception {
         System.out.println(toDTO);
         return 0;
 
+    }
+
+    @PostMapping("/deletebien")
+    @ResponseStatus(HttpStatus.OK)
+    public void deleteBien(@RequestBody BienDTO bienDTO) throws BienFoundExeption, NoSuchAlgorithmException, InvalidKeySpecException {
+        ((BienService)service).deleteBien(bienDTO);
     }
 }

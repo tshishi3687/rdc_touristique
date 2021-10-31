@@ -24,7 +24,7 @@ public class VilleMapper implements Mapper<VilleDTO, Ville>{
 
         return new VilleDTO(
                 ville.getId(),
-                ville.getNom_ville(),
+                ville.getNomVille(),
                 ville.getNhabitant(),
                 provinceMapper.toDTO(ville.getProvince()),
                 ville.getDesciption()
@@ -41,7 +41,7 @@ public class VilleMapper implements Mapper<VilleDTO, Ville>{
 
         Ville ville = new Ville();
         ville.setId(villeDTO.getId());
-        ville.setNom_ville(villeDTO.getNom_ville());
+        ville.setNomVille(villeDTO.getNomVille());
         ville.setNhabitant(villeDTO.getNhabitant());
         ville.setProvince(provinceRepository.getOne(villeDTO.getProvince().getId()));
         ville.setDesciption(villeDTO.getDescription());

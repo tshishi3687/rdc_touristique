@@ -18,7 +18,7 @@ public class Ville {
     private int id;
 
     @Column
-    private String nom_ville;
+    private String nomVille;
 
     @Column
     private int nhabitant;

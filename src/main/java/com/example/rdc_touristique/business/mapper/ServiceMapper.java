@@ -35,8 +35,7 @@ public class ServiceMapper implements Mapper<ServiceDTO, Service>{
                 service.getNom(),
                 typeMapper.toDTO(service.getType()),
                 coordonneeMapper.toDTO(service.getCoordonnee()),
-                service.getDateCreation(),
-                service.getSuperid()
+                service.getDateCreation()
         );
     }
 
@@ -51,7 +50,6 @@ public class ServiceMapper implements Mapper<ServiceDTO, Service>{
         service.setType(typeRepository.getOne(serviceDTO.getType().getId()));
         service.setCoordonnee(coordonneeMapper.toEntity(serviceDTO.getCoordonnee()));
         service.setDateCreation(LocalDateTime.now());
-        service.setSuperid(0);
 
         return service;
     }

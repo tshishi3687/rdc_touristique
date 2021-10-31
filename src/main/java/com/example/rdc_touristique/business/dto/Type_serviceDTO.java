@@ -14,5 +14,4 @@ public class Type_serviceDTO implements IdentifiedDTO<Integer>{
     private Integer id;
     private String nomtype;
     private LocalDateTime dateCreation;
-    private int superid;
 }

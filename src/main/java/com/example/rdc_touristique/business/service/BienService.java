@@ -40,7 +40,11 @@ public class BienService implements CrudService<BienDTO, Integer> {
     @Autowired
     private AladispositionRepository aladispositionRepository;
     @Autowired
-    private Mapper<AladispositionDTO, Aladisposition> aladispositionMapper;
+    private ImageRepository imageRepository;
+    @Autowired
+    private DemandeRepository descriptionRepository;
+    @Autowired
+    private PersonneReposytory personneReposytory;
 
     @Transactional
     public List<BienDTO> selonLaPersonne(PersonneSimplifierDTO personne) throws NoSuchAlgorithmException, InvalidKeySpecException {
@@ -74,7 +78,7 @@ public class BienService implements CrudService<BienDTO, Integer> {
         actionDTO.setIdClasse(toCreat.getId());
         actionDTO.setAction("Création");
         actionDTO.setDescription("Création de/d' " +toCreat.getType_bien().getNom() +
-                " bien  à " + toCreat.getCoordonnee().getVille().getNom_ville() +
+                " bien  à " + toCreat.getCoordonnee().getVille().getNomVille() +
                 " dans la province de " + toCreat.getCoordonnee().getVille().getProvince().getNomprovince()
                 + " par " + toCreat.getAppartient().getNom() + "-" + toCreat.getAppartient().getPrenom());
         actionRepository.save(actionMapper.toEntity(actionDTO));
@@ -112,7 +116,7 @@ public class BienService implements CrudService<BienDTO, Integer> {
         actionDTO.setIdClasse(toUpdate.getId());
         actionDTO.setAction("Modification");
         actionDTO.setDescription("Modification de/d' " +toUpdate.getType_bien().getNom() +
-                " bien  à " + toUpdate.getCoordonnee().getVille().getNom_ville() +
+                " bien  à " + toUpdate.getCoordonnee().getVille().getNomVille() +
                 " dans la province de " + toUpdate.getCoordonnee().getVille().getProvince().getNomprovince()
                 + " par " + toUpdate.getAppartient().getNom() + "-" + toUpdate.getAppartient().getPrenom());
         actionRepository.save(actionMapper.toEntity(actionDTO));
@@ -132,11 +136,26 @@ public class BienService implements CrudService<BienDTO, Integer> {
         actionDTO.setIdClasse(toDelete);
         actionDTO.setAction("Suppression");
         actionDTO.setDescription("Suppression  de/d' " + readOne(toDelete).getType_bien().getNom() +
-                " bien  à " + readOne(toDelete).getCoordonnee().getVille().getNom_ville() +
+                " bien  à " + readOne(toDelete).getCoordonnee().getVille().getNomVille() +
                 " dans la province de " + readOne(toDelete).getCoordonnee().getVille().getProvince().getNomprovince()
                 + " par " + readOne(toDelete).getAppartient().getNom() + "-" + readOne(toDelete).getAppartient().getPrenom());
         actionRepository.save(actionMapper.toEntity(actionDTO));
 
         bienRepository.deleteById(toDelete);
+    }
+
+    @Transactional
+    public void deleteBien(BienDTO bienDTO) throws BienFoundExeption, NoSuchAlgorithmException, InvalidKeySpecException {
+        if( !bienRepository.existsById(bienDTO.getId()))
+            throw new BienFoundExeption(bienDTO.getId());
+
+        List<Personne> listPersonne = personneReposytory.findAll();
+        for (Personne personne : listPersonne) {
+            if (personne.getLikedBien().contains(bienRepository.getOne(bienDTO.getId())))
+                personne.getLikedBien().removeIf(bien -> bien.getId() == bien.getId());
+        }
+        imageRepository.deleteAllByBienid(bienMapper.toEntity(bienDTO));
+        descriptionRepository.deleteAllByBienDemandee(bienMapper.toEntity(bienDTO));
+        bienRepository.deleteById(bienDTO.getId());
     }
 }

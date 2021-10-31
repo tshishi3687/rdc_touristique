@@ -24,7 +24,4 @@ public class Type {
 
     @Column
     private LocalDateTime dateCreation;
-
-    @Column
-    private int superid;
 }

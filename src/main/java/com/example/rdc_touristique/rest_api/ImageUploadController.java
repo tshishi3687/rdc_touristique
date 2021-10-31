@@ -10,6 +10,7 @@ import com.example.rdc_touristique.business.dto.ImageModelDTO;
 import com.example.rdc_touristique.business.service.CrudService;
 import com.example.rdc_touristique.business.service.ImageModelService;
 import com.example.rdc_touristique.data_access.entity.ImageBien;
+import com.example.rdc_touristique.exeption.BienExisteExeption;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity.BodyBuilder;
 import org.springframework.web.bind.annotation.*;
@@ -32,6 +33,12 @@ public class ImageUploadController extends AbstratCrudController<ImageModelDTO, 
     @ResponseStatus(HttpStatus.OK)
     public List<ImageBien> allImageByBienid(@RequestBody BienDTO bien){
         return ((ImageModelService)service).getImage(bien);
+    }
+
+    @PostMapping("/deleteimg")
+    @ResponseStatus(HttpStatus.OK)
+    public void deleteImg(@RequestBody BienDTO bienId) throws NoSuchAlgorithmException, InvalidKeySpecException, BienExisteExeption {
+        ((ImageModelService)service).deleteImageBien(bienId);
     }
 
 }

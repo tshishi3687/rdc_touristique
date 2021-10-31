@@ -10,4 +10,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 public interface ImageRepository extends JpaRepository<ImageBien, Long> {
     Optional<ImageBien> findByName(String name);
     List<ImageBien> findAllByBienid(Bien bien);
+    void deleteAllByBienid(Bien bienId);
+    boolean existsByName(String name);
 }
