@@ -12,6 +12,7 @@ import com.example.rdc_touristique.data_access.repository.ContactUserRepository;
 import com.example.rdc_touristique.data_access.repository.PassWordRepository;
 import com.example.rdc_touristique.exeption.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -31,8 +32,6 @@ public class PassWordService implements CrudService<PassWordDTO, Integer> {
     private Mapper<PassWordDTO, PassWord> passWordMapper;
     @Autowired
     private PassWordRepository passWordRepository;
-    @Autowired
-    private ContactUserRepository contactUserRepository;
 
 
     @Override

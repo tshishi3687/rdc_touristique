@@ -8,6 +8,7 @@ import com.example.rdc_touristique.business.service.CrudService;
 import com.example.rdc_touristique.exeption.BienExisteExeption;
 import com.example.rdc_touristique.exeption.BienFoundExeption;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.NoSuchAlgorithmException;

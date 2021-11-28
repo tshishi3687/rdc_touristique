@@ -68,7 +68,7 @@ public class ImageModelService implements CrudService<ImageModelDTO, Integer>{
     }
 
     @Transactional
-    public ResponseEntity.BodyBuilder uploadImage(List<MultipartFile> file, int id) throws IOException{
+    public void uploadImage(List<MultipartFile> file, int id) throws IOException{
 
         for (MultipartFile multipartFile : file) {
             ImageBien img = new ImageBien();
@@ -78,8 +78,6 @@ public class ImageModelService implements CrudService<ImageModelDTO, Integer>{
             img.setBienid(bienRepository.getOne(id));
             imageRepository.save(img);
         }
-
-        return ResponseEntity.status(HttpStatus.OK);
     }
 
 

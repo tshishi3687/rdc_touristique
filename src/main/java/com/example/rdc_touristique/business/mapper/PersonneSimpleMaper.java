@@ -1,5 +1,6 @@
 package com.example.rdc_touristique.business.mapper;
 
+import com.example.rdc_touristique.business.dto.CreatPersonne;
 import com.example.rdc_touristique.business.dto.PersonneSimpleDTO;
 import com.example.rdc_touristique.business.dto.RollDTO;
 import com.example.rdc_touristique.data_access.entity.Personne;
@@ -8,11 +9,13 @@ import com.example.rdc_touristique.data_access.repository.RollRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import javax.transaction.Transactional;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.Random;
 
 @Component
 public class PersonneSimpleMaper implements Mapper<PersonneSimpleDTO, Personne>{
@@ -33,7 +36,8 @@ public class PersonneSimpleMaper implements Mapper<PersonneSimpleDTO, Personne>{
                 personne.getPrenom(),
                 personne.getDdn(),
                 rollMapper.toDTO(personne.getRoll()),
-                personne.getDdj()
+                personne.getDdj(),
+                personne.isActive()
         );
 
     }
@@ -52,6 +56,4 @@ public class PersonneSimpleMaper implements Mapper<PersonneSimpleDTO, Personne>{
         personne.setDdj(LocalDateTime.now());
         return personne;
     }
-
-
 }

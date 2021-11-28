@@ -17,4 +17,5 @@ public class PersonneSimpleDTO implements IdentifiedDTO<Integer>{
     private LocalDate ddn;
     private RollDTO roll;
     private LocalDateTime ddj;
+    private boolean active;
 }

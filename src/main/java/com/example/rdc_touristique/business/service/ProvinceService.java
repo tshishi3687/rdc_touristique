@@ -43,7 +43,7 @@ public class ProvinceService implements CrudService<ProvinceDTO, Integer> {
 
     @Override
     public List<ProvinceDTO> readAll() {
-        return provinceRepository.findAll().stream()
+        return provinceRepository.findByOrderByNomprovinceAsc().stream()
                 .map(provinceMapper::toDTO)
                 .collect(Collectors.toList());
     }

@@ -11,6 +11,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.mail.MessagingException;
 import javax.validation.Valid;
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
@@ -26,7 +27,7 @@ public abstract class AbstratCrudController<DTO extends IdentifiedDTO<ID>,ID> im
     // CREATE - POST > http://localhost:8081/?
     @PostMapping
     @ResponseStatus(HttpStatus.OK)
-    public void create(@RequestBody @Valid DTO dto) throws ElementAlreadyExistsException, IOException, NoSuchAlgorithmException, InvalidKeySpecException, ActionFoundExeption {
+    public void create(@RequestBody @Valid DTO dto) throws ElementAlreadyExistsException, IOException, NoSuchAlgorithmException, InvalidKeySpecException, ActionFoundExeption, MessagingException {
         service.creat(dto);
 
     }

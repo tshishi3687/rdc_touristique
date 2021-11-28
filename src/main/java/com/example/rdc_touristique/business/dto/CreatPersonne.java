@@ -18,5 +18,6 @@ public class CreatPersonne {
     private RollDTO roll;
     private LocalDateTime ddj;
     private ContactUserDTO contactUser;
-    private MdpDTO mdp;
+    private MdpDTO password;
+    private String verifMDP;
 }

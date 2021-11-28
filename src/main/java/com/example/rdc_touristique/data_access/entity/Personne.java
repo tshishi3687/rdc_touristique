@@ -34,6 +34,12 @@ public class Personne {
     @JoinColumn(name = "roll", referencedColumnName = "id")
     private Roll roll;
 
+    @Column
+    private String codeActivation;
+
+    @Column
+    private boolean active;
+
     @Column(name = "date_creation")
     private LocalDateTime ddj;
 

@@ -5,8 +5,12 @@ import com.example.rdc_touristique.business.service.CrudService;
 import com.example.rdc_touristique.business.service.PersonneService;
 import com.example.rdc_touristique.exeption.PersonneSimpleExisteExeption;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
+import javax.annotation.security.PermitAll;
+import javax.mail.MessagingException;
+import javax.validation.Valid;
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
 
@@ -21,18 +25,25 @@ public class PersonneController extends AbstratCrudController<PersonneSimpleDTO,
 
     @PostMapping("/user")
     @ResponseStatus(HttpStatus.OK)
-    public PersonneSimpleDTO getUser(@RequestBody MdpDTO dto) throws NoSuchAlgorithmException, InvalidKeySpecException {
-        return ((PersonneService)service).seloguer(dto);
+    public void login(@Valid @RequestBody MdpDTO dto) throws Exception {
+        ((PersonneService)service).seloguer(dto);
     }
+
     @PostMapping("/email")
     @ResponseStatus(HttpStatus.OK)
     public boolean getEmail(@RequestBody MdpDTO dto)  {
         return ((PersonneService)service).selonEmail(dto);
     }
 
+    @PostMapping("/activation_compte")
+    @ResponseStatus(HttpStatus.OK)
+    public boolean getActivated(@RequestBody String codeActivation) throws NoSuchAlgorithmException {
+        return ((PersonneService)service).isActive(codeActivation);
+    }
+
     @PostMapping("/creat")
     @ResponseStatus(HttpStatus.OK)
-    public void creatPersonne(@RequestBody CreatPersonne dto) throws NoSuchAlgorithmException, InvalidKeySpecException, PersonneSimpleExisteExeption {
+    public void creatPersonne(@RequestBody CreatPersonne dto) throws NoSuchAlgorithmException, InvalidKeySpecException, PersonneSimpleExisteExeption, MessagingException {
         ((PersonneService) service).creatPersonne(dto);
     }
 

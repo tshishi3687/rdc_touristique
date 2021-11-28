@@ -79,7 +79,7 @@ public class ImageProvinceService implements CrudService<ImageProvinceDTO,Intege
     }
 
     @Transactional
-    public ResponseEntity.BodyBuilder uploadImage(List<MultipartFile> file, int id) throws IOException{
+    public void uploadImage(List<MultipartFile> file, int id) throws IOException{
 
         for (MultipartFile multipartFile : file) {
             ImageProvince img = new ImageProvince();
@@ -89,8 +89,6 @@ public class ImageProvinceService implements CrudService<ImageProvinceDTO,Intege
             img.setProvinceID(provinceRepository.getOne(id));
             imageProvinceRepository.save(img);
         }
-
-        return ResponseEntity.status(HttpStatus.OK);
     }
 
 

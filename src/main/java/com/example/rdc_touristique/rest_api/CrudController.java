@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 
+import javax.mail.MessagingException;
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
@@ -18,7 +19,7 @@ import java.security.spec.InvalidKeySpecException;
 public interface CrudController<DTO extends IdentifiedDTO<ID>, ID> {
 
     // Create
-    void create(@RequestBody DTO dto) throws ElementAlreadyExistsException, IOException, NoSuchAlgorithmException, InvalidKeySpecException, ActionFoundExeption;
+    void create(@RequestBody DTO dto) throws ElementAlreadyExistsException, IOException, NoSuchAlgorithmException, InvalidKeySpecException, ActionFoundExeption, MessagingException;
 
     // Read
     ResponseEntity<DTO> getOne(@PathVariable ID id) throws ElementFoundException, FoundExeption;

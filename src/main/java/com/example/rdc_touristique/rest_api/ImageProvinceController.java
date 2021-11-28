@@ -24,8 +24,8 @@ public class ImageProvinceController extends AbstratCrudController<ImageProvince
 
     @PostMapping("/upload")
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity.BodyBuilder uplaodImage(@RequestParam("imageFile") List<MultipartFile> file, @RequestParam("province")int province) throws IOException {
-        return ((ImageProvinceService)service).uploadImage(file, province);
+    public void uplaodImage(@RequestParam("imageFile") List<MultipartFile> file, @RequestParam("province")int province) throws IOException {
+         ((ImageProvinceService)service).uploadImage(file, province);
     }
 
     @PostMapping("/all")
