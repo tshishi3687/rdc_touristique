@@ -5,10 +5,8 @@ import com.example.rdc_touristique.business.service.CrudService;
 import com.example.rdc_touristique.business.service.PersonneService;
 import com.example.rdc_touristique.exeption.PersonneSimpleExisteExeption;
 import org.springframework.http.HttpStatus;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
-import javax.annotation.security.PermitAll;
 import javax.mail.MessagingException;
 import javax.validation.Valid;
 import java.security.NoSuchAlgorithmException;
@@ -25,8 +23,8 @@ public class PersonneController extends AbstratCrudController<PersonneSimpleDTO,
 
     @PostMapping("/user")
     @ResponseStatus(HttpStatus.OK)
-    public void login(@Valid @RequestBody MdpDTO dto) throws Exception {
-        ((PersonneService)service).seloguer(dto);
+    public PersonneSimpleDTO login(@RequestBody MdpDTO dto) throws Exception {
+        return ((PersonneService)service).seloguer(dto);
     }
 
     @PostMapping("/email")

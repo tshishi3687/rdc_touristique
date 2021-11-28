@@ -1,9 +1,11 @@
 package com.example.rdc_touristique.security;
 
+import antlr.BaseAST;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.interfaces.DecodedJWT;
+import org.springframework.boot.autoconfigure.security.oauth2.resource.OAuth2ResourceServerProperties;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -30,7 +32,7 @@ public class JWTAuthorizationFilter extends OncePerRequestFilter {
 //        response.addHeader("Access-Control-Expose-Header", "Access-Control-Allow-Origin, Access-Control-Allow-Credentials, authorization");
 //
 
-//        System.out.println("request " + request.getHeaderNames());
+        System.out.println("request " + request);
 
         String jwtToken = request.getHeader(SecurityParams.HEADER_STRING);
         System.out.println("token = " + jwtToken);

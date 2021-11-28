@@ -17,10 +17,8 @@ import org.springframework.stereotype.Service;
 
 import javax.mail.MessagingException;
 import javax.transaction.Transactional;
-import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -121,22 +119,25 @@ public class PersonneService implements CrudService<PersonneSimpleDTO, Integer> 
     }
 
     @Transactional
-    public void seloguer(MdpDTO mdp) throws NoSuchAlgorithmException {
+    public PersonneSimpleDTO seloguer(MdpDTO mdp) throws NoSuchAlgorithmException {
         if (mdp == null)
             throw new NoSuchAlgorithmException();
 
         Optional<ContactUser> contactUser = contactUserRepository.findByEmail(mdp.getMail());
+        System.out.println("contact trouvé " +
+                "" +contactUser.get());
 
         if (contactUser.isPresent()){
             List<PassWord> passWord = passWordRepository.findAllByAppartienA(contactUser.get().getAppartienA());
 
             for (PassWord word : passWord) {
                 if (bCryptPasswordEncoder.matches(mdp.getMdp(), word.getMdp())){
-                    System.out.println("1er etape ok");
-                    userDetailsServiceImpl.loadUserByUsername(contactUser.get().getEmail());
+                    System.out.println(personneMapper.toDTO(contactUser.get().getAppartienA()));
+                    return personneMapper.toDTO(contactUser.get().getAppartienA());
                 }
             }
         }
+        return null;
     }
 
     @Transactional
