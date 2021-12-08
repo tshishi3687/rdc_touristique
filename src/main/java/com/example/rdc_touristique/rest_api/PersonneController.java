@@ -8,7 +8,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import javax.mail.MessagingException;
-import javax.validation.Valid;
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
 
@@ -17,9 +16,12 @@ import java.security.spec.InvalidKeySpecException;
 @RequestMapping("personne")
 public class PersonneController extends AbstratCrudController<PersonneSimpleDTO, Integer>{
 
+
+
     public PersonneController(CrudService<PersonneSimpleDTO, Integer> service) {
         super(service);
     }
+
 
     @PostMapping("/user")
     @ResponseStatus(HttpStatus.OK)

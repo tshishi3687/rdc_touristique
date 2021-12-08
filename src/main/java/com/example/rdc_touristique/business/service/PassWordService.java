@@ -72,28 +72,4 @@ public class PassWordService implements CrudService<PassWordDTO, Integer> {
     public void delete(Integer toDelete) throws FoundExeption, BienFoundExeption, CoordonneeFoundExeption, Lien_photoFoundExeption, PersonneSimpleFoundExeption, ProvinceFoundExeption, ReservationFoundExeption, ServiceFoundExeption, Type_bienFoundExeption, TypeFoundExeption, VilleFoundExeption, ActionFoundExeption, NoSuchAlgorithmException, InvalidKeySpecException, DureeLocationFoundExeption, RollFoundExeption, AdressUserFoundExeption, ContactUserFoundExeption, InfoBancaireFoundExeption {
 
     }
-
-
-    private String hasMdp(String mdp) throws NoSuchAlgorithmException {
-        MessageDigest md = MessageDigest.getInstance("SHA-256");
-        md.update(mdp.getBytes());
-
-        byte byteData[] = md.digest();
-
-        //convertir le tableau de bits en une format hexadécimal - méthode 1
-        StringBuffer sb = new StringBuffer();
-        for (int i = 0; i < byteData.length; i++) {
-            sb.append(Integer.toString((byteData[i] & 0xff) + 0x100, 16).substring(1));
-        }
-
-        //convertir le tableau de bits en une format hexadécimal - méthode 2
-        StringBuffer hexString = new StringBuffer();
-        for (byte byteDatum : byteData) {
-            String hex = Integer.toHexString(0xff & byteDatum);
-            if (hex.length() == 1) hexString.append('0');
-            hexString.append(hex);
-        }
-        return hexString.toString();
-    }
-
 }

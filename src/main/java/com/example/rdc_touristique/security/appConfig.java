@@ -14,13 +14,14 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
+import uk.co.ticklethepanda.spring.auth.jwt.JwtAuthenticationFilter;
 
 
 @Configuration
 @EnableWebSecurity
 public class appConfig extends WebSecurityConfigurerAdapter {
 
-//
+
 //    @Autowired
 //    private UserDetailsServiceImpl userDetailsService;
 //    @Autowired
@@ -36,36 +37,21 @@ public class appConfig extends WebSecurityConfigurerAdapter {
 //
 //    @Override
 //    protected void configure(HttpSecurity http) throws Exception {
-//        http.cors().disable();
-//
-//               http
-//                        .authorizeRequests()
-//                                .antMatchers("/personne/user", "/personne/creat", "/personne/email")
-//                                        .permitAll()
-//                .antMatchers(HttpMethod.POST, "/ville/*", "/province/*", "/service/*", "/type_bien/*", "/type/*")
-//                .hasAuthority("Admin")
-//                .antMatchers(HttpMethod.DELETE, "/personne/*", "/ville/*", "/province/*", "/service/*", "/type_bien/*", "/type/*")
-//                .hasAuthority("Admin")
-//                .antMatchers(HttpMethod.PUT, "/personne/*", "/ville/*", "/province/*", "/service/*", "/type_bien/*", "/type/*")
-//                .hasAuthority("Admin")
-//                .anyRequest().authenticated();
+//        http.csrf().disable();
+//        http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+//        http.authorizeRequests().antMatchers(HttpMethod.POST, "/ville/*", "/province/*", "/service/*", "/type_bien/*", "/type/*")
+//                .hasAuthority("Admin");
+//        http.authorizeRequests().antMatchers(HttpMethod.DELETE, "/personne/*", "/ville/*", "/province/*", "/service/*", "/type_bien/*", "/type/*")
+//                .hasAuthority("Admin");
+//        http.authorizeRequests().antMatchers(HttpMethod.PUT, "/personne/*", "/ville/*", "/province/*", "/service/*", "/type_bien/*", "/type/*")
+//                .hasAuthority("Admin");
+//        http.authorizeRequests().anyRequest().authenticated();
+//        http.addFilter(new JWTAuthenticationFilter(authenticationManager()));
+//        http.addFilterBefore(new JWTAuthorizationFilter(), UsernamePasswordAuthenticationFilter.class);
 //    }
-//
-//    @Bean
-//    public CorsConfigurationSource corsConfigurationSource() {
-//        CorsConfiguration corsConfiguration = new CorsConfiguration();
-//        corsConfiguration.setAllowCredentials(true);
-//        corsConfiguration.addAllowedOrigin("http://localhost:4200");
-//        corsConfiguration.addAllowedMethod("*");
-//        corsConfiguration.addAllowedHeader("*");
-//        corsConfiguration.addExposedHeader("authorization");
-//        return request -> corsConfiguration;
-//    }
-//
-//    @Bean
-//    public PasswordEncoder encoder(){
-//        return new BCryptPasswordEncoder();
-//    }
+
+
+
 private final static String user = "user";
     private final static String code = "root";
 

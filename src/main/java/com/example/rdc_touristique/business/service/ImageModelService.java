@@ -121,7 +121,6 @@ public class ImageModelService implements CrudService<ImageModelDTO, Integer>{
             outputStream.close();
         } catch (IOException ignored) {
         }
-        System.out.println("Compressed Image Byte Size - " + outputStream.toByteArray().length);
         return outputStream.toByteArray();
     }
     // uncompress the image bytes before returning it to the angular application

@@ -8,6 +8,7 @@ import com.example.rdc_touristique.data_access.entity.*;
 import com.example.rdc_touristique.data_access.repository.*;
 import com.example.rdc_touristique.exeption.*;
 import com.example.rdc_touristique.security.MyUserPrincipal;
+import com.example.rdc_touristique.security.SecurityParams;
 import com.example.rdc_touristique.security.UserDetailsServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -17,8 +18,10 @@ import org.springframework.stereotype.Service;
 
 import javax.mail.MessagingException;
 import javax.transaction.Transactional;
+import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -76,7 +79,7 @@ public class PersonneService implements CrudService<PersonneSimpleDTO, Integer> 
 
         Personne entity = personneCreaMapper.toEntity(toCreat);
         entity.setActive(false);
-        entity.setCodeActivation(bCryptPasswordEncoder.encode(code));
+        entity.setCodeActivation(hasMdp(code));
 
         Personne idPer = personneReposytory.save(entity);
 
@@ -97,7 +100,6 @@ public class PersonneService implements CrudService<PersonneSimpleDTO, Integer> 
         contactUserRepository.save(contactUser);
 
         mail.envoyer(toCreat.getContactUser().getEmail(), textMail.getSujetCrea(), textMail.creationMessageInscription(code,toCreat.getPrenom()));
-        System.out.println("message envoyée");
 
         actionRepository.save(actionMapper.toEntity(actionDTO));
 
@@ -124,15 +126,12 @@ public class PersonneService implements CrudService<PersonneSimpleDTO, Integer> 
             throw new NoSuchAlgorithmException();
 
         Optional<ContactUser> contactUser = contactUserRepository.findByEmail(mdp.getMail());
-        System.out.println("contact trouvé " +
-                "" +contactUser.get());
 
         if (contactUser.isPresent()){
             List<PassWord> passWord = passWordRepository.findAllByAppartienA(contactUser.get().getAppartienA());
 
             for (PassWord word : passWord) {
                 if (bCryptPasswordEncoder.matches(mdp.getMdp(), word.getMdp())){
-                    System.out.println(personneMapper.toDTO(contactUser.get().getAppartienA()));
                     return personneMapper.toDTO(contactUser.get().getAppartienA());
                 }
             }
@@ -176,10 +175,10 @@ public class PersonneService implements CrudService<PersonneSimpleDTO, Integer> 
 
     @Transactional
     public boolean isActive(String codeActive) throws NoSuchAlgorithmException {
-        Optional<Personne> personne = personneReposytory.findByCodeActivation(bCryptPasswordEncoder.encode(codeActive));
+        Optional<Personne> personne = personneReposytory.findByCodeActivation(hasMdp(codeActive));
         if (personne.isPresent()){
             personne.get().setActive(true);
-            personne.get().setCodeActivation(bCryptPasswordEncoder.encode(personne.get().getId() + "_Nikel_je suis active. Mon compte est ok"));
+            personne.get().setCodeActivation(bCryptPasswordEncoder.encode( LocalDateTime.now()+ "_" + personne.get().getId() + "_Nikel_je suis active. Mon compte est ok" + SecurityParams.SECRET + "_" + LocalDate.now()));
             personneReposytory.save(personne.get());
         }
         return personne.isPresent();
@@ -208,7 +207,7 @@ public class PersonneService implements CrudService<PersonneSimpleDTO, Integer> 
         personneReposytory.deleteById(toDelete);
     }
 
-    private String codeActivation()  {
+    private String codeActivation() throws NoSuchAlgorithmException {
         Random rand = new Random();
 
         String str1="", str2="";
@@ -225,11 +224,31 @@ public class PersonneService implements CrudService<PersonneSimpleDTO, Integer> 
                 char c = (char)(rand.nextInt(26) + 97);
                 str2 += c;
             }
-        }while(personneReposytory.findByCodeActivation(bCryptPasswordEncoder.encode(bCryptPasswordEncoder.encode(str1 + str3 + str2))).isPresent());
+        }while(personneReposytory.findByCodeActivation(hasMdp(str1 + str3 + str2)).isPresent());
 
 
         return str1+str3+str2;
     }
 
+    private String hasMdp(String mdp) throws NoSuchAlgorithmException {
+        MessageDigest md = MessageDigest.getInstance("SHA-256");
+        md.update(mdp.getBytes());
 
+        byte byteData[] = md.digest();
+
+        //convertir le tableau de bits en une format hexadécimal - méthode 1
+        StringBuffer sb = new StringBuffer();
+        for (int i = 0; i < byteData.length; i++) {
+            sb.append(Integer.toString((byteData[i] & 0xff) + 0x100, 16).substring(1));
+        }
+
+        //convertir le tableau de bits en une format hexadécimal - méthode 2
+        StringBuffer hexString = new StringBuffer();
+        for (byte byteDatum : byteData) {
+            String hex = Integer.toHexString(0xff & byteDatum);
+            if (hex.length() == 1) hexString.append('0');
+            hexString.append(hex);
+        }
+        return hexString.toString();
+    }
 }

@@ -47,4 +47,11 @@ public class BienController extends AbstratCrudController<BienDTO, Integer> {
     public void deleteBien(@RequestBody BienDTO bienDTO) throws BienFoundExeption, NoSuchAlgorithmException, InvalidKeySpecException {
         ((BienService)service).deleteBien(bienDTO);
     }
+
+    @PostMapping("/acti")
+    @ResponseStatus(HttpStatus.OK)
+    public void activationBien(@RequestBody BienDTO bienDTO) throws BienFoundExeption {
+        ((BienService)service).activationBien(bienDTO);
+    }
+
 }

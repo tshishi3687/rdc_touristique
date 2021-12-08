@@ -58,7 +58,8 @@ public class BienMapper implements Mapper<BienDTO, Bien>{
                 coordonneeMapper.toDTO(bien.getCoordonnee()),
                 personneMapper.toDTO(bien.getAppartient()),
                 bien.getDateCreation(),
-                likes
+                likes,
+                bien.isModeActive()
         );
     }
 

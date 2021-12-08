@@ -56,7 +56,7 @@ public class BienService implements CrudService<BienDTO, Integer> {
         actionDTO.setDescription("Recherche de tous les biens appartenants à " + personne.getNom() + " / " + personne.getPrenom());
         actionRepository.save(actionMapper.toEntity(actionDTO));
 
-        return bienRepository.findAllByAppartient(personneMapper.toEntity(personne)).stream()
+        return bienRepository.findAllByAppartientOrderByModeActive(personneMapper.toEntity(personne)).stream()
         .map(bienMapper::toDTO)
         .collect(Collectors.toList());
     }
@@ -84,6 +84,7 @@ public class BienService implements CrudService<BienDTO, Integer> {
         actionRepository.save(actionMapper.toEntity(actionDTO));
 
         Bien entity = bienMapper.toEntity(toCreat);
+        entity.setModeActive(false);
         aladispositionRepository.save(entity.getAladisposition());
         coordorRepository.save(entity.getCoordonnee());
         return bienRepository.save(entity).getId();
@@ -100,7 +101,7 @@ public class BienService implements CrudService<BienDTO, Integer> {
 
     @Override
     public List<BienDTO> readAll() {
-        return bienRepository.findByOrderByIdDesc().stream()
+        return bienRepository.findAllByModeActiveIs(true).stream()
                 .map(bienMapper::toDTO)
                 .collect(Collectors.toList());
     }
@@ -126,22 +127,24 @@ public class BienService implements CrudService<BienDTO, Integer> {
 
     @Override
     public void delete(Integer toDelete) throws BienFoundExeption, NoSuchAlgorithmException, InvalidKeySpecException {
-        if( !bienRepository.existsById(toDelete))
-            throw new BienFoundExeption(toDelete);
 
-        PersonneSimplifierDTO personne = personneMapper.toDTO(bienRepository.getOne(toDelete).getAppartient());
-        actionDTO.setId(0);
-        actionDTO.setDate(LocalDateTime.now());
-        actionDTO.setClassName("Bien");
-        actionDTO.setIdClasse(toDelete);
-        actionDTO.setAction("Suppression");
-        actionDTO.setDescription("Suppression  de/d' " + readOne(toDelete).getType_bien().getNom() +
-                " bien  à " + readOne(toDelete).getCoordonnee().getVille().getNomVille() +
-                " dans la province de " + readOne(toDelete).getCoordonnee().getVille().getProvince().getNomprovince()
-                + " par " + readOne(toDelete).getAppartient().getNom() + "-" + readOne(toDelete).getAppartient().getPrenom());
-        actionRepository.save(actionMapper.toEntity(actionDTO));
+    }
 
-        bienRepository.deleteById(toDelete);
+    @Transactional
+    public void activationBien(BienDTO bienDTO) throws BienFoundExeption {
+        if( !bienRepository.existsById(bienDTO.getId()))
+            throw new BienFoundExeption(bienDTO.getId());
+
+        Bien bien = bienRepository.getOne(bienDTO.getId());
+
+        if (bien.isModeActive()){
+            bien.setModeActive(false);
+            bienRepository.save(bien);
+        }else{
+            bien.setModeActive(true);
+            bienRepository.save(bien);
+        }
+
     }
 
     @Transactional

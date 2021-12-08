@@ -31,4 +31,5 @@ public class BienDTO implements IdentifiedDTO<Integer>{
     private PersonneSimplifierDTO appartient;
     private LocalDateTime dateCreation;
     private int likes;
+    private boolean modeActive;
 }

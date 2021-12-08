@@ -76,4 +76,7 @@ public class Bien {
 
     @ManyToMany(mappedBy = "likedBien")
     private List<Personne> likes;
+
+    @Column
+    private boolean modeActive;
 }
