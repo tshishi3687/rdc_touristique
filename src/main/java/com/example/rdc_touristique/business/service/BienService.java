@@ -15,6 +15,7 @@ import java.security.spec.InvalidKeySpecException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -191,17 +192,25 @@ public class BienService implements CrudService<BienVuDTO, Integer> {
                 contrat.setDuree(textContrat.dureeMobembo());
                 contrat.setDardl(textContrat.dARDL());
 
-            // 6. je cree l'entité de la table bien_mis_en_ligne
-            BienMisEnLigne bienMisEnLigne = new BienMisEnLigne();
+            Optional<BienMisEnLigne> bmel = bienMisEnLigneRepository.findByBienLie(bien);
+            if (bmel.isPresent()){
+                bmel.get().getBienLie().setDateFinMisEnLigne(LocalDate.now().plusDays(bienDTO.getIdNNuit()));
+                contratRepository.deleteById(bmel.get().getContratBienMisEnLigne().getId());
+                bmel.get().setContratBienMisEnLigne(contrat);
+                bienMisEnLigneRepository.save(bmel.get());
+            }else{
+                // 6. je cree l'entité de la table bien_mis_en_ligne
+                BienMisEnLigne bienMisEnLigne = new BienMisEnLigne();
                 bienMisEnLigne.setId(0); // id mis à 0 pour s'assurée que le bien n'existe pas
                 bienMisEnLigne.setBienLie(bien); // le bien consernée ou lié
                 bienMisEnLigne.setContratBienMisEnLigne(contratRepository.save(contrat)); // j'intégre le nouveau contrat créé
-
-            // 7. j'enregistre l'entité "bien_mis_en_ligne
-            bienMisEnLigneRepository.save(bienMisEnLigne);
+                // 7. j'enregistre l'entité "bien_mis_en_ligne
+                bienMisEnLigneRepository.save(bienMisEnLigne);
+            }
 
             // 8. je change le modeActive du bien en active
             bien.setModeActive(true);
+            bienRepository.save(bien);
 
         }
 

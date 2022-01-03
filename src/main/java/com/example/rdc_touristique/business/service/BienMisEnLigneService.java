@@ -39,7 +39,7 @@ public class BienMisEnLigneService implements CrudService<BienMisEnLigneDTO, Int
 
     @Override
     public void creat(BienMisEnLigneDTO toDTO) throws ElementAlreadyExistsException, IOException, NoSuchAlgorithmException, InvalidKeySpecException, ActionFoundExeption, MessagingException, ReservationFoundExeption {
-        // créé dans le bien service.
+        // créé dans le BienService.
     }
 
     @Override
