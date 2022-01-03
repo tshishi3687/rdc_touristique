@@ -2,8 +2,7 @@ package com.example.rdc_touristique.business.mapper;
 
 import com.example.rdc_touristique.business.dto.*;
 import com.example.rdc_touristique.data_access.entity.*;
-import com.example.rdc_touristique.data_access.repository.BienRepository;
-import com.example.rdc_touristique.data_access.repository.DemandeRepository;
+import com.example.rdc_touristique.data_access.repository.ReservationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -17,15 +16,7 @@ public class PersonneInfoMapper implements Mapper<PersonneInfoDTO, Personne>{
     @Autowired
     private Mapper<BienDTO, Bien> bienDTOMapper;
     @Autowired
-    private Mapper<DemandeDTO, Demande> demandeMapper;
-    @Autowired
-    private BienRepository bienRepository;
-    @Autowired
-    private DemandeRepository demandeRepository;
-    @Autowired
-    private Mapper<InfoBancaireDTO, InfoBancaire> infoBancaireMapper;
-    @Autowired
-    private Mapper<AdressUserDTO, AdressUser> adressUserMapper;
+    private ReservationRepository demandeRepository;
 
 
     @Override
@@ -34,24 +25,6 @@ public class PersonneInfoMapper implements Mapper<PersonneInfoDTO, Personne>{
             return null;
 
         return null;
-//        return new PersonneInfoDTO(
-//                personne.getId(),
-//                personne.getBien().stream()
-//                    .map((bien -> bienDTOMapper.toDTO(bien)))
-//                    .collect(Collectors.toList()),
-//                personne.getDemande().stream()
-//                    .map((demande -> demandeMapper.toDTO(demande)))
-//                    .collect(Collectors.toList()),
-//                personne.getInfoBancaires().stream()
-//                        .map((infoBancaire -> infoBancaireMapper.toDTO(infoBancaire)))
-//                        .collect(Collectors.toList()),
-//                personne.getDocOfficiels().stream()
-//                        .map((docOfficiel -> docOfficielMapper.toDTO(docOfficiel)))
-//                        .collect(Collectors.toList()),
-//                personne.getAdressUser().stream()
-//                        .map((adressUser -> adressUserMapper.toDTO(adressUser)))
-//                        .collect(Collectors.toList())
-//        );
     }
 
     @Override
@@ -71,11 +44,6 @@ public class PersonneInfoMapper implements Mapper<PersonneInfoDTO, Personne>{
                         return null;
                     })
                     .collect(Collectors.toList()));
-        personne.setDemande(demandeRepository.findAllById(personneInfoDTO.getReservation()
-                .stream()
-                .map(DemandeDTO::getId)
-                .collect(Collectors.toList())))
-        ;
 
         return null;
 //        return personne;

@@ -21,7 +21,7 @@ import uk.co.ticklethepanda.spring.auth.jwt.JwtAuthenticationFilter;
 @EnableWebSecurity
 public class appConfig extends WebSecurityConfigurerAdapter {
 
-
+//
 //    @Autowired
 //    private UserDetailsServiceImpl userDetailsService;
 //    @Autowired

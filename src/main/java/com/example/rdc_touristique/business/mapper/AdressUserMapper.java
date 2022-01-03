@@ -3,7 +3,7 @@ package com.example.rdc_touristique.business.mapper;
 import com.example.rdc_touristique.business.dto.AdressUserDTO;
 import com.example.rdc_touristique.business.dto.PaysDTO;
 import com.example.rdc_touristique.business.dto.PersonneSimplifierDTO;
-import com.example.rdc_touristique.data_access.entity.AdressUser;
+import com.example.rdc_touristique.data_access.entity.Adresse;
 import com.example.rdc_touristique.data_access.entity.Pays;
 import com.example.rdc_touristique.data_access.entity.Personne;
 import com.example.rdc_touristique.data_access.repository.PaysRepository;
@@ -15,7 +15,7 @@ import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
 
 @Component
-public class AdressUserMapper implements Mapper<AdressUserDTO, AdressUser>{
+public class AdressUserMapper implements Mapper<AdressUserDTO, Adresse>{
 
     @Autowired
     private Mapper<PersonneSimplifierDTO, Personne> personneMapper;
@@ -29,31 +29,31 @@ public class AdressUserMapper implements Mapper<AdressUserDTO, AdressUser>{
 
 
     @Override
-    public AdressUserDTO toDTO(AdressUser adressUser) {
-        if (adressUser==null)
+    public AdressUserDTO toDTO(Adresse adresse) {
+        if (adresse ==null)
             return null;
         return new AdressUserDTO(
-                adressUser.getId(),
-                adressUser.getNumHabitation(),
-                adressUser.getNomRue(),
-                adressUser.getCodePostal(),
-                paysMapper.toDTO(adressUser.getPays()),
-                personneMapper.toDTO(adressUser.getAppartienA())
+                adresse.getId(),
+                adresse.getNumHabitation().charAt(0) + "**",
+                adresse.getNomRue().charAt(0) + "*******",
+                adresse.getCodePostal().charAt(0) + "*****",
+                paysMapper.toDTO(adresse.getPays()),
+                personneMapper.toDTO(adresse.getAppartienA())
         );
     }
 
     @Override
-    public AdressUser toEntity(AdressUserDTO adressUserDTO) throws NoSuchAlgorithmException, InvalidKeySpecException {
+    public Adresse toEntity(AdressUserDTO adressUserDTO) throws NoSuchAlgorithmException, InvalidKeySpecException {
         if (adressUserDTO==null)
             return null;
 
-        AdressUser adressUser = new AdressUser();
-        adressUser.setId(adressUserDTO.getId());
-        adressUser.setNumHabitation(adressUserDTO.getNumHabitation());
-        adressUser.setNomRue(adressUserDTO.getNomRue());
-        adressUser.setCodePostal(adressUserDTO.getCodePostal());
-        adressUser.setPays(paysRepository.getOne(adressUserDTO.getPays().getId()));
-        adressUser.setAppartienA(personneReposytory.getOne(adressUserDTO.getAppartienA().getId()));
-        return adressUser;
+        Adresse adresse = new Adresse();
+        adresse.setId(adressUserDTO.getId());
+        adresse.setNumHabitation(adressUserDTO.getNumHabitation());
+        adresse.setNomRue(adressUserDTO.getNomRue());
+        adresse.setCodePostal(adressUserDTO.getCodePostal());
+        adresse.setPays(paysRepository.getOne(adressUserDTO.getPays().getId()));
+        adresse.setAppartienA(personneReposytory.getOne(adressUserDTO.getAppartienA().getId()));
+        return adresse;
     }
 }

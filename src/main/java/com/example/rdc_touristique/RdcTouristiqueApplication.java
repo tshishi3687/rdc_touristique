@@ -10,7 +10,7 @@ public class RdcTouristiqueApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(RdcTouristiqueApplication.class, args);
-		System.out.println("c'est parti :)");
+		System.out.println("=> Service RDC: C'est parti :)");
 	}
 
 	@Bean

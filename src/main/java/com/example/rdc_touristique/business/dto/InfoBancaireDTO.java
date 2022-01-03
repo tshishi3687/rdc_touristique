@@ -17,5 +17,4 @@ public class InfoBancaireDTO implements IdentifiedDTO<Integer>{
     private String numCompte;
     private LocalDate dateExpiration;
     private PersonneSimplifierDTO appartienA;
-    private boolean acctive;
 }

@@ -7,12 +7,8 @@ import com.example.rdc_touristique.business.mapper.Mapper;
 import com.example.rdc_touristique.data_access.entity.*;
 import com.example.rdc_touristique.data_access.repository.*;
 import com.example.rdc_touristique.exeption.*;
-import com.example.rdc_touristique.security.MyUserPrincipal;
 import com.example.rdc_touristique.security.SecurityParams;
-import com.example.rdc_touristique.security.UserDetailsServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -53,8 +49,6 @@ public class PersonneService implements CrudService<PersonneSimpleDTO, Integer> 
     private EngistrementEmail mail;
     @Autowired
     private StringText textMail;
-    @Autowired
-    private UserDetailsServiceImpl userDetailsServiceImpl;
     @Autowired
     private BCryptPasswordEncoder bCryptPasswordEncoder;
 
@@ -105,19 +99,21 @@ public class PersonneService implements CrudService<PersonneSimpleDTO, Integer> 
 
     }
 
+    @Transactional
+    public boolean infoBanAdreUser(PersonneSimpleDTO personne) throws PersonneSimpleExisteExeption {
+        if (!personneReposytory.existsById(personne.getId()))
+            throw new PersonneSimpleExisteExeption(personne.getId());
+
+        Personne entity = personneReposytory.getOne(personne.getId());
+        return entity.getInfoBancaires() != null && entity.getAdresse() != null;
+    }
+
     @Override
     public PersonneSimpleDTO readOne(Integer integer) throws PersonneSimpleFoundExeption {
         Personne entity = personneReposytory.findById(integer)
                 .orElseThrow(()-> new PersonneSimpleFoundExeption(integer));
 
         return personneMapper.toDTO(entity);
-    }
-
-    @Transactional
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException, PersonneSimpleExisteExeption {
-        Optional<Personne> user = personneReposytory.findByCodeActivation(username);
-        user.orElseThrow(() -> new PersonneSimpleExisteExeption(user.get().getId()));
-        return user.map(MyUserPrincipal::new).get();
     }
 
     @Transactional
@@ -128,13 +124,12 @@ public class PersonneService implements CrudService<PersonneSimpleDTO, Integer> 
         Optional<ContactUser> contactUser = contactUserRepository.findByEmail(mdp.getMail());
 
         if (contactUser.isPresent()){
-            List<PassWord> passWord = passWordRepository.findAllByAppartienA(contactUser.get().getAppartienA());
+            PassWord passWord = passWordRepository.findByAppartienA(contactUser.get().getAppartienA());
 
-            for (PassWord word : passWord) {
-                if (bCryptPasswordEncoder.matches(mdp.getMdp(), word.getMdp())){
+                if (bCryptPasswordEncoder.matches(mdp.getMdp(), passWord.getMdp())){
                     return personneMapper.toDTO(contactUser.get().getAppartienA());
                 }
-            }
+
         }
         return null;
     }

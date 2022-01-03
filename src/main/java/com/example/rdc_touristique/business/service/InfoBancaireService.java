@@ -7,6 +7,7 @@ import com.example.rdc_touristique.business.mapper.Mapper;
 import com.example.rdc_touristique.data_access.entity.InfoBancaire;
 import com.example.rdc_touristique.data_access.entity.Personne;
 import com.example.rdc_touristique.data_access.repository.InfoBancaireRepository;
+import com.example.rdc_touristique.data_access.repository.PersonneReposytory;
 import com.example.rdc_touristique.exeption.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -27,24 +28,18 @@ public class InfoBancaireService implements CrudService<InfoBancaireDTO, Integer
     private Mapper<InfoBancaireDTO, InfoBancaire> infoBancaireMapper;
     @Autowired
     private InfoBancaireRepository infoBancaireRepository;
+    @Autowired
+    private PersonneReposytory personneReposytory;
 
     @Override
     public void creat(InfoBancaireDTO toDTO) throws ElementAlreadyExistsException, IOException, NoSuchAlgorithmException, InvalidKeySpecException, ActionFoundExeption {
-        if (infoBancaireRepository.existsById(toDTO.getId()))
-            throw new InfoBancaireExisteExeption(toDTO.getId());
-
-        List<InfoBancaire> infoBancaireList= infoBancaireRepository.findAllByAppartienA(personneMapper.toEntity(toDTO.getAppartienA()));
-
-        for (InfoBancaire infoBancaire: infoBancaireList){
-            if(infoBancaire.isActive()){
-                infoBancaire.setActive(false);
-                infoBancaireRepository.save(infoBancaire);
-            }
+        if (infoBancaireRepository.existsByAppartienA(personneMapper.toEntity(toDTO.getAppartienA()))){
+            int idInfoB = infoBancaireRepository.findOneByAppartienA(personneMapper.toEntity(toDTO.getAppartienA())).getId();
+            throw new InfoBancaireExisteExeption(idInfoB);
         }
 
-        InfoBancaire entity = infoBancaireMapper.toEntity(toDTO);
-        entity.setActive(true);
-        infoBancaireRepository.save(entity);
+
+        infoBancaireRepository.save(infoBancaireMapper.toEntity(toDTO));
     }
 
     @Override
@@ -78,9 +73,10 @@ public class InfoBancaireService implements CrudService<InfoBancaireDTO, Integer
     }
 
     @Transactional
-    public List<InfoBancaireDTO> selonPersonne(PersonneSimplifierDTO personne) throws NoSuchAlgorithmException, InvalidKeySpecException {
-        return infoBancaireRepository.findAllByAppartienA(personneMapper.toEntity(personne)).stream()
-                .map(infoBancaireMapper::toDTO)
-                .collect(Collectors.toList());
+    public InfoBancaireDTO selonPersonne(PersonneSimplifierDTO personne) throws PersonneInfoExisteExeption {
+        if (!personneReposytory.existsById(personne.getId()))
+            throw new PersonneInfoExisteExeption(personne.getId());
+        Personne entity = personneReposytory.getOne(personne.getId());
+        return infoBancaireMapper.toDTO(entity.getInfoBancaires());
     }
 }

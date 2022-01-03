@@ -3,9 +3,10 @@ package com.example.rdc_touristique.business.service;
 import com.example.rdc_touristique.business.dto.AdressUserDTO;
 import com.example.rdc_touristique.business.dto.PersonneSimplifierDTO;
 import com.example.rdc_touristique.business.mapper.Mapper;
-import com.example.rdc_touristique.data_access.entity.AdressUser;
+import com.example.rdc_touristique.data_access.entity.Adresse;
 import com.example.rdc_touristique.data_access.entity.Personne;
 import com.example.rdc_touristique.data_access.repository.AdressUserReposytory;
+import com.example.rdc_touristique.data_access.repository.PersonneReposytory;
 import com.example.rdc_touristique.exeption.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -23,21 +24,26 @@ public class AdressUserService implements CrudService<AdressUserDTO, Integer>{
     @Autowired
     private Mapper<PersonneSimplifierDTO, Personne> personneMapper;
     @Autowired
-    private Mapper<AdressUserDTO, AdressUser> adressUserMapper;
+    private Mapper<AdressUserDTO, Adresse> adressUserMapper;
     @Autowired
     private AdressUserReposytory adressUserReposytory;
+    @Autowired
+    private PersonneReposytory personneReposytory;
 
     @Override
     public void creat(AdressUserDTO toDTO) throws ElementAlreadyExistsException, IOException, NoSuchAlgorithmException, InvalidKeySpecException{
-        if (adressUserReposytory.existsById(toDTO.getId()))
-            throw new AdressUserExisteExeption(toDTO.getId());
+        if (adressUserReposytory.existsByAppartienA(personneMapper.toEntity(toDTO.getAppartienA()))){
+            int idadress = adressUserReposytory.findOneByAppartienA(personneMapper.toEntity(toDTO.getAppartienA())).getId();
+            throw new AdressUserExisteExeption(idadress);
+
+        }
 
         adressUserReposytory.save(adressUserMapper.toEntity(toDTO));
     }
 
     @Override
     public AdressUserDTO readOne(Integer integer) throws AdressUserFoundExeption {
-        AdressUser entity = adressUserReposytory.findById(integer)
+        Adresse entity = adressUserReposytory.findById(integer)
                 .orElseThrow(()-> new AdressUserFoundExeption(integer));
         return adressUserMapper.toDTO(entity);
     }
@@ -67,9 +73,10 @@ public class AdressUserService implements CrudService<AdressUserDTO, Integer>{
     }
 
     @Transactional
-    public List<AdressUserDTO> selonPersonne(PersonneSimplifierDTO personne) throws NoSuchAlgorithmException, InvalidKeySpecException {
-        return adressUserReposytory.findAllByAppartienA(personneMapper.toEntity(personne)).stream()
-                .map(adressUserMapper::toDTO)
-                .collect(Collectors.toList());
+    public AdressUserDTO selonPersonne(PersonneSimplifierDTO personne) throws PersonneInfoExisteExeption {
+        if (!personneReposytory.existsById(personne.getId()))
+            throw new PersonneInfoExisteExeption(personne.getId());
+        Personne entity = personneReposytory.getOne(personne.getId());
+        return adressUserMapper.toDTO(entity.getAdresse());
     }
 }

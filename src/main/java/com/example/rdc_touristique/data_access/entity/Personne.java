@@ -43,17 +43,17 @@ public class Personne {
     @Column(name = "date_creation")
     private LocalDateTime ddj;
 
-    @OneToMany(mappedBy = "appartienA")
-    private List<AdressUser> adressUser;
+    @OneToOne(mappedBy = "appartienA")
+    private Adresse adresse;
 
-    @OneToMany(mappedBy = "appartienA")
-    private List<ContactUser> contactUser;
+    @OneToOne(mappedBy = "appartienA")
+    private ContactUser contactUser;
 
-    @OneToMany(mappedBy = "appartienA")
-    private List<PassWord> mdp;
+    @OneToOne(mappedBy = "appartienA")
+    private PassWord mdp;
 
-    @OneToMany(mappedBy = "appartienA")
-    private List<InfoBancaire> infoBancaires;
+    @OneToOne(mappedBy = "appartienA")
+    private InfoBancaire infoBancaires;
 
     @OneToMany(mappedBy= "personneId")
     private List<DocOfficiel> docOfficiels;
@@ -61,8 +61,11 @@ public class Personne {
     @OneToMany(mappedBy = "appartient")
     private List<Bien> bien;
 
-    @OneToMany(mappedBy = "faitPar")
-    private List<Demande> demande;
+    @OneToMany(mappedBy = "preneur")
+    private List<Contrat> contratsPreneur;
+
+    @OneToMany(mappedBy = "bailleur")
+    private List<Contrat> contratsBailleur;
 
     @ManyToMany
     @JoinTable(

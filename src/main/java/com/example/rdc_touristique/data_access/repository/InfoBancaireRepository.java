@@ -8,5 +8,6 @@ import java.util.List;
 
 public interface InfoBancaireRepository extends JpaRepository<InfoBancaire, Integer> {
 
-    List<InfoBancaire> findAllByAppartienA(Personne personne);
+    InfoBancaire findOneByAppartienA(Personne personne);
+    boolean existsByAppartienA(Personne personne);
 }

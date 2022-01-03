@@ -21,7 +21,7 @@ public class ContactUserController extends AbstratCrudController<ContactUserDTO,
 
     @PostMapping("/user")
     @ResponseStatus(HttpStatus.OK)
-    public List<ContactUserDTO> adressPersonne(PersonneSimplifierDTO dto) throws NoSuchAlgorithmException, InvalidKeySpecException {
+    public ContactUserDTO adressPersonne(PersonneSimplifierDTO dto) throws NoSuchAlgorithmException, InvalidKeySpecException {
         return ((ContactUserService)service).selonPersonne(dto);
     }
 }

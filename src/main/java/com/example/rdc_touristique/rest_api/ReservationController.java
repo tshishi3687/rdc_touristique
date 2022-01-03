@@ -1,9 +1,9 @@
 package com.example.rdc_touristique.rest_api;
 
 import com.example.rdc_touristique.business.dto.PersonneSimpleDTO;
-import com.example.rdc_touristique.business.dto.DemandeDTO;
+import com.example.rdc_touristique.business.dto.ReservationDTO;
 import com.example.rdc_touristique.business.service.CrudService;
-import com.example.rdc_touristique.business.service.DemandeService;
+import com.example.rdc_touristique.business.service.ReservationService;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
@@ -12,22 +12,22 @@ import java.security.spec.InvalidKeySpecException;
 import java.util.List;
 
 @RestController
-@RequestMapping("demande")
-public class DemandeController extends AbstratCrudController<DemandeDTO, Integer> {
-    public DemandeController(CrudService<DemandeDTO, Integer> service) {
+@RequestMapping("reservation")
+public class ReservationController extends AbstratCrudController<ReservationDTO, Integer> {
+    public ReservationController(CrudService<ReservationDTO, Integer> service) {
         super(service);
     }
 
     @PostMapping("/user")
     @ResponseStatus(HttpStatus.OK)
-    public List<DemandeDTO> getAllByUser(@RequestBody PersonneSimpleDTO dto) throws NoSuchAlgorithmException, InvalidKeySpecException {
-        return ((DemandeService)service).selonLaPer(dto);
+    public List<ReservationDTO> getAllByUser(@RequestBody PersonneSimpleDTO dto) throws NoSuchAlgorithmException, InvalidKeySpecException {
+        return ((ReservationService)service).selonLaPer(dto);
     }
 
     @PostMapping("/client")
     @ResponseStatus(HttpStatus.OK)
-    public List<DemandeDTO> getAllByClient(@RequestBody PersonneSimpleDTO dto) throws NoSuchAlgorithmException, InvalidKeySpecException {
-        return ((DemandeService)service).damandeFaite(dto);
+    public List<ReservationDTO> getAllByClient(@RequestBody PersonneSimpleDTO dto) throws NoSuchAlgorithmException, InvalidKeySpecException {
+        return ((ReservationService)service).reservationFait(dto);
     }
 
 //    @PostMapping("/date")

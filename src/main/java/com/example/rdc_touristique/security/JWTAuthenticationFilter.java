@@ -43,19 +43,19 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
     public JWTAuthenticationFilter(AuthenticationManager authenticationManager) {
         this.authenticationManager = authenticationManager;
     }
-
-    @Override
-    public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException {
-        Optional<ContactUser> contactUser = contactUserRepository.findByEmail(request.getParameter("mail"));
-        List<PassWord> passWord = passWordRepository.findAllByAppartienA(contactUser.get().getAppartienA());
-        for (PassWord word : passWord) {
-            if (word.isMode() && bCryptPasswordEncoder.matches(request.getParameter("mdp"), word.getMdp())){
-                return authenticationManager.authenticate(
-                        new UsernamePasswordAuthenticationToken(contactUser.get().getEmail(), word.getMdp()));
-            }
-        }
-        return null;
-    }
+//
+//    @Override
+//    public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException {
+//        Optional<ContactUser> contactUser = contactUserRepository.findByEmail(request.getParameter("mail"));
+//        PassWord passWord = passWordRepository.findByAppartienA(contactUser.get().getAppartienA());
+//        for (PassWord word : passWord) {
+//            if (word.isMode() && bCryptPasswordEncoder.matches(request.getParameter("mdp"), word.getMdp())){
+//                return authenticationManager.authenticate(
+//                        new UsernamePasswordAuthenticationToken(contactUser.get().getEmail(), word.getMdp()));
+//            }
+//        }
+//        return null;
+//    }
 
     @Override
     protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response,

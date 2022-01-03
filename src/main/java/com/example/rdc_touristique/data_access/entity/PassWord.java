@@ -24,7 +24,7 @@ public class PassWord {
     @Column
     private boolean mode;
 
-    @ManyToOne
+    @OneToOne
     @JoinColumn(name = "appartien_a")
     private Personne appartienA;
 }

@@ -14,34 +14,29 @@ import java.time.LocalDateTime;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class Demande {
+public class Reservation {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
     @Column(name = "date_creation")
-    private LocalDateTime ddj;
+    private LocalDateTime dateCreation;
 
     @Column
-    private LocalDate dda;
+    private LocalDate dateArrivee;
 
     @Column
-    private LocalDate ddd;
+    private LocalDate dateDepart;
 
     @Column
-    private int npersonne;
+    private int nPersonneSurLieu;
+
+    @OneToOne( cascade = CascadeType.ALL )
+    private Contrat contratLieeReservation;
 
     @ManyToOne
-    @JoinColumn(name = "etat_demande")
-    private EtatDemande etatDemande;
-
-    @ManyToOne
-    @JoinColumn(name = "bien_reserve")
-    private Bien bienDemandee;
-
-    @ManyToOne
-    @JoinColumn(name = "reserver_par")
-    private Personne faitPar;
+    @JoinColumn(name  = "bienReservee")
+    private Bien bienReservee;
 
 }

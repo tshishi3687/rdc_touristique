@@ -27,7 +27,7 @@ public class Ville {
     @JoinColumn(name = "province")
     private Province province;
 
-    @Column
+    @Column(length = 1000)
     private String desciption;
 
 //    @Column

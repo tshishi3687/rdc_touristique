@@ -4,11 +4,9 @@ import com.example.rdc_touristique.business.dto.InfoBancaireDTO;
 import com.example.rdc_touristique.business.dto.PersonneSimplifierDTO;
 import com.example.rdc_touristique.business.service.CrudService;
 import com.example.rdc_touristique.business.service.InfoBancaireService;
+import com.example.rdc_touristique.exeption.PersonneInfoExisteExeption;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
@@ -21,7 +19,7 @@ public class InfoBancaireController extends AbstratCrudController<InfoBancaireDT
 
     @PostMapping("/user")
     @ResponseStatus(HttpStatus.OK)
-    public List<InfoBancaireDTO> infoBancaire(PersonneSimplifierDTO dto) throws NoSuchAlgorithmException, InvalidKeySpecException {
+    public InfoBancaireDTO infoBancaire(@RequestBody PersonneSimplifierDTO dto) throws PersonneInfoExisteExeption {
         return ((InfoBancaireService)service).selonPersonne(dto);
     }
 }

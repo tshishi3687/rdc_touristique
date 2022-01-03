@@ -19,7 +19,7 @@ public class Province {
     @Column
     private String nomprovince;
 
-    @Column
+    @Column(length = 1000)
     private String description;
 
     @OneToMany(mappedBy = "provinceID")

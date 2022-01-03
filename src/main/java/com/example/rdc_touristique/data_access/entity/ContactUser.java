@@ -24,7 +24,7 @@ public class ContactUser {
     @Column
     private String telephone;
 
-    @ManyToOne
+    @OneToOne
     @JoinColumn(name = "appartien_a")
     private Personne appartienA;
 

@@ -31,10 +31,7 @@ public class InfoBancaire {
     @Column
     private LocalDate dateExpiration;
 
-    @Column
-    private boolean active;
-
-    @ManyToOne
+    @OneToOne
     @JoinColumn(name = "appartien_a")
     private Personne appartienA;
 }

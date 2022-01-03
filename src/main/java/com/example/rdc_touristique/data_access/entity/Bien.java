@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -24,9 +25,8 @@ public class Bien {
     @JoinColumn(name = "type")
     private Type_bien type;
 
-    @ManyToOne
-    @JoinColumn(name = "dureeLocation")
-    private DureeLocation dureeLocation;
+    @OneToMany(mappedBy = "bienLie",cascade = CascadeType.ALL)
+    private List<BienMisEnLigne> dureeOnLine;
 
     @OneToOne( cascade = CascadeType.ALL )
     @JoinColumn( name="aladisposition", referencedColumnName = "id")
@@ -53,7 +53,7 @@ public class Bien {
     @Column
     private int superficie;
 
-    @Column
+    @Column(length = 1000)
     private String description;
 
 
@@ -68,8 +68,8 @@ public class Bien {
     @Column
     private LocalDateTime dateCreation;
 
-    @OneToMany(mappedBy = "bienDemandee")
-    private List<Demande> deDemande;
+    @OneToMany(mappedBy = "bienReservee",cascade = CascadeType.ALL )
+    private List<Reservation> deReservation;
 
     @OneToMany(mappedBy = "bienid",cascade = CascadeType.ALL)
     private List<ImageBien> Image;
@@ -77,6 +77,12 @@ public class Bien {
     @ManyToMany(mappedBy = "likedBien")
     private List<Personne> likes;
 
+    @OneToMany(mappedBy = "bienLie")
+    private List<BienMisEnLigne> bienOnline;
+
     @Column
     private boolean modeActive;
+
+    @Column
+    private LocalDate dateFinMisEnLigne;
 }

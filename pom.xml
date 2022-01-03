@@ -68,11 +68,6 @@
 			<version>3.18.1</version>
 		</dependency>
 
-		<dependency>
-			<groupId>mysql</groupId>
-			<artifactId>mysql-connector-java</artifactId>
-		</dependency>
-
 
 		<!-- https://mvnrepository.com/artifact/uk.co.ticklethepanda/spring-jwt-authentication-filter -->
 		<dependency>

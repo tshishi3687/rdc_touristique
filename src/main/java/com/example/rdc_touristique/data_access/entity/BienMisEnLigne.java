@@ -6,34 +6,24 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.time.LocalDate;
 
 @Entity
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class AdressUser {
+
+public class BienMisEnLigne {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @Column
-    private String numHabitation;
-
-    @Column
-    private String nomRue;
-
-    @Column
-    private String CodePostal;
-
     @ManyToOne
-    @JoinColumn(name = "pays", referencedColumnName = "id")
-    private Pays pays;
+    @JoinColumn(name = "bienLie")
+    private Bien bienLie;
 
-    @ManyToOne
-    @JoinColumn(name = "adressUser")
-    private Personne appartienA;
-
-
+    @OneToOne( cascade = CascadeType.ALL )
+    private Contrat contratBienMisEnLigne;
 }

@@ -1,7 +1,9 @@
 package com.example.rdc_touristique.business.mapper;
 
+import com.example.rdc_touristique.business.dto.AdressUserDTO;
 import com.example.rdc_touristique.business.dto.PersonneSimpleDTO;
 import com.example.rdc_touristique.business.dto.RollDTO;
+import com.example.rdc_touristique.data_access.entity.Adresse;
 import com.example.rdc_touristique.data_access.entity.Personne;
 import com.example.rdc_touristique.data_access.entity.Roll;
 import com.example.rdc_touristique.data_access.repository.RollRepository;
@@ -17,6 +19,8 @@ public class PersonneSimpleMaper implements Mapper<PersonneSimpleDTO, Personne>{
     private Mapper<RollDTO, Roll> rollMapper;
     @Autowired
     private RollRepository rollRepository;
+    @Autowired
+    private Mapper<AdressUserDTO, Adresse> adressUserMapper;
 
     @Override
     public PersonneSimpleDTO toDTO(Personne personne) {
@@ -30,7 +34,8 @@ public class PersonneSimpleMaper implements Mapper<PersonneSimpleDTO, Personne>{
                 personne.getDdn(),
                 rollMapper.toDTO(personne.getRoll()),
                 personne.getDdj(),
-                personne.isActive()
+                personne.isActive(),
+                adressUserMapper.toDTO(personne.getAdresse())
         );
 
     }

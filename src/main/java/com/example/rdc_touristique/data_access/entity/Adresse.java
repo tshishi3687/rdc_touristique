@@ -12,16 +12,29 @@ import javax.persistence.*;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-
-public class DureeLocation {
+public class Adresse {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @Column(name = "duree")
-    private String duree;
+    @Column
+    private String numHabitation;
 
-    @Column(name = "desciption")
-    private String desciption;
+    @Column
+    private String nomRue;
+
+    @Column
+    private String codePostal;
+
+    @ManyToOne
+    @JoinColumn(name = "pays", referencedColumnName = "id")
+    private Pays pays;
+
+    @OneToOne
+    @JoinColumn(name = "adressUser")
+    private Personne appartienA;
+
+
+
 }

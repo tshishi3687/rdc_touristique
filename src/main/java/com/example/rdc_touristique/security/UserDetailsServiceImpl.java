@@ -35,23 +35,23 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         Optional<ContactUser> contactUser = contactUserRepository.findByEmail(username);
 
-        if (contactUser.isPresent()){
-            List<PassWord> passWord = passWordRepository.findAllByAppartienA(contactUser.get().getAppartienA());
-
-            System.out.println("je suis la  1");
-            for (PassWord word : passWord) {
-                if (word.isMode()){
-
-                    System.out.println("je suis la  2");
-
-                    Collection<GrantedAuthority> authorities = new ArrayList<>();
-                    authorities.add(new SimpleGrantedAuthority(word.getAppartienA().getRoll().getNomRoll()));
-                    System.out.println(new User(contactUser.get().getEmail(), word.getMdp(), authorities));
-                    System.out.println("**************************************");
-                    return new User(contactUser.get().getEmail(), word.getMdp(), authorities);
-                }
-            }
-        }
+//        if (contactUser.isPresent()){
+//            List<PassWord> passWord = passWordRepository.findAllByAppartienA(contactUser.get().getAppartienA());
+//
+//            System.out.println("je suis la  1");
+//            for (PassWord word : passWord) {
+//                if (word.isMode()){
+//
+//                    System.out.println("je suis la  2");
+//
+//                    Collection<GrantedAuthority> authorities = new ArrayList<>();
+//                    authorities.add(new SimpleGrantedAuthority(word.getAppartienA().getRoll().getNomRoll()));
+//                    System.out.println(new User(contactUser.get().getEmail(), word.getMdp(), authorities));
+//                    System.out.println("**************************************");
+//                    return new User(contactUser.get().getEmail(), word.getMdp(), authorities);
+//                }
+//            }
+//        }
         return null;
     }
 }

@@ -9,6 +9,6 @@ import java.util.List;
 import java.util.Optional;
 
 public interface ContactUserRepository extends JpaRepository<ContactUser, Integer> {
-    List<ContactUser> findAllByAppartienA(Personne personne);
+    ContactUser findAllByAppartienA(Personne personne);
     Optional<ContactUser> findByEmail(String mdp);
 }

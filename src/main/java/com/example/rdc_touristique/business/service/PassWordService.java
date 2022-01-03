@@ -39,15 +39,6 @@ public class PassWordService implements CrudService<PassWordDTO, Integer> {
         if (passWordRepository.existsById(toDTO.getId()))
             throw new PassWordExisteExeption(toDTO.getId());
 
-        List<PassWord> passWordList = passWordRepository.findAllByAppartienA(mapper.toEntity(toDTO.getAppartienA()));
-
-        for (PassWord passWord : passWordList) {
-            if (passWord.isMode()){
-                passWord.setMode(false);
-                passWordRepository.save(passWord);
-            }
-        }
-
         PassWord entity = passWordMapper.toEntity(toDTO);
         entity.setMode(true);
         passWordRepository.save(entity);

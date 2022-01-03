@@ -1,10 +1,8 @@
 package com.example.rdc_touristique.business.dto;
 
-import com.example.rdc_touristique.data_access.entity.Action;
-import com.example.rdc_touristique.data_access.entity.DureeLocation;
 import lombok.*;
+import org.springframework.web.multipart.MultipartFile;
 
-import javax.persistence.Column;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -17,7 +15,7 @@ public class BienDTO implements IdentifiedDTO<Integer>{
 
     private Integer id;
     private Type_bienDTO type_bien;
-    private DureeLocationDTO dureeLocation;
+    private int dureeOnLine;
     private AladispositionDTO aladisposition;
     private int prix;
     private int npmin;
@@ -32,4 +30,5 @@ public class BienDTO implements IdentifiedDTO<Integer>{
     private LocalDateTime dateCreation;
     private int likes;
     private boolean modeActive;
+    private List<MultipartFile> img;
 }

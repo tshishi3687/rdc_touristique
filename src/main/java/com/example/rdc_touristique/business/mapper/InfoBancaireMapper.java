@@ -25,12 +25,11 @@ public class InfoBancaireMapper implements Mapper<InfoBancaireDTO, InfoBancaire>
 
         return new InfoBancaireDTO(
                 infoBancaire.getId(),
-                infoBancaire.getNomBanque(),
-                infoBancaire.getNumCarte(),
-                infoBancaire.getNumCompte(),
+                infoBancaire.getNomBanque().charAt(0) + "****",
+                "**** **** **** ***" + infoBancaire.getNumCarte().charAt(infoBancaire.getNumCarte().length() -1),
+                "**** **** **** ***" + infoBancaire.getNumCompte().charAt(infoBancaire.getNumCompte().length() - 1),
                 infoBancaire.getDateExpiration(),
-                personneMapper.toDTO(infoBancaire.getAppartienA()),
-                infoBancaire.isActive()
+                personneMapper.toDTO(infoBancaire.getAppartienA())
         );
     }
 

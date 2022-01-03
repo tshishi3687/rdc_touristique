@@ -8,19 +8,12 @@ import org.springframework.stereotype.Component;
 
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Component
 public class BienMapper implements Mapper<BienDTO, Bien>{
 
-    @Autowired
-    private Mapper<DureeLocationDTO, DureeLocation> dureeLocationMapper;
-    @Autowired
-    private DureeLocationRepository dureeLocationRepository;
-    @Autowired
-    private Mapper<PersonneSimplifierDTO, Personne> personneMapper;
-    @Autowired
-    private Mapper<Type_bienDTO, Type_bien> type_bienMapper;
     @Autowired
     private Mapper<CoordonneeDTO, Coordonnee> coordonneeMapper;
     @Autowired
@@ -32,35 +25,7 @@ public class BienMapper implements Mapper<BienDTO, Bien>{
 
     @Override
     public BienDTO toDTO(Bien bien) {
-        if (bien==null)
-            return null;
-
-        int likes;
-        if((bien.getLikes()== null) || (bien.getLikes().size()<=0)){
-            likes = 0;
-        }else{
-            likes = bien.getLikes().size();
-        }
-
-        return new BienDTO(
-                bien.getId(),
-                type_bienMapper.toDTO(bien.getType()),
-                dureeLocationMapper.toDTO(bien.getDureeLocation()),
-                aladispositionMapper.toDTO(bien.getAladisposition()),
-                bien.getPrix(),
-                bien.getNpmin(),
-                bien.getNpmax(),
-                bien.getNchambre(),
-                bien.getNsdb(),
-                bien.getNwc(),
-                bien.getSuperficie(),
-                bien.getDescription(),
-                coordonneeMapper.toDTO(bien.getCoordonnee()),
-                personneMapper.toDTO(bien.getAppartient()),
-                bien.getDateCreation(),
-                likes,
-                bien.isModeActive()
-        );
+        return null;
     }
 
     @Override
@@ -71,7 +36,6 @@ public class BienMapper implements Mapper<BienDTO, Bien>{
         Bien bien = new Bien();
         bien.setId(bienDTO.getId());
         bien.setType(type_bienRepository.getOne(bienDTO.getType_bien().getId()));
-        bien.setDureeLocation(dureeLocationRepository.getOne(bienDTO.getDureeLocation().getId()));
         bien.setAladisposition(aladispositionMapper.toEntity(bienDTO.getAladisposition()));
         bien.setPrix(bienDTO.getPrix());
         bien.setNpmin(bienDTO.getNpmin());
@@ -84,6 +48,7 @@ public class BienMapper implements Mapper<BienDTO, Bien>{
         bien.setCoordonnee(coordonneeMapper.toEntity(bienDTO.getCoordonnee()));
         bien.setAppartient(personneReposytory.getOne(bienDTO.getAppartient().getId()));
         bien.setDateCreation(LocalDateTime.now());
+        bien.setDateFinMisEnLigne(LocalDate.now());
         return bien;
     }
 }

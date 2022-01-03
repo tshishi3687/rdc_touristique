@@ -29,6 +29,12 @@ public class PersonneController extends AbstratCrudController<PersonneSimpleDTO,
         return ((PersonneService)service).seloguer(dto);
     }
 
+    @PostMapping("/ibau")
+    @ResponseStatus(HttpStatus.OK)
+    public boolean verifIBAU(@RequestBody PersonneSimpleDTO personneSimpleDTO) throws PersonneSimpleExisteExeption {
+        return ((PersonneService)service).infoBanAdreUser(personneSimpleDTO);
+    }
+
     @PostMapping("/email")
     @ResponseStatus(HttpStatus.OK)
     public boolean getEmail(@RequestBody MdpDTO dto)  {

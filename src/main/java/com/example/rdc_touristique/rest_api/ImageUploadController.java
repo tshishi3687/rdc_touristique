@@ -32,7 +32,7 @@ public class ImageUploadController extends AbstratCrudController<ImageModelDTO, 
 
     @PostMapping("/all")
     @ResponseStatus(HttpStatus.OK)
-    public List<ImageBien> allImageByBienid(@RequestBody BienDTO bien){
+    public List<ImageBien> allImageByBienid(@RequestBody int bien){
         return ((ImageModelService)service).getImage(bien);
     }
 

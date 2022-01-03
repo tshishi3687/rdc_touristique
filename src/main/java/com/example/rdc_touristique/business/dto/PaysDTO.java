@@ -7,9 +7,9 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
-public class PaysDTO {
+public class PaysDTO implements IdentifiedDTO<Integer> {
 
-    private int id;
+    private Integer id;
     private int code;
     private String alpha2;
     private String alpha3;

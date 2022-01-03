@@ -66,9 +66,7 @@ public class ContactUserService implements CrudService<ContactUserDTO, Integer> 
     }
 
     @Transactional
-    public List<ContactUserDTO> selonPersonne(PersonneSimplifierDTO personne) throws NoSuchAlgorithmException, InvalidKeySpecException {
-        return contactUserRepository.findAllByAppartienA(personneMapper.toEntity(personne)).stream()
-                .map(contactUserMapper::toDTO)
-                .collect(Collectors.toList());
+    public ContactUserDTO selonPersonne(PersonneSimplifierDTO personne) throws NoSuchAlgorithmException, InvalidKeySpecException {
+        return contactUserMapper.toDTO(contactUserRepository.findAllByAppartienA(personneMapper.toEntity(personne)));
     }
 }

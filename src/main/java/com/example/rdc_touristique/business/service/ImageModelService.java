@@ -82,11 +82,11 @@ public class ImageModelService implements CrudService<ImageModelDTO, Integer>{
 
 
     @Transactional
-    public List<ImageBien> getImage(BienDTO bien) {
-        if(bien == null)
+    public List<ImageBien> getImage(int idBien) {
+        if(idBien <= 0)
             return null;
 
-        List<ImageBien> listBien = imageRepository.findAllByBienid(bienRepository.getOne(bien.getId()));
+        List<ImageBien> listBien = imageRepository.findAllByBienid(bienRepository.getOne(idBien));
         List<ImageBien> newListImageBien = new ArrayList<>();
 
         for (ImageBien imageBien : listBien) {

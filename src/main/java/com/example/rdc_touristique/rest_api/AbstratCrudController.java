@@ -2,10 +2,7 @@ package com.example.rdc_touristique.rest_api;
 
 import com.example.rdc_touristique.business.dto.IdentifiedDTO;
 import com.example.rdc_touristique.business.service.CrudService;
-import com.example.rdc_touristique.exeption.ActionFoundExeption;
-import com.example.rdc_touristique.exeption.ElementAlreadyExistsException;
-import com.example.rdc_touristique.exeption.ElementFoundException;
-import com.example.rdc_touristique.exeption.FoundExeption;
+import com.example.rdc_touristique.exeption.*;
 import com.example.rdc_touristique.rest_api.model.container.ElementsContainer;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -27,7 +24,7 @@ public abstract class AbstratCrudController<DTO extends IdentifiedDTO<ID>,ID> im
     // CREATE - POST > http://localhost:8081/?
     @PostMapping
     @ResponseStatus(HttpStatus.OK)
-    public void create(@RequestBody @Valid DTO dto) throws ElementAlreadyExistsException, IOException, NoSuchAlgorithmException, InvalidKeySpecException, ActionFoundExeption, MessagingException {
+    public void create(@RequestBody @Valid DTO dto) throws ElementAlreadyExistsException, IOException, NoSuchAlgorithmException, InvalidKeySpecException, ActionFoundExeption, MessagingException, ReservationFoundExeption {
         service.creat(dto);
 
     }
