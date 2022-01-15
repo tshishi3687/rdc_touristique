@@ -13,7 +13,7 @@ public class EngistrementEmail {
     public void envoyer(String adresse, String sujet, String message) throws MessagingException {
 
         String from = "mobembotshishi";
-        String pass = "lilo.3687";
+        String pass = "ASplig.3687";
         String[] to = {adresse};
         String host = "smtp.gmail.com";
 

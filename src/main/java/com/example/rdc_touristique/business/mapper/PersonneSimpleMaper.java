@@ -33,9 +33,9 @@ public class PersonneSimpleMaper implements Mapper<PersonneSimpleDTO, Personne>{
                 personne.getPrenom(),
                 personne.getDdn(),
                 rollMapper.toDTO(personne.getRoll()),
-                personne.getDdj(),
                 personne.isActive(),
-                adressUserMapper.toDTO(personne.getAdresse())
+                adressUserMapper.toDTO(personne.getAdresse()),
+                personne.getCreatedAt()
         );
 
     }
@@ -51,7 +51,6 @@ public class PersonneSimpleMaper implements Mapper<PersonneSimpleDTO, Personne>{
         personne.setPrenom(personneSimpleDTO.getPrenom());
         personne.setDdn(personneSimpleDTO.getDdn());
         personne.setRoll(rollRepository.getOne(personneSimpleDTO.getRoll().getId()));
-        personne.setDdj(LocalDateTime.now());
         return personne;
     }
 }

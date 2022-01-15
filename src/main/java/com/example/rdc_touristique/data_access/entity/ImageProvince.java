@@ -7,7 +7,7 @@ import javax.persistence.*;
 @Entity
 @Table(name = "image_province")
 @Component
-public class ImageProvince {
+public class ImageProvince extends BaseEntity{
 
     public ImageProvince() {
         super();

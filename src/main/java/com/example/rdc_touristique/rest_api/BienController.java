@@ -13,6 +13,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.mail.MessagingException;
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
 import java.util.List;
@@ -54,6 +55,12 @@ public class BienController extends AbstratCrudController<BienVuDTO, Integer> {
     @ResponseStatus(HttpStatus.OK)
     public void activationBien(@RequestBody BienVuDTO bienDTO) throws BienFoundExeption, PersonneSimpleExisteExeption {
         ((BienService)service).activationBien(bienDTO);
+    }
+
+    @PostMapping("/env_mail")
+    @ResponseStatus(HttpStatus.OK)
+    public void envoiMail(@RequestBody BienVuDTO bienDTO) throws BienFoundExeption, PersonneSimpleExisteExeption, MessagingException, BienExisteExeption, NoSuchAlgorithmException {
+        ((BienService)service).maildeconfirmationBienMisEnLigne(bienDTO);
     }
 
 }

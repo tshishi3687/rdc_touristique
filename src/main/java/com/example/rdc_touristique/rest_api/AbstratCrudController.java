@@ -24,7 +24,7 @@ public abstract class AbstratCrudController<DTO extends IdentifiedDTO<ID>,ID> im
     // CREATE - POST > http://localhost:8081/?
     @PostMapping
     @ResponseStatus(HttpStatus.OK)
-    public void create(@RequestBody @Valid DTO dto) throws ElementAlreadyExistsException, IOException, NoSuchAlgorithmException, InvalidKeySpecException, ActionFoundExeption, MessagingException, ReservationFoundExeption {
+    public void create(@RequestBody @Valid DTO dto) throws ElementAlreadyExistsException, IOException, NoSuchAlgorithmException, InvalidKeySpecException, ActionFoundExeption, MessagingException {
         service.creat(dto);
 
     }

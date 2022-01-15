@@ -2,7 +2,6 @@ package com.example.rdc_touristique.business.mapper;
 
 import com.example.rdc_touristique.business.dto.*;
 import com.example.rdc_touristique.data_access.entity.*;
-import com.example.rdc_touristique.data_access.repository.ReservationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -15,8 +14,6 @@ public class PersonneInfoMapper implements Mapper<PersonneInfoDTO, Personne>{
 
     @Autowired
     private Mapper<BienDTO, Bien> bienDTOMapper;
-    @Autowired
-    private ReservationRepository demandeRepository;
 
 
     @Override

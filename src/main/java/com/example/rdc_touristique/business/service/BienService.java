@@ -1,5 +1,7 @@
 package com.example.rdc_touristique.business.service;
 
+import com.example.rdc_touristique.Email.EngistrementEmail;
+import com.example.rdc_touristique.Email.StringText;
 import com.example.rdc_touristique.business.dto.*;
 import com.example.rdc_touristique.business.mapper.Mapper;
 import com.example.rdc_touristique.contratLocation.TextContrat;
@@ -7,15 +9,18 @@ import com.example.rdc_touristique.data_access.entity.*;
 import com.example.rdc_touristique.data_access.repository.*;
 import com.example.rdc_touristique.exeption.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.mail.MessagingException;
+import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
+import java.util.Random;
 import java.util.stream.Collectors;
 
 @Service
@@ -34,36 +39,27 @@ public class BienService implements CrudService<BienVuDTO, Integer> {
     @Autowired
     private Mapper<PersonneSimpleDTO, Personne> personneSimpleMapper;
     @Autowired
-    private ActionRepository actionRepository;
-    @Autowired
-    private Mapper<ActionDTO, Action> actionMapper;
-    @Autowired
-    private final ActionDTO  actionDTO = new ActionDTO();
-    @Autowired
     private AladispositionRepository aladispositionRepository;
     @Autowired
     private ImageRepository imageRepository;
     @Autowired
     private PersonneReposytory personneReposytory;
     @Autowired
-    private BienMisEnLigneRepository bienMisEnLigneRepository;
-    @Autowired
-    private ContratRepository contratRepository;
+    private ContratMisEnLigneRepository contratRepository;
     @Autowired
     private PersonneService personneService;
+    @Autowired
+    private EngistrementEmail mail;
+    @Autowired
+    private StringText textMail;
+    @Autowired
+    private BCryptPasswordEncoder bCryptPasswordEncoder;
 
     @Transactional
     public List<BienVuDTO> selonLaPersonne(PersonneSimplifierDTO personne) throws NoSuchAlgorithmException, InvalidKeySpecException, BienFoundExeption {
 
         if (personne == null)
             throw new BienFoundExeption(personne.getId());
-        actionDTO.setId(0);
-        actionDTO.setDate(LocalDateTime.now());
-        actionDTO.setClassName("Bien-personne");
-        actionDTO.setIdClasse(personne.getId());
-        actionDTO.setAction("Recherche");
-        actionDTO.setDescription("Recherche de tous les biens appartenants à " + personne.getNom() + " / " + personne.getPrenom());
-        actionRepository.save(actionMapper.toEntity(actionDTO));
 
         return bienRepository.findAllByAppartientAndModeActiveFalse(personneMapper.toEntity(personne)).stream()
         .map(bienVuMapper::toDTO)
@@ -89,26 +85,11 @@ public class BienService implements CrudService<BienVuDTO, Integer> {
 
         Personne personne = personneReposytory.getOne(personneMapper.toEntity(toCreat.getAppartient()).getId());
         if (personneReposytory.existsById(toCreat.getAppartient().getId()) && (personne.getRoll().getId() == 1 || personne.getRoll().getId() == 3)){
-            System.out.println("1 ok");
-            actionDTO.setId(0);
-            actionDTO.setDate(today);
-            actionDTO.setClassName("Bien");
-            actionDTO.setIdClasse(toCreat.getId());
-            actionDTO.setAction("Création");
-            actionDTO.setDescription("Création de/d' " +toCreat.getType_bien().getNom() +
-                    " bien  à " + toCreat.getCoordonnee().getVille().getNomVille() +
-                    " dans la province de " + toCreat.getCoordonnee().getVille().getProvince().getNomprovince()
-                    + " par " + toCreat.getAppartient().getNom() + "-" + toCreat.getAppartient().getPrenom());
-            actionRepository.save(actionMapper.toEntity(actionDTO));
 
-            System.out.println("2 ok");
             Bien entity = bienMapper.toEntity(toCreat);
             entity.setModeActive(false);
             aladispositionRepository.save(entity.getAladisposition());
-            System.out.println("3 ok");
             coordorRepository.save(entity.getCoordonnee());
-
-            System.out.println("4 ok");
             return bienVuMapper.toDTO(bienRepository.save(entity)).getId();
 
         }
@@ -152,18 +133,16 @@ public class BienService implements CrudService<BienVuDTO, Integer> {
 
         // Pour faire passer un bien en mode active, je dois:
             // créé un contrat entre le propiétaire du bien et Mobembo (representé par personne Admin
-            // créé une ligne dans la table "bien_mis_en_ligne
 
         // 1. je reccupère le bien dans la bd.
         Bien bien = bienRepository.getOne(bienDTO.getId());
-            // j'ai besoin de le transformer en personneSimple
+            // j'ai besoin de le transformer en personneSimple pour la partie 2
         PersonneSimpleDTO personneSimpleDTO = personneSimpleMapper.toDTO(personneReposytory.getOne(bien.getAppartient().getId()));
 
-        // 2. verifi si le bien reccupéré n'est pas déja active:
+        // 2. verifi si le bien reccupéré n'est pas déja active et si la personne a déjà donnée ses info bancaire et ses coordonnée
         if (!bien.isModeActive() && personneService.infoBanAdreUser(personneSimpleDTO)){
 
             // Préparation du contrat liant le propiétaire du bien et Mobembo.cd
-
             // 3. je cherche les deux partie
                 // 3.1 Preneur: c'est la le propiétaire du bien
             Personne preneur = bien.getAppartient();
@@ -180,10 +159,14 @@ public class BienService implements CrudService<BienVuDTO, Integer> {
             );
 
             // 5. je cree l'entité contrat
-            Contrat contrat = new Contrat();
+            ContratMisEnLigne contrat = new ContratMisEnLigne();
                 contrat.setId(0); // id 0 pour la création
+                contrat.setDdDebut(LocalDate.now());
+                contrat.setDdFin(LocalDate.now().plusDays(bienDTO.getIdNNuit()));
+                contrat.setIdBien(bien);
                 contrat.setBailleur(bailleur); // bailleur: personne ENTITY
                 contrat.setPreneur(preneur); // preneur: personne ENTITY
+                contrat.setEnCour(true);
                 contrat.setEntre(textContrat.EntreBailler());
                 contrat.setEntre2(textContrat.EntrePreneur());
                 contrat.setObjet(textContrat.objet());
@@ -191,29 +174,72 @@ public class BienService implements CrudService<BienVuDTO, Integer> {
                 contrat.setLoyer(textContrat.loyerMobembo());
                 contrat.setDuree(textContrat.dureeMobembo());
                 contrat.setDardl(textContrat.dARDL());
-
-            Optional<BienMisEnLigne> bmel = bienMisEnLigneRepository.findByBienLie(bien);
-            if (bmel.isPresent()){
-                bmel.get().getBienLie().setDateFinMisEnLigne(LocalDate.now().plusDays(bienDTO.getIdNNuit()));
-                contratRepository.deleteById(bmel.get().getContratBienMisEnLigne().getId());
-                bmel.get().setContratBienMisEnLigne(contrat);
-                bienMisEnLigneRepository.save(bmel.get());
-            }else{
-                // 6. je cree l'entité de la table bien_mis_en_ligne
-                BienMisEnLigne bienMisEnLigne = new BienMisEnLigne();
-                bienMisEnLigne.setId(0); // id mis à 0 pour s'assurée que le bien n'existe pas
-                bienMisEnLigne.setBienLie(bien); // le bien consernée ou lié
-                bienMisEnLigne.setContratBienMisEnLigne(contratRepository.save(contrat)); // j'intégre le nouveau contrat créé
-                // 7. j'enregistre l'entité "bien_mis_en_ligne
-                bienMisEnLigneRepository.save(bienMisEnLigne);
-            }
+;           contratRepository.save(contrat);
 
             // 8. je change le modeActive du bien en active
             bien.setModeActive(true);
             bienRepository.save(bien);
+        }
+    }
 
+    @Transactional
+    public void maildeconfirmationBienMisEnLigne(BienVuDTO bienVuDTO) throws BienExisteExeption, NoSuchAlgorithmException, MessagingException {
+        if (!bienRepository.existsById(bienVuDTO.getId()))
+            throw  new BienExisteExeption(bienVuDTO.getId());
+
+        String code = codeActivation();
+
+        Bien bien = bienRepository.getOne(bienVuDTO.getId());
+        Personne personne = personneReposytory.getOne(bien.getAppartient().getId());
+
+        mail.envoyer(personne.getContactUser().getEmail(), textMail.getSujetEnvoisConfMisEnLigne(), textMail.confirmationMisEnLigne(personne,bien, bienVuDTO.getIdNNuit(), code));
+        personne.setCodeActivation(hasMdp(code));
+        personneReposytory.save(personne);
+    }
+
+    private String codeActivation() throws NoSuchAlgorithmException {
+        Random rand = new Random();
+
+        String str1="", str2="";
+        int str3;
+        do{
+            str3 = (int)(Math.random() * ((1000 - 1) + 1));
+
+            for(int i = 0 ; i < 4 ; i++){
+                char c = (char)(rand.nextInt(26) + 97);
+                str1 += c;
+            }
+
+            for(int i = 0 ; i < 2 ; i++){
+                char c = (char)(rand.nextInt(26) + 97);
+                str2 += c;
+            }
+        }while(personneReposytory.findByCodeActivation(hasMdp(str1 + str3 + str2)).isPresent());
+
+
+        return str1+str3+str2;
+    }
+
+    private String hasMdp(String mdp) throws NoSuchAlgorithmException {
+        MessageDigest md = MessageDigest.getInstance("SHA-256");
+        md.update(mdp.getBytes());
+
+        byte byteData[] = md.digest();
+
+        //convertir le tableau de bits en une format hexadécimal - méthode 1
+        StringBuffer sb = new StringBuffer();
+        for (int i = 0; i < byteData.length; i++) {
+            sb.append(Integer.toString((byteData[i] & 0xff) + 0x100, 16).substring(1));
         }
 
+        //convertir le tableau de bits en une format hexadécimal - méthode 2
+        StringBuffer hexString = new StringBuffer();
+        for (byte byteDatum : byteData) {
+            String hex = Integer.toHexString(0xff & byteDatum);
+            if (hex.length() == 1) hexString.append('0');
+            hexString.append(hex);
+        }
+        return hexString.toString();
     }
 
     @Transactional

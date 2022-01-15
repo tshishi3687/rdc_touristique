@@ -1,5 +1,6 @@
 package com.example.rdc_touristique.data_access.entity;
 
+import com.example.rdc_touristique.business.dto.ContratLocationDTO;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -15,7 +16,7 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class Bien {
+public class Bien extends BaseEntity{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -24,9 +25,6 @@ public class Bien {
     @ManyToOne
     @JoinColumn(name = "type")
     private Type_bien type;
-
-    @OneToMany(mappedBy = "bienLie",cascade = CascadeType.ALL)
-    private List<BienMisEnLigne> dureeOnLine;
 
     @OneToOne( cascade = CascadeType.ALL )
     @JoinColumn( name="aladisposition", referencedColumnName = "id")
@@ -56,7 +54,6 @@ public class Bien {
     @Column(length = 1000)
     private String description;
 
-
     @ManyToOne
     @JoinColumn(name = "coordonnee", referencedColumnName = "id")
     private Coordonnee coordonnee;
@@ -65,24 +62,18 @@ public class Bien {
     @JoinColumn(name = "appartient")
     private Personne appartient;
 
-    @Column
-    private LocalDateTime dateCreation;
-
-    @OneToMany(mappedBy = "bienReservee",cascade = CascadeType.ALL )
-    private List<Reservation> deReservation;
-
     @OneToMany(mappedBy = "bienid",cascade = CascadeType.ALL)
     private List<ImageBien> Image;
 
     @ManyToMany(mappedBy = "likedBien")
     private List<Personne> likes;
 
-    @OneToMany(mappedBy = "bienLie")
-    private List<BienMisEnLigne> bienOnline;
+    @OneToMany(mappedBy = "idBien",cascade = CascadeType.ALL)
+    private List<ContratMisEnLigne> contratMisEnLigneList;
+
+    @OneToMany(mappedBy = "idBien",cascade = CascadeType.ALL)
+    private List<ContratLocation> contratLocationList;
 
     @Column
     private boolean modeActive;
-
-    @Column
-    private LocalDate dateFinMisEnLigne;
 }

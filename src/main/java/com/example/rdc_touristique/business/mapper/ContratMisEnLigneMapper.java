@@ -1,8 +1,10 @@
 package com.example.rdc_touristique.business.mapper;
 
-import com.example.rdc_touristique.business.dto.ContratDTO;
+import com.example.rdc_touristique.business.dto.BienVuDTO;
+import com.example.rdc_touristique.business.dto.ContratMisEnLigneDTO;
 import com.example.rdc_touristique.business.dto.PersonneSimpleDTO;
-import com.example.rdc_touristique.data_access.entity.Contrat;
+import com.example.rdc_touristique.data_access.entity.Bien;
+import com.example.rdc_touristique.data_access.entity.ContratMisEnLigne;
 import com.example.rdc_touristique.data_access.entity.Personne;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -11,18 +13,23 @@ import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
 
 @Component
-public class ContratMapper implements Mapper<ContratDTO, Contrat> {
+public class ContratMisEnLigneMapper implements Mapper<ContratMisEnLigneDTO, ContratMisEnLigne> {
 
     @Autowired
     private Mapper<PersonneSimpleDTO, Personne> personneMapper;
+    @Autowired
+    private Mapper<BienVuDTO, Bien> bienMapper;
 
     @Override
-    public ContratDTO toDTO(Contrat contrat) {
+    public ContratMisEnLigneDTO toDTO(ContratMisEnLigne contrat) {
         if (contrat==null)
             return null;
 
-        return new ContratDTO(
+        return new ContratMisEnLigneDTO(
                 contrat.getId(),
+                contrat.getDdDebut(),
+                contrat.getDdFin(),
+                bienMapper.toDTO(contrat.getIdBien()),
                 personneMapper.toDTO(contrat.getBailleur()),
                 personneMapper.toDTO(contrat.getPreneur()),
                 contrat.isEnCour(),
@@ -37,7 +44,8 @@ public class ContratMapper implements Mapper<ContratDTO, Contrat> {
     }
 
     @Override
-    public Contrat toEntity(ContratDTO contratDTO) throws NoSuchAlgorithmException, InvalidKeySpecException {
+    public ContratMisEnLigne toEntity(ContratMisEnLigneDTO contratDTO) throws NoSuchAlgorithmException, InvalidKeySpecException {
+        // tous les action je les fait dans BienServie
         return null;
     }
 }

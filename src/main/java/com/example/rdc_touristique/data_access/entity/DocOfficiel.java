@@ -7,7 +7,7 @@ import javax.persistence.*;
 @Entity
 @Table(name = "doc_officiel")
 @Component
-public class DocOfficiel {
+public class DocOfficiel extends BaseEntity{
 
     public DocOfficiel() {
         super();

@@ -7,18 +7,30 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 
 @Entity
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class Contrat {
+public class ContratLocation extends BaseEntity{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
+
+    @Column
+    private LocalDate ddDebut;
+
+    @Column
+    private LocalDate ddFin;
+
+    @ManyToOne
+    @JoinColumn(name = "id_bien")
+    private Bien idBien;
+
+    @Column
+    private int nPersonneSurLieu;
 
     @ManyToOne
     private Personne preneur;

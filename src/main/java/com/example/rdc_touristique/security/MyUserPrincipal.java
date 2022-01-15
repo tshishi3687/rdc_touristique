@@ -18,7 +18,6 @@ public class MyUserPrincipal implements UserDetails {
     private final String prenom;
     private final String nom;
     private final LocalDate ddn;
-    private final LocalDateTime ddj;
     private final String password;
     private final boolean active;
     private final List<GrantedAuthority> authorities;
@@ -27,7 +26,6 @@ public class MyUserPrincipal implements UserDetails {
         this.id = user.getId();
         this.prenom = user.getPrenom();
         this.ddn = user.getDdn();
-        this.ddj = user.getDdj();
         this.nom = user.getNom();
         this.password = (LocalDateTime.now()) + "_tu croyais quoi?";
         this.active = user.isActive();
@@ -46,11 +44,6 @@ public class MyUserPrincipal implements UserDetails {
 
     public LocalDate getDdn() {
         return ddn;
-    }
-
-
-    public LocalDateTime getDdj() {
-        return ddj;
     }
 
     @Override

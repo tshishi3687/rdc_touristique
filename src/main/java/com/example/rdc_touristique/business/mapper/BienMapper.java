@@ -8,8 +8,6 @@ import org.springframework.stereotype.Component;
 
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
 
 @Component
 public class BienMapper implements Mapper<BienDTO, Bien>{
@@ -47,8 +45,6 @@ public class BienMapper implements Mapper<BienDTO, Bien>{
         bien.setDescription(bienDTO.getDescription());
         bien.setCoordonnee(coordonneeMapper.toEntity(bienDTO.getCoordonnee()));
         bien.setAppartient(personneReposytory.getOne(bienDTO.getAppartient().getId()));
-        bien.setDateCreation(LocalDateTime.now());
-        bien.setDateFinMisEnLigne(LocalDate.now());
         return bien;
     }
 }

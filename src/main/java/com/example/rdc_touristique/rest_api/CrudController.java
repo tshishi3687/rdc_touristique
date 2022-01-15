@@ -16,7 +16,7 @@ import java.security.spec.InvalidKeySpecException;
 public interface CrudController<DTO extends IdentifiedDTO<ID>, ID> {
 
     // Create
-    void create(@RequestBody DTO dto) throws ElementAlreadyExistsException, IOException, NoSuchAlgorithmException, InvalidKeySpecException, ActionFoundExeption, MessagingException, ReservationFoundExeption;
+    void create(@RequestBody DTO dto) throws ElementAlreadyExistsException, IOException, NoSuchAlgorithmException, InvalidKeySpecException, ActionFoundExeption, MessagingException;
 
     // Read
     ResponseEntity<DTO> getOne(@PathVariable ID id) throws ElementFoundException, FoundExeption;

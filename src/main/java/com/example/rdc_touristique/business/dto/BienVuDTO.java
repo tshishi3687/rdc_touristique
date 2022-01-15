@@ -27,10 +27,8 @@ public class BienVuDTO implements IdentifiedDTO<Integer>{
     private int superficie;
     private String description;
     private CoordonneeDTO coordonnee;
-    private LocalDateTime dateCreation;
     private int likes;
     private boolean modeActive;
     private List<ImageBien> images;
     private int idNNuit;
-    private LocalDate dateFinMisEnLigne;
 }

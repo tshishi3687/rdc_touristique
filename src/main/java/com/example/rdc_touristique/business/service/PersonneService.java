@@ -38,10 +38,6 @@ public class PersonneService implements CrudService<PersonneSimpleDTO, Integer> 
     @Autowired
     private PersonneReposytory personneReposytory;
     @Autowired
-    private ActionRepository actionRepository;
-    @Autowired
-    private Mapper<ActionDTO, Action> actionMapper;
-    @Autowired
     private final ActionDTO actionDTO = new ActionDTO();
     @Autowired
     private ContactUserRepository contactUserRepository;
@@ -63,13 +59,6 @@ public class PersonneService implements CrudService<PersonneSimpleDTO, Integer> 
             throw new PersonneSimpleExisteExeption(toCreat.getId());
 
         String code = codeActivation();
-
-        actionDTO.setId(0);
-        actionDTO.setDate(LocalDateTime.now());
-        actionDTO.setClassName("Personne");
-        actionDTO.setIdClasse(toCreat.getId());
-        actionDTO.setAction("Création");
-        actionDTO.setDescription("Création de compte au nom de  " + toCreat.getNom() + "-" + toCreat.getPrenom());
 
         Personne entity = personneCreaMapper.toEntity(toCreat);
         entity.setActive(false);
@@ -95,9 +84,7 @@ public class PersonneService implements CrudService<PersonneSimpleDTO, Integer> 
 
         mail.envoyer(toCreat.getContactUser().getEmail(), textMail.getSujetCrea(), textMail.creationMessageInscription(code,toCreat.getPrenom()));
 
-        actionRepository.save(actionMapper.toEntity(actionDTO));
-
-    }
+     }
 
     @Transactional
     public boolean infoBanAdreUser(PersonneSimpleDTO personne) throws PersonneSimpleExisteExeption {
@@ -200,6 +187,32 @@ public class PersonneService implements CrudService<PersonneSimpleDTO, Integer> 
             throw new PersonneSimpleFoundExeption(toDelete);
 
         personneReposytory.deleteById(toDelete);
+    }
+
+    @Transactional
+    public boolean modifMDP(CreatPersonne personne) throws NoSuchAlgorithmException, MessagingException {
+        Optional<Personne> entity = personneReposytory.findById(personne.getId());
+        if (entity.isPresent() &&
+                entity.get().getNom().equals(personne.getNom()) &&
+                entity.get().getPrenom().equals(personne.getPrenom()) &&
+                entity.get().getContactUser().getEmail().equals(personne.getContactUser().getEmail()) &&
+                entity.get().getDdn().equals(personne.getDdn())
+        ){
+
+            String code = codeActivation();
+
+            mail.envoyer(
+                    entity.get().getContactUser().getEmail(),
+                    textMail.getSujetmodifMDP(),
+                    textMail.demandeModifMDP(entity.get(),code));
+
+            entity.get().setCodeActivation(hasMdp(code));
+
+            return true;
+
+        }
+
+        return false;
     }
 
     private String codeActivation() throws NoSuchAlgorithmException {

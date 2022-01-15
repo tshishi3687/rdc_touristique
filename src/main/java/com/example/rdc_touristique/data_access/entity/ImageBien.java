@@ -10,7 +10,7 @@ import java.time.LocalDateTime;
 @Entity
 @Table(name = "imagesBien")
 @Component
-public class ImageBien {
+public class ImageBien extends BaseEntity{
     public ImageBien() {
         super();
     }

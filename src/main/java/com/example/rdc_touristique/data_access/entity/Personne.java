@@ -1,9 +1,6 @@
 package com.example.rdc_touristique.data_access.entity;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 import java.time.LocalDate;
@@ -15,7 +12,8 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class Personne {
+@ToString
+public class Personne extends BaseEntity{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -40,9 +38,6 @@ public class Personne {
     @Column
     private boolean active;
 
-    @Column(name = "date_creation")
-    private LocalDateTime ddj;
-
     @OneToOne(mappedBy = "appartienA")
     private Adresse adresse;
 
@@ -62,10 +57,10 @@ public class Personne {
     private List<Bien> bien;
 
     @OneToMany(mappedBy = "preneur")
-    private List<Contrat> contratsPreneur;
+    private List<ContratMisEnLigne> contratsPreneur;
 
     @OneToMany(mappedBy = "bailleur")
-    private List<Contrat> contratsBailleur;
+    private List<ContratMisEnLigne> contratsBailleur;
 
     @ManyToMany
     @JoinTable(
