@@ -7,8 +7,16 @@ import com.example.rdc_touristique.business.mapper.Mapper;
 import com.example.rdc_touristique.data_access.entity.*;
 import com.example.rdc_touristique.data_access.repository.*;
 import com.example.rdc_touristique.exeption.*;
-import com.example.rdc_touristique.security.SecurityParams;
+//import com.example.rdc_touristique.security.config.JwtRequestFilter;
+import com.example.rdc_touristique.security.config.JwtResponse;
+import com.example.rdc_touristique.security.config.JwtTokenUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
+
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -38,8 +46,6 @@ public class PersonneService implements CrudService<PersonneSimpleDTO, Integer> 
     @Autowired
     private PersonneReposytory personneReposytory;
     @Autowired
-    private final ActionDTO actionDTO = new ActionDTO();
-    @Autowired
     private ContactUserRepository contactUserRepository;
     @Autowired
     private EngistrementEmail mail;
@@ -47,6 +53,15 @@ public class PersonneService implements CrudService<PersonneSimpleDTO, Integer> 
     private StringText textMail;
     @Autowired
     private BCryptPasswordEncoder bCryptPasswordEncoder;
+    @Autowired
+    public AuthenticationManager authenticationManager;
+
+    @Autowired
+    private JwtTokenUtil jwtTokenUtil;
+
+    @Autowired
+    private UserDetailsService jwtInMemoryUserDetailsService;
+
 
     @Override
     public void creat(PersonneSimpleDTO toCreat) throws PersonneSimpleExisteExeption, NoSuchAlgorithmException, InvalidKeySpecException {
@@ -104,7 +119,20 @@ public class PersonneService implements CrudService<PersonneSimpleDTO, Integer> 
     }
 
     @Transactional
-    public PersonneSimpleDTO seloguer(MdpDTO mdp) throws NoSuchAlgorithmException {
+    public ResponseEntity<?> seloguer(MdpDTO mdp) throws Exception {
+
+        authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(mdp.getMail(), mdp.getMdp()));
+        final UserDetails userDetails = jwtInMemoryUserDetailsService
+                .loadUserByUsername(mdp.getMail());
+
+        final String token = jwtTokenUtil.generateToken(userDetails);
+
+        return ResponseEntity.ok(new JwtResponse(token));
+
+    }
+
+    @Transactional
+    public PersonneSimpleDTO seloguerSansJWT(MdpDTO mdp) throws NoSuchAlgorithmException {
         if (mdp == null)
             throw new NoSuchAlgorithmException();
 
@@ -113,13 +141,18 @@ public class PersonneService implements CrudService<PersonneSimpleDTO, Integer> 
         if (contactUser.isPresent()){
             PassWord passWord = passWordRepository.findByAppartienA(contactUser.get().getAppartienA());
 
-                if (bCryptPasswordEncoder.matches(mdp.getMdp(), passWord.getMdp())){
-                    return personneMapper.toDTO(contactUser.get().getAppartienA());
-                }
+            if (bCryptPasswordEncoder.matches(mdp.getMdp(), passWord.getMdp())){
+                return personneMapper.toDTO(contactUser.get().getAppartienA());
+            }
 
         }
         return null;
     }
+
+//    @Transactional
+//    public PersonneSimpleDTO infoPersonne(){
+//        return personneMapper.toDTO(JwtRequestFilter.maPersonne());
+//    }
 
     @Transactional
     public void likes(LikeBien likes) throws Exception {
@@ -160,7 +193,18 @@ public class PersonneService implements CrudService<PersonneSimpleDTO, Integer> 
         Optional<Personne> personne = personneReposytory.findByCodeActivation(hasMdp(codeActive));
         if (personne.isPresent()){
             personne.get().setActive(true);
-            personne.get().setCodeActivation(bCryptPasswordEncoder.encode( LocalDateTime.now()+ "_" + personne.get().getId() + "_Nikel_je suis active. Mon compte est ok" + SecurityParams.SECRET + "_" + LocalDate.now()));
+            personne.get().setCodeActivation(bCryptPasswordEncoder.encode( LocalDateTime.now()+ "_" + personne.get().getId() + "_Nikel_je suis active. Mon compte est ok" +  "_" + LocalDate.now()));
+            personneReposytory.save(personne.get());
+        }
+        return personne.isPresent();
+    }
+
+    @Transactional
+    public boolean modifMDP(ModifPass pass) throws  NoSuchAlgorithmException {
+        Optional<Personne> personne = personneReposytory.findByCodeActivation(hasMdp(pass.getCodeActive()));
+        if (personne.isPresent() && pass.getNewPass().equals(pass.getVerifPass())){
+            personne.get().getMdp().setMdp(bCryptPasswordEncoder.encode(pass.getNewPass()));
+            personne.get().setCodeActivation(bCryptPasswordEncoder.encode( LocalDateTime.now()+ "_" + personne.get().getId() + "_Nikel_je suis active. Mon compte est ok" +  "_" + LocalDate.now()));
             personneReposytory.save(personne.get());
         }
         return personne.isPresent();
@@ -191,22 +235,23 @@ public class PersonneService implements CrudService<PersonneSimpleDTO, Integer> 
 
     @Transactional
     public boolean modifMDP(CreatPersonne personne) throws NoSuchAlgorithmException, MessagingException {
-        Optional<Personne> entity = personneReposytory.findById(personne.getId());
+
+        Optional<ContactUser> entity = contactUserRepository.findByEmail(personne.getContactUser().getEmail());
         if (entity.isPresent() &&
-                entity.get().getNom().equals(personne.getNom()) &&
-                entity.get().getPrenom().equals(personne.getPrenom()) &&
-                entity.get().getContactUser().getEmail().equals(personne.getContactUser().getEmail()) &&
-                entity.get().getDdn().equals(personne.getDdn())
+                entity.get().getAppartienA().getNom().equals(personne.getNom()) &&
+                entity.get().getAppartienA().getPrenom().equals(personne.getPrenom()) &&
+                entity.get().getAppartienA().getContactUser().getEmail().equals(personne.getContactUser().getEmail()) &&
+                entity.get().getAppartienA().getDdn().equals(personne.getDdn())
         ){
 
             String code = codeActivation();
 
             mail.envoyer(
-                    entity.get().getContactUser().getEmail(),
+                    entity.get().getAppartienA().getContactUser().getEmail(),
                     textMail.getSujetmodifMDP(),
-                    textMail.demandeModifMDP(entity.get(),code));
+                    textMail.demandeModifMDP(entity.get().getAppartienA(),code));
 
-            entity.get().setCodeActivation(hasMdp(code));
+            entity.get().getAppartienA().setCodeActivation(hasMdp(code));
 
             return true;
 

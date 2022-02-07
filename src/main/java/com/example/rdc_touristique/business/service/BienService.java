@@ -17,9 +17,12 @@ import javax.mail.MessagingException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
+import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
+import java.util.Optional;
 import java.util.Random;
 import java.util.stream.Collectors;
 
@@ -53,7 +56,7 @@ public class BienService implements CrudService<BienVuDTO, Integer> {
     @Autowired
     private StringText textMail;
     @Autowired
-    private BCryptPasswordEncoder bCryptPasswordEncoder;
+    private ContratLocationRepository contratLocationRepository;
 
     @Transactional
     public List<BienVuDTO> selonLaPersonne(PersonneSimplifierDTO personne) throws NoSuchAlgorithmException, InvalidKeySpecException, BienFoundExeption {
@@ -183,18 +186,93 @@ public class BienService implements CrudService<BienVuDTO, Integer> {
     }
 
     @Transactional
-    public void maildeconfirmationBienMisEnLigne(BienVuDTO bienVuDTO) throws BienExisteExeption, NoSuchAlgorithmException, MessagingException {
+    public boolean reservationBien(ReservationBienDTO reservationBienDTO) throws NoSuchAlgorithmException, InvalidKeySpecException {
+        List<ContratLocation> allContrat = contratLocationRepository.findAll();
+
+        for (ContratLocation contratLocation : allContrat) {
+            if (
+                    (!reservationBienDTO.getDdArrivee().isBefore(LocalDate.now()) || !reservationBienDTO.getDdArrivee().equals(LocalDate.now())) || // si la date d'arrivé < la date du jour
+                            reservationBienDTO.getDdArrivee().isAfter(reservationBienDTO.getDdDepart()) || // si la date d'arrivé et avant la date de depart
+                            !contratLocation.getDdDebut().equals(reservationBienDTO.getDdArrivee()) || //
+                            (reservationBienDTO.getDdArrivee().isBefore(contratLocation.getDdFin()) && reservationBienDTO.getDdArrivee().isAfter(contratLocation.getDdDebut())) ||
+                            (reservationBienDTO.getDdDepart().isAfter(contratLocation.getDdDebut()) && reservationBienDTO.getDdDepart().isBefore(contratLocation.getDdFin()))
+            )
+                return false;
+        }
+
+        Personne bailleur = personneReposytory.findByRoll_NomRoll("Admin");
+        Personne preneur = personneReposytory.getOne(reservationBienDTO.getFaitPar().getId());
+        Bien bien = bienRepository.getOne(reservationBienDTO.getBienConserne().getId());
+
+        TextContrat textContrat = new TextContrat(
+                bailleur, // le Bailleur: personne ENTITY
+                preneur, // le Preneur: personne ENTITY
+                bienVuMapper.toDTO(bien), // bien consernée: bienDTO
+                reservationBienDTO.getDdArrivee(), // jour-J
+                reservationBienDTO.getDdDepart()
+        );
+
+        ContratLocation newContrat = new ContratLocation();
+            newContrat.setId(0);
+            newContrat.setDdDebut(reservationBienDTO.getDdArrivee());
+            newContrat.setDdFin(reservationBienDTO.getDdDepart());
+            newContrat.setIdBien(bienMapper.toEntity(reservationBienDTO.getBienConserne()));
+            newContrat.setNPersonneSurLieu(reservationBienDTO.getNPersonneSurLieu());
+            newContrat.setBailleur(bailleur);
+            newContrat.setPreneur(preneur);
+            newContrat.setEnCour(reservationBienDTO.getDdArrivee().equals(LocalDate.now()));
+            newContrat.setEntre(textContrat.EntreBailler());
+            newContrat.setEntre2(textContrat.EntrePreneur());
+            newContrat.setObjet(textContrat.objet());
+            newContrat.setEtatLieu(textContrat.etatLieu());
+            newContrat.setLoyer(textContrat.loyerMobembo());
+            newContrat.setDuree(textContrat.dureeMobembo());
+            newContrat.setDardl(textContrat.dARDL());
+        contratLocationRepository.save(newContrat);
+
+        return true;
+
+    }
+
+    @Transactional
+    public void maildeconfirmationBienMisEnLigne(BienVuDTO bienVuDTO) throws BienExisteExeption, NoSuchAlgorithmException, MessagingException, PersonneSimpleExisteExeption {
         if (!bienRepository.existsById(bienVuDTO.getId()))
             throw  new BienExisteExeption(bienVuDTO.getId());
 
+        Bien bien = bienRepository.getOne(bienVuDTO.getId());
+        Optional<Personne> personne = personneReposytory.findById(bien.getAppartient().getId());
+
+        if (personne.isEmpty() || personne.get().getRoll().getId() == 2)
+            throw new PersonneSimpleExisteExeption(personne.get().getId());
+
         String code = codeActivation();
 
-        Bien bien = bienRepository.getOne(bienVuDTO.getId());
-        Personne personne = personneReposytory.getOne(bien.getAppartient().getId());
+        mail.envoyer(personne.get().getContactUser().getEmail(), textMail.getSujetEnvoisConfMisEnLigne(), textMail.confirmationMisEnLigne(personne.get(),bien, bienVuDTO.getIdNNuit(), code));
+        personne.get().setCodeActivation(hasMdp(code));
+        personneReposytory.save(personne.get());
+    }
 
-        mail.envoyer(personne.getContactUser().getEmail(), textMail.getSujetEnvoisConfMisEnLigne(), textMail.confirmationMisEnLigne(personne,bien, bienVuDTO.getIdNNuit(), code));
-        personne.setCodeActivation(hasMdp(code));
-        personneReposytory.save(personne);
+    @Transactional
+    public long maildeconfirmationBienReserve(ReservationBienDTO reservationBienDTO) throws BienExisteExeption, NoSuchAlgorithmException, MessagingException, PersonneSimpleExisteExeption {
+        if (!bienRepository.existsById(reservationBienDTO.getBienConserne().getId()))
+            throw  new BienExisteExeption(reservationBienDTO.getBienConserne().getId());
+
+
+        Optional<Personne> personne = personneReposytory.findById(reservationBienDTO.getFaitPar().getId());
+        if (personne.isEmpty() || personne.get().getRoll().getId() == 3)
+            throw new PersonneSimpleExisteExeption(personne.get().getId());
+
+        long nJour = ChronoUnit.DAYS.between(reservationBienDTO.getDdArrivee(), reservationBienDTO.getDdDepart());
+
+        String code = codeActivation();
+
+        Bien bien = bienRepository.getOne(reservationBienDTO.getBienConserne().getId());
+
+        mail.envoyer(personne.get().getContactUser().getEmail(), textMail.getSujetConfirmationReservation(), textMail.confirmationReservation(personne.get(),bien, nJour, code));
+        personne.get().setCodeActivation(hasMdp(code));
+        personneReposytory.save(personne.get());
+
+        return nJour;
     }
 
     private String codeActivation() throws NoSuchAlgorithmException {

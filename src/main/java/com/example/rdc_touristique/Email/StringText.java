@@ -17,7 +17,9 @@ public class StringText {
     private static final String sujetEnvoisConfMisEnLigne = "Confirmation de mise en ligne.";
     private static final String sujetDemanderecu = "Nouvelle réservation reçue";
     private static final String sujetmodifMDP = "Demande de changement de mot-de-passe";
-    public static final String sujetBienNonConforme = "Bien non conforme.";
+    private static final String sujetBienNonConforme = "Bien non conforme.";
+    private static final String sujetConfirmationReservation = "Demande de Réservation";
+
 
     public String getSujetEnvoisConfMisEnLigne(){ return sujetEnvoisConfMisEnLigne; }
     public String getSujetCrea(){
@@ -33,6 +35,7 @@ public class StringText {
         return sujetmodifMDP;
     }
     public String getSujetBienNonConforme(){return sujetBienNonConforme;}
+    public String getSujetConfirmationReservation(){return sujetConfirmationReservation;}
 
     public String creationMessageInscription(String codeCree, String nom){
         return "" +
@@ -99,6 +102,39 @@ public class StringText {
                 "</ul> " +
                 "" +
                 " En ligne pour une durée de " + jours + " jours." +
+                "<br>" +
+                "<br>" +
+                "Si vous êtes d'accord avec les informations indiquées ci-avant, voici votre code : " +
+                "\"" + code + "\"<br>" +
+                "En mettant ce code sur MOBEMBO.cd, vous acceptez les termes et conditions liés à la mise en ligne d'un Bien sur MOBEMBO.cd." +
+                "<br>" +
+                "<br>" +
+                "Bien à vous," +
+                "<br>" +
+                "<br>" +
+                "Tshibangu Cédrcik" +
+                "<br>" +
+                "Créateur et developpeur de MOBEMBO.cd.";
+    }
+
+    public String confirmationReservation(Personne personne, Bien bien,long jours, String code){
+        return "Bonjour Madame, Monsieur " + personne.getNom() + "," +
+                "<br>" +
+                "<br>" +
+                "Nous constatons que vous êtes sur le point de faire la réservation du Bien suivant: <br>" +
+                "<ul>" +
+                    "<li>" +
+                        bien.getType().getNom() +
+                    "</li>" +
+                    "<li>" +
+                        "A " + bien.getPrix() + "/ €" +
+                    "</li>" +
+                    "<li>" +
+                        "Adresse : " + bien.getCoordonnee().getNum() + " " + bien.getCoordonnee().getRue() + ", " + bien.getCoordonnee().getVille().getNomVille() + " " + bien.getCoordonnee().getVille().getProvince().getNomprovince() +
+                    "</li>" +
+                "</ul> " +
+                "" +
+                " Pour une durée de " + jours + " jours." +
                 "<br>" +
                 "<br>" +
                 "Si vous êtes d'accord avec les informations indiquées ci-avant, voici votre code : " +

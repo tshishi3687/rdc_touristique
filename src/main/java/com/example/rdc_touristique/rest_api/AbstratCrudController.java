@@ -46,7 +46,7 @@ public abstract class AbstratCrudController<DTO extends IdentifiedDTO<ID>,ID> im
 
     // UPDATE - PUT > http://localhost:8081/?
     @PutMapping
-    public ResponseEntity<String> update(@RequestBody DTO dto) throws ElementFoundException, FoundExeption, NoSuchAlgorithmException, InvalidKeySpecException {
+    public ResponseEntity<String> update(@RequestBody DTO dto) throws ElementFoundException, FoundExeption, NoSuchAlgorithmException, InvalidKeySpecException, MessagingException, ContratMisEnLigneExisteExeption {
         service.update(dto);
         return ResponseEntity.ok("Un élément a été modifié" );
     }

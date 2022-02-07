@@ -23,7 +23,7 @@ public interface CrudController<DTO extends IdentifiedDTO<ID>, ID> {
     ResponseEntity<ElementsContainer<DTO>> getAll();
 
     // Update
-    ResponseEntity<String> update(@RequestBody DTO dto) throws ElementFoundException, FoundExeption, NoSuchAlgorithmException, InvalidKeySpecException;
+    ResponseEntity<String> update(@RequestBody DTO dto) throws ElementFoundException, FoundExeption, NoSuchAlgorithmException, InvalidKeySpecException, MessagingException, ContratMisEnLigneExisteExeption;
 
     // Delete
     ResponseEntity<DTO> delete(@PathVariable ID id) throws ElementFoundException, FoundExeption, NoSuchAlgorithmException, InvalidKeySpecException;

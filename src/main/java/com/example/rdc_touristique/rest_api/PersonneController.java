@@ -5,6 +5,7 @@ import com.example.rdc_touristique.business.service.CrudService;
 import com.example.rdc_touristique.business.service.PersonneService;
 import com.example.rdc_touristique.exeption.PersonneSimpleExisteExeption;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.mail.MessagingException;
@@ -23,10 +24,21 @@ public class PersonneController extends AbstratCrudController<PersonneSimpleDTO,
     }
 
 
+    @RequestMapping({ "/hello" })
+    public String firstPage() {
+        return "Hello World";
+    }
+
+//    @PostMapping("/user")
+//    @ResponseStatus(HttpStatus.OK)
+//    public ResponseEntity<?> login(@RequestBody MdpDTO dto) throws Exception {
+//        return ((PersonneService)service).seloguer(dto);
+//    }
+
     @PostMapping("/user")
     @ResponseStatus(HttpStatus.OK)
     public PersonneSimpleDTO login(@RequestBody MdpDTO dto) throws Exception {
-        return ((PersonneService)service).seloguer(dto);
+        return ((PersonneService)service).seloguerSansJWT(dto);
     }
 
     @PostMapping("/ibau")
@@ -53,15 +65,33 @@ public class PersonneController extends AbstratCrudController<PersonneSimpleDTO,
         ((PersonneService) service).creatPersonne(dto);
     }
 
+    @PostMapping("/change_passe")
+    @ResponseStatus(HttpStatus.OK)
+    public boolean changePasse(@RequestBody CreatPersonne dto) throws NoSuchAlgorithmException, InvalidKeySpecException, PersonneSimpleExisteExeption, MessagingException {
+        return ((PersonneService) service).modifMDP(dto);
+    }
+
     @PostMapping("/likes")
     @ResponseStatus(HttpStatus.OK)
     public void like(@RequestBody LikeBien like) throws Exception {
         ((PersonneService)service).likes(like);
     }
 
+//    @GetMapping("/info_personne")
+//    public PersonneSimpleDTO infoPersonne(){
+//        return ((PersonneService)service).infoPersonne();
+//    }
+
     @PostMapping("/favory")
     @ResponseStatus(HttpStatus.OK)
     public void favory(@RequestBody FavoryDTO favory) throws Exception {
         ((PersonneService)service).myFavory(favory);
     }
+
+//    @PostMapping("/mdp_modif")
+//    @ResponseStatus(HttpStatus.OK)
+//    public boolean modifMDP(@RequestBody ModifPass modifMDPDTO) throws Exception {
+//        System.out.println(modifMDPDTO);
+//        return ((PersonneService)service).modifMDP(modifMDPDTO);
+//    }
 }

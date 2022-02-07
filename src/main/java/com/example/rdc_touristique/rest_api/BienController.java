@@ -1,9 +1,6 @@
 package com.example.rdc_touristique.rest_api;
 
-import com.example.rdc_touristique.business.dto.BienDTO;
-import com.example.rdc_touristique.business.dto.BienVuDTO;
-import com.example.rdc_touristique.business.dto.LikeBien;
-import com.example.rdc_touristique.business.dto.PersonneSimplifierDTO;
+import com.example.rdc_touristique.business.dto.*;
 import com.example.rdc_touristique.business.service.BienService;
 import com.example.rdc_touristique.business.service.CrudService;
 import com.example.rdc_touristique.exeption.BienExisteExeption;
@@ -40,7 +37,6 @@ public class BienController extends AbstratCrudController<BienVuDTO, Integer> {
 
     @GetMapping("/bien_likes")
     public int count_like(@RequestBody BienVuDTO toDTO) throws Exception {
-        System.out.println(toDTO);
         return 0;
 
     }
@@ -62,5 +58,19 @@ public class BienController extends AbstratCrudController<BienVuDTO, Integer> {
     public void envoiMail(@RequestBody BienVuDTO bienDTO) throws BienFoundExeption, PersonneSimpleExisteExeption, MessagingException, BienExisteExeption, NoSuchAlgorithmException {
         ((BienService)service).maildeconfirmationBienMisEnLigne(bienDTO);
     }
+
+    @PostMapping("/envo_mail")
+    @ResponseStatus(HttpStatus.OK)
+    public long envoiMailReservation(@RequestBody ReservationBienDTO reservationBienDTO) throws BienFoundExeption, PersonneSimpleExisteExeption, MessagingException, BienExisteExeption, NoSuchAlgorithmException {
+       return ((BienService)service).maildeconfirmationBienReserve(reservationBienDTO);
+    }
+
+    @PostMapping("/reservation")
+    @ResponseStatus(HttpStatus.OK)
+    public boolean reservation(@RequestBody ReservationBienDTO reservationBienDTO) throws NoSuchAlgorithmException, InvalidKeySpecException {
+       return ((BienService)service).reservationBien(reservationBienDTO);
+    }
+
+
 
 }

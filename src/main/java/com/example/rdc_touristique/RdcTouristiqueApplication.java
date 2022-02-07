@@ -13,6 +13,7 @@ public class RdcTouristiqueApplication {
 		System.out.println("=> Service RDC: C'est parti :)");
 	}
 
+
 	@Bean
 	BCryptPasswordEncoder getBCPE(){
 		return new BCryptPasswordEncoder();
