@@ -3,7 +3,7 @@ package com.example.rdc_touristique.business.service;
 import com.example.rdc_touristique.business.dto.ContactUserDTO;
 import com.example.rdc_touristique.business.dto.PersonneSimplifierDTO;
 import com.example.rdc_touristique.business.mapper.Mapper;
-import com.example.rdc_touristique.data_access.entity.ContactUser;
+import com.example.rdc_touristique.data_access.entity.ContactPersonne;
 import com.example.rdc_touristique.data_access.entity.Personne;
 import com.example.rdc_touristique.data_access.repository.ContactUserRepository;
 import com.example.rdc_touristique.exeption.*;
@@ -17,12 +17,12 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-public class ContactUserService implements CrudService<ContactUserDTO, Integer> {
+public class ContactPersonneService implements CrudService<ContactUserDTO, Integer> {
 
     @Autowired
     private Mapper<PersonneSimplifierDTO, Personne> personneMapper;
     @Autowired
-    private Mapper<ContactUserDTO, ContactUser> contactUserMapper;
+    private Mapper<ContactUserDTO, ContactPersonne> contactUserMapper;
     @Autowired
     private ContactUserRepository contactUserRepository;
 
@@ -36,7 +36,7 @@ public class ContactUserService implements CrudService<ContactUserDTO, Integer> 
 
     @Override
     public ContactUserDTO readOne(Integer integer) throws ContactUserFoundExeption {
-        ContactUser entity = contactUserRepository.findById(integer)
+        ContactPersonne entity = contactUserRepository.findById(integer)
                 .orElseThrow(()-> new ContactUserFoundExeption(integer));
 
         return contactUserMapper.toDTO(entity);

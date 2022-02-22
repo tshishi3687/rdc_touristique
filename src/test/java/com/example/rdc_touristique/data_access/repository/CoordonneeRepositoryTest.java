@@ -14,15 +14,6 @@ class CoordonneeRepositoryTest {
 
     @Test
     void creat(){
-        Coordonnee coordonnee = new Coordonnee();
-        coordonnee.setVille(null);
-        coordonnee.setNum(5);
-        coordonnee.setEmail("jkhjkhjkhkjhghk");
-        coordonnee.setCpostal(5555);
-        coordonnee.setRue("jkghjghjghjghjg");
-
-        coordaoRepository.save(coordonnee);
-        coordaoRepository.getOne(12);
     }
 }
 

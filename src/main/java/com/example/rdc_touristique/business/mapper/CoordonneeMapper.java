@@ -29,8 +29,7 @@ public class CoordonneeMapper implements Mapper<CoordonneeDTO, Coordonnee>{
                 coordonnee.getNum(),
                 coordonnee.getEmail(),
                 coordonnee.getTelephone(),
-                coordonnee.getDateCreation(),
-                coordonnee.getSuperid()
+                coordonnee.getDateCreation()
         );
     }
 

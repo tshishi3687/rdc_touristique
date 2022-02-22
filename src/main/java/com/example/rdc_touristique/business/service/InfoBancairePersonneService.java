@@ -4,11 +4,12 @@ package com.example.rdc_touristique.business.service;
 import com.example.rdc_touristique.business.dto.InfoBancaireDTO;
 import com.example.rdc_touristique.business.dto.PersonneSimplifierDTO;
 import com.example.rdc_touristique.business.mapper.Mapper;
-import com.example.rdc_touristique.data_access.entity.InfoBancaire;
+import com.example.rdc_touristique.data_access.entity.InfoBancairePersonne;
 import com.example.rdc_touristique.data_access.entity.Personne;
 import com.example.rdc_touristique.data_access.repository.InfoBancaireRepository;
 import com.example.rdc_touristique.data_access.repository.PersonneReposytory;
 import com.example.rdc_touristique.exeption.*;
+import com.example.rdc_touristique.security.config.JwtRequestFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -20,12 +21,12 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-public class InfoBancaireService implements CrudService<InfoBancaireDTO, Integer> {
+public class InfoBancairePersonneService implements CrudService<InfoBancaireDTO, Integer> {
 
     @Autowired
     private Mapper<PersonneSimplifierDTO, Personne> personneMapper;
     @Autowired
-    private Mapper<InfoBancaireDTO, InfoBancaire> infoBancaireMapper;
+    private Mapper<InfoBancaireDTO, InfoBancairePersonne> infoBancaireMapper;
     @Autowired
     private InfoBancaireRepository infoBancaireRepository;
     @Autowired
@@ -33,18 +34,16 @@ public class InfoBancaireService implements CrudService<InfoBancaireDTO, Integer
 
     @Override
     public void creat(InfoBancaireDTO toDTO) throws ElementAlreadyExistsException, IOException, NoSuchAlgorithmException, InvalidKeySpecException, ActionFoundExeption {
-        if (infoBancaireRepository.existsByAppartienA(personneMapper.toEntity(toDTO.getAppartienA()))){
-            int idInfoB = infoBancaireRepository.findOneByAppartienA(personneMapper.toEntity(toDTO.getAppartienA())).getId();
+        if (infoBancaireRepository.existsByAppartienA(JwtRequestFilter.maPersonne())){
+            int idInfoB = infoBancaireRepository.findOneByAppartienA(JwtRequestFilter.maPersonne()).getId();
             throw new InfoBancaireExisteExeption(idInfoB);
         }
-
-
         infoBancaireRepository.save(infoBancaireMapper.toEntity(toDTO));
     }
 
     @Override
     public InfoBancaireDTO readOne(Integer integer) throws InfoBancaireFoundExeption {
-        InfoBancaire entity = infoBancaireRepository.findById(integer)
+        InfoBancairePersonne entity = infoBancaireRepository.findById(integer)
                 .orElseThrow(()-> new InfoBancaireFoundExeption(integer));
         return infoBancaireMapper.toDTO(entity);
     }
@@ -73,10 +72,7 @@ public class InfoBancaireService implements CrudService<InfoBancaireDTO, Integer
     }
 
     @Transactional
-    public InfoBancaireDTO selonPersonne(PersonneSimplifierDTO personne) throws PersonneInfoExisteExeption {
-        if (!personneReposytory.existsById(personne.getId()))
-            throw new PersonneInfoExisteExeption(personne.getId());
-        Personne entity = personneReposytory.getOne(personne.getId());
-        return infoBancaireMapper.toDTO(entity.getInfoBancaires());
+    public InfoBancaireDTO selonPersonne() throws PersonneInfoExisteExeption {
+        return infoBancaireMapper.toDTO(JwtRequestFilter.maPersonne().getInfoBancaires());
     }
 }

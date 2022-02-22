@@ -4,7 +4,6 @@ import lombok.*;
 
 import javax.persistence.*;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
@@ -19,18 +18,18 @@ public class Personne extends BaseEntity{
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @Column
+    @Column(length = 50, nullable = false)
     private String nom;
 
-    @Column
+    @Column(length = 50, nullable = false)
     private String prenom;
 
-    @Column
+    @Column(nullable = false)
     private LocalDate ddn;
 
     @ManyToOne
-    @JoinColumn(name = "roll", referencedColumnName = "id")
-    private Roll roll;
+    @JoinColumn(name = "role_Id", referencedColumnName = "id", nullable = false)
+    private RolePersonne roleId;
 
     @Column
     private String codeActivation;
@@ -39,19 +38,19 @@ public class Personne extends BaseEntity{
     private boolean active;
 
     @OneToOne(mappedBy = "appartienA")
-    private Adresse adresse;
+    private AdressePersonne adresse;
 
     @OneToOne(mappedBy = "appartienA")
-    private ContactUser contactUser;
+    private ContactPersonne contactUser;
 
     @OneToOne(mappedBy = "appartienA")
     private PassWord mdp;
 
     @OneToOne(mappedBy = "appartienA")
-    private InfoBancaire infoBancaires;
+    private InfoBancairePersonne infoBancaires;
 
     @OneToMany(mappedBy= "personneId")
-    private List<DocOfficiel> docOfficiels;
+    private List<DocOfficielPersonne> docOfficiels;
 
     @OneToMany(mappedBy = "appartient")
     private List<Bien> bien;

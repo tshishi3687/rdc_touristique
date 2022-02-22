@@ -25,16 +25,6 @@ public class PaysMapper implements Mapper<PaysDTO, Pays> {
 
     @Override
     public Pays toEntity(PaysDTO paysDTO) throws NoSuchAlgorithmException, InvalidKeySpecException {
-        if (paysDTO==null)
-            return null;
-
-        Pays pays =  new Pays();
-        pays.setId(paysDTO.getId());
-        pays.setCode(paysDTO.getCode());
-        pays.setAlpha2(paysDTO.getAlpha2());
-        pays.setAlpha3(paysDTO.getAlpha3());
-        pays.setNomEnGb(paysDTO.getNomEnGb());
-        pays.setNomFrFr(paysDTO.getNomFrFr());
-        return pays;
+        return null;
     }
 }

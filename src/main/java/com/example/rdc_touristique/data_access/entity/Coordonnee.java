@@ -25,23 +25,20 @@ public class Coordonnee extends BaseEntity{
     private Ville ville;
 
     @Column
-    private int cpostal;
+    private String cpostal;
 
     @Column
     private String rue;
 
     @Column
-    private int num;
+    private String num;
 
     @Column
     private String email;
 
     @Column
-    private int telephone;
+    private String telephone;
 
     @Column
     private LocalDateTime dateCreation;
-
-    @Column
-    private int superid;
 }

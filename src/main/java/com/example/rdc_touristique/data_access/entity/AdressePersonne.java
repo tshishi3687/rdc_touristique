@@ -12,20 +12,29 @@ import javax.persistence.*;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class ContactUser extends BaseEntity{
+public class AdressePersonne extends BaseEntity{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @Column(unique = true)
-    private String email;
+    @Column
+    private String numHabitation;
 
     @Column
-    private String telephone;
+    private String nomRue;
+
+    @Column
+    private String codePostal;
+
+    @ManyToOne
+    @JoinColumn(name = "pays", referencedColumnName = "id", nullable = false)
+    private Pays pays;
 
     @OneToOne
-    @JoinColumn(name = "appartien_a")
+    @JoinColumn(name = "adressUser", nullable = false)
     private Personne appartienA;
+
+
 
 }

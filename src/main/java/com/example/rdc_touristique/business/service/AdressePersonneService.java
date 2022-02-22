@@ -3,11 +3,12 @@ package com.example.rdc_touristique.business.service;
 import com.example.rdc_touristique.business.dto.AdressUserDTO;
 import com.example.rdc_touristique.business.dto.PersonneSimplifierDTO;
 import com.example.rdc_touristique.business.mapper.Mapper;
-import com.example.rdc_touristique.data_access.entity.Adresse;
+import com.example.rdc_touristique.data_access.entity.AdressePersonne;
 import com.example.rdc_touristique.data_access.entity.Personne;
 import com.example.rdc_touristique.data_access.repository.AdressUserReposytory;
 import com.example.rdc_touristique.data_access.repository.PersonneReposytory;
 import com.example.rdc_touristique.exeption.*;
+import com.example.rdc_touristique.security.config.JwtRequestFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -19,12 +20,12 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-public class AdressUserService implements CrudService<AdressUserDTO, Integer>{
+public class AdressePersonneService implements CrudService<AdressUserDTO, Integer>{
 
     @Autowired
     private Mapper<PersonneSimplifierDTO, Personne> personneMapper;
     @Autowired
-    private Mapper<AdressUserDTO, Adresse> adressUserMapper;
+    private Mapper<AdressUserDTO, AdressePersonne> adressUserMapper;
     @Autowired
     private AdressUserReposytory adressUserReposytory;
     @Autowired
@@ -32,8 +33,8 @@ public class AdressUserService implements CrudService<AdressUserDTO, Integer>{
 
     @Override
     public void creat(AdressUserDTO toDTO) throws ElementAlreadyExistsException, IOException, NoSuchAlgorithmException, InvalidKeySpecException{
-        if (adressUserReposytory.existsByAppartienA(personneMapper.toEntity(toDTO.getAppartienA()))){
-            int idadress = adressUserReposytory.findOneByAppartienA(personneMapper.toEntity(toDTO.getAppartienA())).getId();
+        if (adressUserReposytory.existsByAppartienA(JwtRequestFilter.maPersonne())){
+            int idadress = adressUserReposytory.findOneByAppartienA(JwtRequestFilter.maPersonne()).getId();
             throw new AdressUserExisteExeption(idadress);
 
         }
@@ -43,7 +44,7 @@ public class AdressUserService implements CrudService<AdressUserDTO, Integer>{
 
     @Override
     public AdressUserDTO readOne(Integer integer) throws AdressUserFoundExeption {
-        Adresse entity = adressUserReposytory.findById(integer)
+        AdressePersonne entity = adressUserReposytory.findById(integer)
                 .orElseThrow(()-> new AdressUserFoundExeption(integer));
         return adressUserMapper.toDTO(entity);
     }
@@ -73,10 +74,7 @@ public class AdressUserService implements CrudService<AdressUserDTO, Integer>{
     }
 
     @Transactional
-    public AdressUserDTO selonPersonne(PersonneSimplifierDTO personne) throws PersonneInfoExisteExeption {
-        if (!personneReposytory.existsById(personne.getId()))
-            throw new PersonneInfoExisteExeption(personne.getId());
-        Personne entity = personneReposytory.getOne(personne.getId());
-        return adressUserMapper.toDTO(entity.getAdresse());
+    public AdressUserDTO selonPersonne() throws PersonneInfoExisteExeption {
+        return adressUserMapper.toDTO(JwtRequestFilter.maPersonne().getAdresse());
     }
 }

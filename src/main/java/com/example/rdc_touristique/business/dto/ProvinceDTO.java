@@ -10,10 +10,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @ToString
 public class ProvinceDTO implements IdentifiedDTO<Integer>{
-
     private Integer id;
     private String nomprovince;
     private String description;
-//    private LocalDateTime dateCreation;
-//    private int superid;
 }

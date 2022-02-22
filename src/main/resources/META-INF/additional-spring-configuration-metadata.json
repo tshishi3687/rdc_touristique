@@ -4,5 +4,15 @@
       "name": "spring.http.multipart.max-file-size",
       "type": "java.lang.String",
       "description": "Description for spring.http.multipart.max-file-size."
-  }
-] }
+    },
+    {
+      "name": "port_serveur",
+      "type": "java.lang.String",
+      "description": "Description for port_serveur."
+    },
+    {
+      "name": "port_serveur",
+      "type": "java.lang.String",
+      "description": "Description for port_serveur."
+    }
+  ] }

@@ -3,6 +3,8 @@ package com.example.rdc_touristique.business.mapper;
 import com.example.rdc_touristique.business.dto.*;
 import com.example.rdc_touristique.data_access.entity.*;
 import com.example.rdc_touristique.data_access.repository.*;
+import com.example.rdc_touristique.security.config.JwtRequestFilter;
+import com.example.rdc_touristique.security.config.constParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -44,7 +46,7 @@ public class BienMapper implements Mapper<BienDTO, Bien>{
         bien.setSuperficie(bienDTO.getSuperficie());
         bien.setDescription(bienDTO.getDescription());
         bien.setCoordonnee(coordonneeMapper.toEntity(bienDTO.getCoordonnee()));
-        bien.setAppartient(personneReposytory.getOne(bienDTO.getAppartient().getId()));
+        bien.setAppartient(JwtRequestFilter.maPersonne());
         return bien;
     }
 }

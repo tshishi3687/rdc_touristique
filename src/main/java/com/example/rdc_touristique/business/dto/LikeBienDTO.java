@@ -7,7 +7,7 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
-public class LikeBien {
+public class LikeBienDTO {
 
     private PersonneSimplifierDTO personneSimplifierDTO;
     private BienDTO bienDTO;

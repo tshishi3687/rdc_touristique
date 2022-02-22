@@ -7,6 +7,6 @@ import java.util.Optional;
 
 public interface PersonneReposytory extends JpaRepository<Personne, Integer> {
     Optional<Personne> findByCodeActivation(String codeActivation);
-    Personne findByRoll_NomRoll(String nomRoll);
+    Personne findByRoleId_NomRole(String nomRoll);
 }
 

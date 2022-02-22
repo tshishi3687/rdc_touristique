@@ -13,11 +13,10 @@ public class CoordonneeDTO implements IdentifiedDTO<Integer>{
 
     private Integer id;
     private VilleDTO ville;
-    private int cpostal;
+    private String cpostal;
     private String rue;
-    private int num;
+    private String num;
     private String email;
-    private int telephone;
+    private String telephone;
     private LocalDateTime dateCreation;
-    private int superid;
 }

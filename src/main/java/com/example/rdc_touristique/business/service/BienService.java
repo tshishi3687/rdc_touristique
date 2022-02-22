@@ -8,8 +8,9 @@ import com.example.rdc_touristique.contratLocation.TextContrat;
 import com.example.rdc_touristique.data_access.entity.*;
 import com.example.rdc_touristique.data_access.repository.*;
 import com.example.rdc_touristique.exeption.*;
+import com.example.rdc_touristique.security.config.JwtRequestFilter;
+import com.example.rdc_touristique.security.config.constParam;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -17,9 +18,7 @@ import javax.mail.MessagingException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
-import java.time.Duration;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.Optional;
@@ -59,12 +58,9 @@ public class BienService implements CrudService<BienVuDTO, Integer> {
     private ContratLocationRepository contratLocationRepository;
 
     @Transactional
-    public List<BienVuDTO> selonLaPersonne(PersonneSimplifierDTO personne) throws NoSuchAlgorithmException, InvalidKeySpecException, BienFoundExeption {
+    public List<BienVuDTO> selonLaPersonne() throws NoSuchAlgorithmException, InvalidKeySpecException, BienFoundExeption {
 
-        if (personne == null)
-            throw new BienFoundExeption(personne.getId());
-
-        return bienRepository.findAllByAppartientAndModeActiveFalse(personneMapper.toEntity(personne)).stream()
+        return bienRepository.findAllByAppartientAndModeActiveFalse(JwtRequestFilter.maPersonne()).stream()
         .map(bienVuMapper::toDTO)
         .collect(Collectors.toList());
     }
@@ -81,13 +77,7 @@ public class BienService implements CrudService<BienVuDTO, Integer> {
             throw new BienExisteExeption(toCreat.getId());
 
 
-//        if (!nNuitRepository.existsById(toCreat.getDureeOnLine()))
-//            throw new Exception();
-
-        LocalDateTime today =  LocalDateTime.now();
-
-        Personne personne = personneReposytory.getOne(personneMapper.toEntity(toCreat.getAppartient()).getId());
-        if (personneReposytory.existsById(toCreat.getAppartient().getId()) && (personne.getRoll().getId() == 1 || personne.getRoll().getId() == 3)){
+        if (JwtRequestFilter.maPersonne() != null && (JwtRequestFilter.maPersonne().getRoleId().getId() != 3)){
 
             Bien entity = bienMapper.toEntity(toCreat);
             entity.setModeActive(false);
@@ -111,7 +101,7 @@ public class BienService implements CrudService<BienVuDTO, Integer> {
 
     @Override
     public List<BienVuDTO> readAll() {
-        return bienRepository.findAllByModeActiveIs(true).stream()
+        return bienRepository.findAllByModeActiveTrue().stream()
                 .map(bienVuMapper::toDTO)
                 .collect(Collectors.toList());
     }
@@ -120,8 +110,8 @@ public class BienService implements CrudService<BienVuDTO, Integer> {
     public void update(BienVuDTO toUpdate) throws BienFoundExeption, NoSuchAlgorithmException, InvalidKeySpecException {
         if( !bienRepository.existsById( toUpdate.getId() ))
             throw new BienFoundExeption(toUpdate.getId());
-
-        bienRepository.save( bienVuMapper.toEntity(toUpdate) );
+        if (JwtRequestFilter.maPersonne().getRoleId().getNomRole().equals(constParam.roleA) || JwtRequestFilter.maPersonne().getRoleId().getNomRole().equals(constParam.roleP))
+            bienRepository.save( bienVuMapper.toEntity(toUpdate) );
     }
 
     @Override
@@ -143,14 +133,14 @@ public class BienService implements CrudService<BienVuDTO, Integer> {
         PersonneSimpleDTO personneSimpleDTO = personneSimpleMapper.toDTO(personneReposytory.getOne(bien.getAppartient().getId()));
 
         // 2. verifi si le bien reccupéré n'est pas déja active et si la personne a déjà donnée ses info bancaire et ses coordonnée
-        if (!bien.isModeActive() && personneService.infoBanAdreUser(personneSimpleDTO)){
+        if (!bien.isModeActive() && personneService.infoBanAdreUser()){
 
             // Préparation du contrat liant le propiétaire du bien et Mobembo.cd
             // 3. je cherche les deux partie
                 // 3.1 Preneur: c'est la le propiétaire du bien
-            Personne preneur = bien.getAppartient();
+            Personne preneur = JwtRequestFilter.maPersonne();
                 // 3.2 Bailleur: Le représenttant de Mobembo.cd (pour le test c'est l'Admin)
-            Personne bailleur = personneReposytory.findByRoll_NomRoll("Admin");
+            Personne bailleur = personneReposytory.findByRoleId_NomRole(constParam.roleA);
 
             // 4 crée le text du contrat
             TextContrat textContrat = new TextContrat(
@@ -200,7 +190,7 @@ public class BienService implements CrudService<BienVuDTO, Integer> {
                 return false;
         }
 
-        Personne bailleur = personneReposytory.findByRoll_NomRoll("Admin");
+        Personne bailleur = personneReposytory.findByRoleId_NomRole(constParam.roleA);
         Personne preneur = personneReposytory.getOne(reservationBienDTO.getFaitPar().getId());
         Bien bien = bienRepository.getOne(reservationBienDTO.getBienConserne().getId());
 
@@ -240,16 +230,13 @@ public class BienService implements CrudService<BienVuDTO, Integer> {
             throw  new BienExisteExeption(bienVuDTO.getId());
 
         Bien bien = bienRepository.getOne(bienVuDTO.getId());
-        Optional<Personne> personne = personneReposytory.findById(bien.getAppartient().getId());
 
-        if (personne.isEmpty() || personne.get().getRoll().getId() == 2)
-            throw new PersonneSimpleExisteExeption(personne.get().getId());
 
         String code = codeActivation();
 
-        mail.envoyer(personne.get().getContactUser().getEmail(), textMail.getSujetEnvoisConfMisEnLigne(), textMail.confirmationMisEnLigne(personne.get(),bien, bienVuDTO.getIdNNuit(), code));
-        personne.get().setCodeActivation(hasMdp(code));
-        personneReposytory.save(personne.get());
+        mail.envoyer(JwtRequestFilter.maPersonne().getContactUser().getEmail(), textMail.getSujetEnvoisConfMisEnLigne(), textMail.confirmationMisEnLigne(JwtRequestFilter.maPersonne(),bien, bienVuDTO.getIdNNuit(), code));
+        JwtRequestFilter.maPersonne().setCodeActivation(hasMdp(code));
+        personneReposytory.save(JwtRequestFilter.maPersonne());
     }
 
     @Transactional
@@ -258,9 +245,6 @@ public class BienService implements CrudService<BienVuDTO, Integer> {
             throw  new BienExisteExeption(reservationBienDTO.getBienConserne().getId());
 
 
-        Optional<Personne> personne = personneReposytory.findById(reservationBienDTO.getFaitPar().getId());
-        if (personne.isEmpty() || personne.get().getRoll().getId() == 3)
-            throw new PersonneSimpleExisteExeption(personne.get().getId());
 
         long nJour = ChronoUnit.DAYS.between(reservationBienDTO.getDdArrivee(), reservationBienDTO.getDdDepart());
 
@@ -268,9 +252,9 @@ public class BienService implements CrudService<BienVuDTO, Integer> {
 
         Bien bien = bienRepository.getOne(reservationBienDTO.getBienConserne().getId());
 
-        mail.envoyer(personne.get().getContactUser().getEmail(), textMail.getSujetConfirmationReservation(), textMail.confirmationReservation(personne.get(),bien, nJour, code));
-        personne.get().setCodeActivation(hasMdp(code));
-        personneReposytory.save(personne.get());
+        mail.envoyer(JwtRequestFilter.maPersonne().getContactUser().getEmail(), textMail.getSujetConfirmationReservation(), textMail.confirmationReservation(JwtRequestFilter.maPersonne(),bien, nJour, code));
+        JwtRequestFilter.maPersonne().setCodeActivation(hasMdp(code));
+        personneReposytory.save(JwtRequestFilter.maPersonne());
 
         return nJour;
     }
@@ -330,8 +314,10 @@ public class BienService implements CrudService<BienVuDTO, Integer> {
             if (personne.getLikedBien().contains(bienRepository.getOne(bienDTO.getId())))
                 personne.getLikedBien().removeIf(bien -> bien.getId() == bien.getId());
         }
+        int cood = bienDTO.getCoordonnee().getId();
         imageRepository.deleteAllByBienid(bienVuMapper.toEntity(bienDTO));
 //        reservationRepository.deleteAllByBienReservation(bienVuMapper.toEntity(bienDTO));
         bienRepository.deleteById(bienDTO.getId());
+        coordorRepository.deleteById(cood);
     }
 }

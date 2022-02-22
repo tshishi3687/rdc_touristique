@@ -26,7 +26,7 @@ public class BienController extends AbstratCrudController<BienVuDTO, Integer> {
     @PostMapping("/user")
     @ResponseStatus(HttpStatus.OK)
     public List<BienVuDTO> getAllByUser(@RequestBody PersonneSimplifierDTO dto) throws NoSuchAlgorithmException, InvalidKeySpecException, BienFoundExeption {
-        return ((BienService)service).selonLaPersonne(dto);
+        return ((BienService)service).selonLaPersonne();
     }
 
     @PostMapping("/creatt")

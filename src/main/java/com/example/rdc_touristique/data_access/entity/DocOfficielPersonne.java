@@ -7,12 +7,12 @@ import javax.persistence.*;
 @Entity
 @Table(name = "doc_officiel")
 @Component
-public class DocOfficiel extends BaseEntity{
+public class DocOfficielPersonne extends BaseEntity{
 
-    public DocOfficiel() {
+    public DocOfficielPersonne() {
         super();
     }
-    public DocOfficiel(String name, String type, byte[] picByte, Personne personneId) {
+    public DocOfficielPersonne(String name, String type, byte[] picByte, Personne personneId) {
         this.name = name;
         this.type = type;
         this.picByte = picByte;

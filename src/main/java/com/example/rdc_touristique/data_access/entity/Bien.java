@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import javax.validation.constraints.Max;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -55,11 +56,11 @@ public class Bien extends BaseEntity{
     private String description;
 
     @ManyToOne
-    @JoinColumn(name = "coordonnee", referencedColumnName = "id")
+    @JoinColumn(name = "coordonnee", referencedColumnName = "id", nullable = false)
     private Coordonnee coordonnee;
 
     @ManyToOne
-    @JoinColumn(name = "appartient")
+    @JoinColumn(name = "appartient", nullable = false)
     private Personne appartient;
 
     @OneToMany(mappedBy = "bienid",cascade = CascadeType.ALL)

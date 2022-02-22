@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 @AllArgsConstructor
 @ToString
 @Component
-public class ModifPass {
+public class ModifPassDTO {
     private String codeActive;
     private String newPass;
     private String verifPass;

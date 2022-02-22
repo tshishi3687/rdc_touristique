@@ -14,5 +14,4 @@ public class AdressUserDTO implements IdentifiedDTO<Integer>{
     private String nomRue;
     private String codePostal;
     private PaysDTO pays;
-    private PersonneSimplifierDTO appartienA;
 }

@@ -20,59 +20,59 @@
 //@Configuration
 //@EnableWebSecurity
 //public class appConfig extends WebSecurityConfigurerAdapter {
-////
-////
-////    @Autowired
-////    private UserDetailsServiceImpl userDetailsService;
-////    @Autowired
-////    private BCryptPasswordEncoder bCryptPasswordEncoder;
-////
-////    @Autowired
-////    public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
-////
-////        auth.userDetailsService(userDetailsService)
-////                .passwordEncoder(bCryptPasswordEncoder);
-////
-////    }
-////
-////    @Override
-////    protected void configure(HttpSecurity http) throws Exception {
-////        http.csrf().disable();
-////        http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
-////        http.authorizeRequests().antMatchers(HttpMethod.POST, "/ville/*", "/province/*", "/service/*", "/type_bien/*", "/type/*")
-////                .hasAuthority("Admin");
-////        http.authorizeRequests().antMatchers(HttpMethod.DELETE, "/personne/*", "/ville/*", "/province/*", "/service/*", "/type_bien/*", "/type/*")
-////                .hasAuthority("Admin");
-////        http.authorizeRequests().antMatchers(HttpMethod.PUT, "/personne/*", "/ville/*", "/province/*", "/service/*", "/type_bien/*", "/type/*")
-////                .hasAuthority("Admin");
-////        http.authorizeRequests().anyRequest().authenticated();
-////        http.addFilter(new JWTAuthenticationFilter(authenticationManager()));
-////        http.addFilterBefore(new JWTAuthorizationFilter(), UsernamePasswordAuthenticationFilter.class);
-////    }
 //
 //
-//
-//private final static String user = "user";
-//    private final static String code = "root";
+//    @Autowired
+//    private UserDetailsServiceImpl userDetailsService;
+//    @Autowired
+//    private BCryptPasswordEncoder bCryptPasswordEncoder;
 //
 //    @Autowired
 //    public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
 //
-//        auth.inMemoryAuthentication()
-//                .withUser(user).password(encoder().encode(code))
-//                .authorities("ROLE_USER");
+//        auth.userDetailsService(userDetailsService)
+//                .passwordEncoder(bCryptPasswordEncoder);
 //
 //    }
 //
 //    @Override
 //    protected void configure(HttpSecurity http) throws Exception {
-//        http.cors().and().csrf().disable()
-//                .authorizeRequests()
-//                .anyRequest().permitAll()
-//                .and()
-//                .httpBasic();
+//        http.csrf().disable();
+//        http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+//        http.authorizeRequests().antMatchers(HttpMethod.POST, "/ville/*", "/province/*", "/service/*", "/type_bien/*", "/type/*")
+//                .hasAuthority("Admin");
+//        http.authorizeRequests().antMatchers(HttpMethod.DELETE, "/personne/*", "/ville/*", "/province/*", "/service/*", "/type_bien/*", "/type/*")
+//                .hasAuthority("Admin");
+//        http.authorizeRequests().antMatchers(HttpMethod.PUT, "/personne/*", "/ville/*", "/province/*", "/service/*", "/type_bien/*", "/type/*")
+//                .hasAuthority("Admin");
+//        http.authorizeRequests().anyRequest().authenticated();
+//        http.addFilter(new JWTAuthenticationFilter(authenticationManager()));
+//        http.addFilterBefore(new JWTAuthorizationFilter(), UsernamePasswordAuthenticationFilter.class);
 //    }
 //
+////
+////
+////private final static String user = "user";
+////    private final static String code = "root";
+////
+////    @Autowired
+////    public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
+////
+////        auth.inMemoryAuthentication()
+////                .withUser(user).password(encoder().encode(code))
+////                .authorities("ROLE_USER");
+////
+////    }
+////
+////    @Override
+////    protected void configure(HttpSecurity http) throws Exception {
+////        http.cors().and().csrf().disable()
+////                .authorizeRequests()
+////                .anyRequest().permitAll()
+////                .and()
+////                .httpBasic();
+////    }
+////
 //    @Bean
 //    public CorsConfigurationSource corsConfigurationSource() {
 //        CorsConfiguration corsConfiguration = new CorsConfiguration();

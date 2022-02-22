@@ -6,6 +6,7 @@ import com.example.rdc_touristique.data_access.entity.Ville;
 import com.example.rdc_touristique.data_access.repository.VilleRepository;
 import com.example.rdc_touristique.exeption.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Service;
 
 import java.security.NoSuchAlgorithmException;
@@ -22,6 +23,7 @@ public class VilleService implements CrudService<VilleDTO, Integer> {
     private VilleRepository villeRepository;
 
     @Override
+    @Secured("Admin")
     public void creat(VilleDTO toCreat) throws ElementAlreadyExistsException, NoSuchAlgorithmException, InvalidKeySpecException {
         if (villeRepository.existsById(toCreat.getId())) {
             throw new VilleExisteExeption(toCreat.getId());
@@ -47,6 +49,7 @@ public class VilleService implements CrudService<VilleDTO, Integer> {
     }
 
     @Override
+    @Secured("Admin")
     public void update(VilleDTO toUpdate) throws VilleFoundExeption, NoSuchAlgorithmException, InvalidKeySpecException {
         if( !villeRepository.existsById( toUpdate.getId() ))
             throw new VilleFoundExeption(toUpdate.getId());
@@ -55,6 +58,7 @@ public class VilleService implements CrudService<VilleDTO, Integer> {
     }
 
     @Override
+    @Secured("Admin")
     public void delete(Integer toDelete) throws VilleFoundExeption {
         if( !villeRepository.existsById(toDelete))
             throw new VilleFoundExeption(toDelete);

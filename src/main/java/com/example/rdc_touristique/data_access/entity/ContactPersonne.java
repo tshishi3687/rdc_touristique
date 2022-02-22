@@ -6,32 +6,26 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
-import java.time.LocalDate;
 
 @Entity
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class InfoBancaire extends BaseEntity{
+public class ContactPersonne extends BaseEntity{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @Column
-    private String nomBanque;
+    @Column(unique = true, nullable = false)
+    private String email;
 
     @Column
-    private String numCarte;
-
-    @Column
-    private String numCompte;
-
-    @Column
-    private LocalDate dateExpiration;
+    private String telephone;
 
     @OneToOne
-    @JoinColumn(name = "appartien_a")
+    @JoinColumn(name = "appartien_a", nullable = false)
     private Personne appartienA;
+
 }

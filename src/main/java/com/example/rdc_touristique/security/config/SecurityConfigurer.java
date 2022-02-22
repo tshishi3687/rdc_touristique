@@ -2,9 +2,11 @@ package com.example.rdc_touristique.security.config;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
@@ -18,17 +20,20 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 
 import java.net.PasswordAuthentication;
-
+@Configuration
 @EnableWebSecurity
+@EnableGlobalMethodSecurity(
+         securedEnabled = true,
+         jsr250Enabled = true,
+        prePostEnabled = true)
 public class SecurityConfigurer extends WebSecurityConfigurerAdapter {
 
     @Autowired
     private UserDetailsService myUserDetailsService;
     @Autowired
     private BCryptPasswordEncoder bCryptPasswordEncoder;
-//    @Autowired
-//    private JwtRequestFilter jwtRequestFilter;
-
+    @Autowired
+    private JwtRequestFilter jwtRequestFilter;
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth.userDetailsService(myUserDetailsService).passwordEncoder(bCryptPasswordEncoder);
@@ -36,29 +41,28 @@ public class SecurityConfigurer extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
+//        http.cors().and().csrf().disable()
+//                .authorizeRequests()
+//                .anyRequest().permitAll()
+//                .and()
+//                .httpBasic();
         http.cors().and().csrf().disable()
-                .authorizeRequests()
-                .anyRequest().permitAll()
+
+                .authorizeRequests().antMatchers("/personne/user", "/personne/creat", "/personne/email").permitAll()
                 .and()
-                .httpBasic();
-//        http.csrf().disable()
-//                .cors().and()
-//                .authorizeRequests().antMatchers("/personne/user").permitAll()
-//                .and()
-//                .authorizeRequests().antMatchers("/bien").permitAll()
-//                .and()
-//                .authorizeRequests().antMatchers("/province").permitAll()
-//                .and()
-//                .authorizeRequests().antMatchers("/ville").permitAll()
-//                .and()
-//                .authorizeRequests().antMatchers("/type_bien").permitAll()
-//                .and()
-//                .authorizeRequests().antMatchers(HttpMethod.OPTIONS, "/**").permitAll()
-//                .anyRequest().authenticated()
-//                .and().sessionManagement()
-//                .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
-//
-//        http.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
+                .authorizeRequests().antMatchers(HttpMethod.GET,"/bien", "/province", "/ville", "/typebien").permitAll()
+                .and()
+                .authorizeRequests().antMatchers(HttpMethod.POST, "/ville/*", "/province/*", "/service/*", "/typebien/*", "/type/*", "/personne")
+                .hasAuthority("Admin")
+                .and()
+                .authorizeRequests().antMatchers(HttpMethod.GET, "/service/*", "/type_bien/*", "/type/*", "/personne")
+                .hasAuthority("Admin")
+                .and()
+                .authorizeRequests().antMatchers(HttpMethod.OPTIONS, "/**").permitAll()
+                .anyRequest().authenticated()
+                .and().sessionManagement()
+                .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+        http.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
     }
 
     @Override
@@ -85,5 +89,3 @@ public class SecurityConfigurer extends WebSecurityConfigurerAdapter {
         return new BCryptPasswordEncoder();
     }
 }
-
-

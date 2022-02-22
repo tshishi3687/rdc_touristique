@@ -25,6 +25,6 @@ public class PassWord extends BaseEntity{
     private boolean mode;
 
     @OneToOne
-    @JoinColumn(name = "appartien_a")
+    @JoinColumn(name = "appartien_a", nullable = false)
     private Personne appartienA;
 }

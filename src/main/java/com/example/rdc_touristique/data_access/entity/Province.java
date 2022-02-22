@@ -24,11 +24,4 @@ public class Province extends BaseEntity{
 
     @OneToMany(mappedBy = "provinceID")
     private List<ImageProvince> imageProvinces;
-
-
-//    @Column
-//    private LocalDateTime dateCreation;
-//
-//    @Column
-//    private int superid;
 }

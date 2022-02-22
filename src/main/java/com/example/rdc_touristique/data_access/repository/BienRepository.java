@@ -10,5 +10,5 @@ import java.util.List;
 public interface BienRepository extends JpaRepository<Bien, Integer> {
     List<Bien> findAllByAppartientAndModeActiveFalse(Personne personne);
     List<Bien> findByOrderByIdDesc();
-    List<Bien> findAllByModeActiveIs(boolean modeActive);
+    List<Bien> findAllByModeActiveTrue();
 }

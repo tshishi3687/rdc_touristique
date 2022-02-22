@@ -1,27 +1,19 @@
 package com.example.rdc_touristique.business.service;
 
-import com.example.rdc_touristique.business.dto.MdpDTO;
 import com.example.rdc_touristique.business.dto.PassWordDTO;
-import com.example.rdc_touristique.business.dto.PersonneSimpleDTO;
 import com.example.rdc_touristique.business.dto.PersonneSimplifierDTO;
 import com.example.rdc_touristique.business.mapper.Mapper;
-import com.example.rdc_touristique.data_access.entity.ContactUser;
 import com.example.rdc_touristique.data_access.entity.PassWord;
 import com.example.rdc_touristique.data_access.entity.Personne;
-import com.example.rdc_touristique.data_access.repository.ContactUserRepository;
 import com.example.rdc_touristique.data_access.repository.PassWordRepository;
 import com.example.rdc_touristique.exeption.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import javax.transaction.Transactional;
 import java.io.IOException;
-import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class PassWordService implements CrudService<PassWordDTO, Integer> {

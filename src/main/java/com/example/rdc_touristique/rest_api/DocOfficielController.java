@@ -1,14 +1,10 @@
 package com.example.rdc_touristique.rest_api;
 
-import com.example.rdc_touristique.business.dto.BienDTO;
 import com.example.rdc_touristique.business.dto.DocOfficielDTO;
-import com.example.rdc_touristique.business.dto.PersonneSimpleDTO;
 import com.example.rdc_touristique.business.dto.PersonneSimplifierDTO;
 import com.example.rdc_touristique.business.service.CrudService;
 import com.example.rdc_touristique.business.service.DocOfficielService;
-import com.example.rdc_touristique.business.service.ImageModelService;
-import com.example.rdc_touristique.data_access.entity.DocOfficiel;
-import com.example.rdc_touristique.data_access.entity.ImageBien;
+import com.example.rdc_touristique.data_access.entity.DocOfficielPersonne;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -32,7 +28,7 @@ public class DocOfficielController extends AbstratCrudController<DocOfficielDTO,
 
     @PostMapping("/all")
     @ResponseStatus(HttpStatus.OK)
-    public List<DocOfficiel> allImageByBienid(@RequestBody PersonneSimplifierDTO personneId){
+    public List<DocOfficielPersonne> allImageByBienid(@RequestBody PersonneSimplifierDTO personneId){
         return ((DocOfficielService)service).getImage(personneId);
     }
 }

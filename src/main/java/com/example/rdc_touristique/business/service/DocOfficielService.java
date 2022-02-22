@@ -2,7 +2,7 @@ package com.example.rdc_touristique.business.service;
 
 import com.example.rdc_touristique.business.dto.DocOfficielDTO;
 import com.example.rdc_touristique.business.dto.PersonneSimplifierDTO;
-import com.example.rdc_touristique.data_access.entity.DocOfficiel;
+import com.example.rdc_touristique.data_access.entity.DocOfficielPersonne;
 import com.example.rdc_touristique.data_access.repository.DocofficielRepository;
 import com.example.rdc_touristique.data_access.repository.PersonneReposytory;
 import com.example.rdc_touristique.exeption.*;
@@ -63,7 +63,7 @@ public class DocOfficielService implements CrudService<DocOfficielDTO, Integer>{
     public ResponseEntity.BodyBuilder uploadDoc(List<MultipartFile> file, int id) throws IOException, NoSuchAlgorithmException, InvalidKeySpecException  {
 
         for (MultipartFile multipartFile : file) {
-            DocOfficiel doc = new DocOfficiel();
+            DocOfficielPersonne doc = new DocOfficielPersonne();
             doc.setName(multipartFile.getOriginalFilename());
             doc.setType(multipartFile.getContentType());
             doc.setPicByte(compressBytes(multipartFile.getBytes()));
@@ -76,15 +76,15 @@ public class DocOfficielService implements CrudService<DocOfficielDTO, Integer>{
     }
 
     @Transactional
-    public List<DocOfficiel> getImage(PersonneSimplifierDTO person) {
+    public List<DocOfficielPersonne> getImage(PersonneSimplifierDTO person) {
         if(person == null)
             return null;
 
-        List<DocOfficiel> listDoc = docofficielRepository.findAllByPersonneId(personneReposytory.getOne(person.getId()));
-        List<DocOfficiel> newListDoc = new ArrayList<>();
+        List<DocOfficielPersonne> listDoc = docofficielRepository.findAllByPersonneId(personneReposytory.getOne(person.getId()));
+        List<DocOfficielPersonne> newListDoc = new ArrayList<>();
 
-        for (DocOfficiel docOfficiel : listDoc) {
-            DocOfficiel imgg = new DocOfficiel();
+        for (DocOfficielPersonne docOfficiel : listDoc) {
+            DocOfficielPersonne imgg = new DocOfficielPersonne();
             imgg.setName(docOfficiel.getName());
             imgg.setType(docOfficiel.getType());
             imgg.setPicByte(decompressBytes(docOfficiel.getPicByte()));

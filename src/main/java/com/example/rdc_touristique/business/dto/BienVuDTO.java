@@ -30,5 +30,6 @@ public class BienVuDTO implements IdentifiedDTO<Integer>{
     private int likes;
     private boolean modeActive;
     private List<ImageBien> images;
+    private List<ServiceDTO> service;
     private int idNNuit;
 }

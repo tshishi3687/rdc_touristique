@@ -54,7 +54,7 @@ public class ContratMisEnLigneService implements CrudService<ContratMisEnLigneDT
             throw new PersonneSimpleExisteExeption(personneSimpleDTO.getId());
 
         Personne personne = personneSimpleDTOMapper.toEntity(personneSimpleDTO);
-        if (personne.getRoll().getNomRoll().equals("Admin"))
+        if (personne.getRoleId().getNomRole().equals("Admin"))
             return contratMisEnLigneRepository.findAllByBailleur(personne).stream()
                 .map(contratMisEnLigneMapper::toDTO)
                 .collect(Collectors.toList());

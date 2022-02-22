@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("type_bien")
+@RequestMapping("typebien")
 public class Type_bienController extends AbstratCrudController<Type_bienDTO, Integer>{
     public Type_bienController(CrudService<Type_bienDTO, Integer> service) {
         super(service);

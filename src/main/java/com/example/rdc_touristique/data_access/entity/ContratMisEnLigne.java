@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import javax.validation.constraints.Size;
 import java.time.LocalDate;
 
 @Entity
@@ -38,24 +39,38 @@ public class ContratMisEnLigne extends BaseEntity{
     @Column
     private boolean enCour;
 
-    @Column(length = 1000)
+
+    @Column(length = 1000, nullable = false)
+    @Size(min = 20, max = 1000)
     private String entre;
 
-    @Column(length = 1000)
+
+    @Column(length = 1000, nullable = false)
+    @Size(min = 20, max = 1000)
     private String entre2;
 
-    @Column(length = 1000)
+
+    @Column(length = 1000, nullable = false)
+    @Size(min = 20, max = 1000)
     private String objet;
 
-    @Column(length = 1000)
+
+    @Column(length = 1000, nullable = false)
+    @Size(min = 20, max = 1000)
     private String etatLieu;
 
-    @Column(length = 1000)
+
+    @Column(length = 1000, nullable = false)
+    @Size(min = 20, max = 1000)
     private String loyer;
 
-    @Column(length = 1000)
+
+    @Column(length = 1000, nullable = false)
+    @Size(min = 20, max = 1000)
     private String duree;
 
-    @Column(length = 1000)
+
+    @Column(length = 1000, nullable = false)
+    @Size(min = 20, max = 1000)
     private String  dardl;
 }

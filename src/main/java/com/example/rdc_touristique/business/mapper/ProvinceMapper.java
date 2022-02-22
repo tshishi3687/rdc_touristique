@@ -16,8 +16,6 @@ public class ProvinceMapper implements Mapper<ProvinceDTO, Province>{
                 province.getId(),
                 province.getNomprovince(),
                 province.getDescription()
-//                province.getDateCreation(),
-//                province.getSuperid()
         );
     }
 
@@ -30,8 +28,6 @@ public class ProvinceMapper implements Mapper<ProvinceDTO, Province>{
         province.setId(provinceDTO.getId());
         province.setNomprovince(provinceDTO.getNomprovince());
         province.setDescription(provinceDTO.getDescription());
-//        province.setDateCreation(LocalDateTime.now());
-//        province.setSuperid(0);
 
         return province;
     }

@@ -37,7 +37,6 @@ public class ServiceService implements CrudService<ServiceDTO, Integer> {
     private VilleRepository villeRepository;
 
 
-    @Transactional
     public List<ServiceDTO> selonLaVille(VilleDTO ville) throws NoSuchAlgorithmException, InvalidKeySpecException {
         return serviceRepository.findAllByCoordonnee_Ville(villeRepository.getOne(ville.getId())).stream()
                 .map(serviceMapper::toDTO)
