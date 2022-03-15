@@ -8,13 +8,11 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
-public class ContratMisEnLigneDTO implements IdentifiedDTO<Integer>{
-    private Integer id;
+public class ContratMisEnLigneDTO implements IdentifiedDTO<Integer> {
+    private Integer Id;
+    private BienVuDTO bienVuDTO;
     private LocalDate ddDebut;
     private LocalDate ddFin;
-    private BienVuDTO idBien;
-    private PersonneSimpleDTO bailler;
-    private PersonneSimpleDTO preneur;
     private boolean enCour;
     private String entre;
     private String entre2;

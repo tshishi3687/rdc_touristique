@@ -52,32 +52,6 @@ public class PersonneController extends AbstratCrudController<PersonneSimpleDTO,
         return ((PersonneService)service).seloguer(dto);
     }
 
-//    @PostMapping("/user")
-//    @ResponseStatus(HttpStatus.OK)
-//    public ResponseEntity<?> login(@RequestBody MdpDTO dto) throws Exception {
-//        Authentication authentication = authenticationManager.authenticate(
-//                new UsernamePasswordAuthenticationToken(dto.getMail(), dto.getMdp()));
-//        SecurityContextHolder.getContext().setAuthentication(authentication);
-//        String jwt = jwtUtils.generateJwtToken(authentication);
-//
-//        UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
-//        List<String> roles = userDetails.getAuthorities().stream()
-//                .map(item -> item.getAuthority())
-//                .collect(Collectors.toList());
-//        return ResponseEntity.ok(new JwtResponse(jwt,
-//                userDetails.getId(),
-//                userDetails.getUsername(),
-//                userDetails.getEmail(),
-//                roles));
-//
-//    }
-
-//    @PostMapping("/user")
-//    @ResponseStatus(HttpStatus.OK)
-//    public PersonneSimpleDTO login(@RequestBody MdpDTO dto) throws Exception {
-//        return ((PersonneService)service).seloguerSansJWT(dto);
-//    }
-
     @PostMapping("/ibau")
     @ResponseStatus(HttpStatus.OK)
     public boolean verifIBAU() throws PersonneSimpleExisteExeption {
@@ -125,10 +99,9 @@ public class PersonneController extends AbstratCrudController<PersonneSimpleDTO,
         ((PersonneService)service).myFavory(favory);
     }
 
-//    @PostMapping("/mdp_modif")
-//    @ResponseStatus(HttpStatus.OK)
-//    public boolean modifMDP(@RequestBody ModifPass modifMDPDTO) throws Exception {
-//        System.out.println(modifMDPDTO);
-//        return ((PersonneService)service).modifMDP(modifMDPDTO);
-//    }
+    @PostMapping("/mdp_modif")
+    @ResponseStatus(HttpStatus.OK)
+    public boolean modifMDP(@RequestBody ModifPassDTO modifMDPDTO) throws Exception {
+        return ((PersonneService)service).modifMDP(modifMDPDTO);
+    }
 }

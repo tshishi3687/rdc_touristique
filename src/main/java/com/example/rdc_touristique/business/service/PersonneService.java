@@ -158,6 +158,7 @@ public class PersonneService implements CrudService<PersonneSimpleDTO, Integer> 
     public void likes(LikeBienDTO likes) throws Exception {
         if( likes == null)
             throw new Exception();
+        likes.getPersonneSimplifierDTO().setId(JwtRequestFilter.maPersonne().getId());
 
         Optional<Personne> tesPer = personneReposytory.findById(likes.getPersonneSimplifierDTO().getId());
 

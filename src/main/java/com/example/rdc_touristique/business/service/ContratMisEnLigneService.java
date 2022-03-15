@@ -9,13 +9,17 @@ import com.example.rdc_touristique.data_access.entity.Personne;
 import com.example.rdc_touristique.data_access.repository.ContratMisEnLigneRepository;
 import com.example.rdc_touristique.data_access.repository.PersonneReposytory;
 import com.example.rdc_touristique.exeption.*;
+import com.example.rdc_touristique.security.config.JwtRequestFilter;
+import com.example.rdc_touristique.security.config.constParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.w3c.dom.Document;
 
 import javax.mail.MessagingException;
 import javax.transaction.Transactional;
-import java.security.NoSuchAlgorithmException;
-import java.security.spec.InvalidKeySpecException;
+import java.awt.*;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -42,30 +46,29 @@ public class ContratMisEnLigneService implements CrudService<ContratMisEnLigneDT
     }
 
     @Override
-    public ContratMisEnLigneDTO readOne(Integer integer) throws ContratMisEnLigneFoundExeption {
+    public ContratMisEnLigneDTO readOne(Integer integer) throws Exception {
         if (readAll().isEmpty())
             throw new ContratMisEnLigneFoundExeption(integer);
         return contratMisEnLigneMapper.toDTO(contratMisEnLigneRepository.getOne(integer));
     }
 
     @Transactional
-    public List<ContratMisEnLigneDTO> selonBien(PersonneSimpleDTO personneSimpleDTO) throws NoSuchAlgorithmException, InvalidKeySpecException, PersonneSimpleExisteExeption {
-        if (!personneReposytory.existsById(personneSimpleDTO.getId()))
-            throw new PersonneSimpleExisteExeption(personneSimpleDTO.getId());
-
-        Personne personne = personneSimpleDTOMapper.toEntity(personneSimpleDTO);
-        if (personne.getRoleId().getNomRole().equals("Admin"))
-            return contratMisEnLigneRepository.findAllByBailleur(personne).stream()
+    public List<ContratMisEnLigneDTO> selonLePrenneur() throws Exception {
+            return contratMisEnLigneRepository.findAllByPreneur(JwtRequestFilter.maPersonne()).stream()
                 .map(contratMisEnLigneMapper::toDTO)
                 .collect(Collectors.toList());
 
-        return null;
     }
 
 
     @Override
-    public List<ContratMisEnLigneDTO> readAll() {
-        return null;
+    public List<ContratMisEnLigneDTO> readAll() throws Exception {
+        if (!JwtRequestFilter.maPersonne().getRoleId().getNomRole().equals( constParam.roleA))
+            throw new Exception("Cette personne n'a pas de contrat");
+
+        return contratMisEnLigneRepository.findAll().stream()
+                .map(contratMisEnLigneMapper::toDTO)
+                .collect(Collectors.toList());
     }
 
     @Override

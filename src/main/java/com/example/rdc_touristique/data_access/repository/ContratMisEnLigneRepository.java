@@ -8,4 +8,5 @@ import java.util.List;
 
 public interface ContratMisEnLigneRepository extends JpaRepository<ContratMisEnLigne, Integer> {
     List<ContratMisEnLigne> findAllByBailleur(Personne personne);
+    List<ContratMisEnLigne> findAllByPreneur(Personne personne);
 }

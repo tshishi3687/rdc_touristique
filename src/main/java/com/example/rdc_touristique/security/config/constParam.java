@@ -7,6 +7,5 @@ public interface constParam {
     long EXPIRATION = 10*24*3600*1000; //10 jours
     String HEADER_PREFIX = "Bearer ";
     String roleA = "Admin";
-    String roleP = "Proprietaire";
-    String roleL = "Locataire";
+    String roleC = "Client";
 }

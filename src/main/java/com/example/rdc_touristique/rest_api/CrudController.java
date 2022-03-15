@@ -19,12 +19,12 @@ public interface CrudController<DTO extends IdentifiedDTO<ID>, ID> {
     void create(@RequestBody DTO dto) throws ElementAlreadyExistsException, IOException, NoSuchAlgorithmException, InvalidKeySpecException, ActionFoundExeption, MessagingException;
 
     // Read
-    ResponseEntity<DTO> getOne(@PathVariable ID id) throws ElementFoundException, FoundExeption;
-    ResponseEntity<ElementsContainer<DTO>> getAll();
+    ResponseEntity<DTO> getOne(@PathVariable ID id) throws Exception;
+    ResponseEntity<ElementsContainer<DTO>> getAll() throws Exception;
 
     // Update
     ResponseEntity<String> update(@RequestBody DTO dto) throws ElementFoundException, FoundExeption, NoSuchAlgorithmException, InvalidKeySpecException, MessagingException, ContratMisEnLigneExisteExeption;
 
     // Delete
-    ResponseEntity<DTO> delete(@PathVariable ID id) throws ElementFoundException, FoundExeption, NoSuchAlgorithmException, InvalidKeySpecException;
+    ResponseEntity<DTO> delete(@PathVariable ID id) throws Exception;
 }

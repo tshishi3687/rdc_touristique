@@ -77,7 +77,7 @@ public class BienService implements CrudService<BienVuDTO, Integer> {
             throw new BienExisteExeption(toCreat.getId());
 
 
-        if (JwtRequestFilter.maPersonne() != null && (JwtRequestFilter.maPersonne().getRoleId().getId() != 3)){
+        if (JwtRequestFilter.maPersonne() != null){
 
             Bien entity = bienMapper.toEntity(toCreat);
             entity.setModeActive(false);
@@ -110,7 +110,7 @@ public class BienService implements CrudService<BienVuDTO, Integer> {
     public void update(BienVuDTO toUpdate) throws BienFoundExeption, NoSuchAlgorithmException, InvalidKeySpecException {
         if( !bienRepository.existsById( toUpdate.getId() ))
             throw new BienFoundExeption(toUpdate.getId());
-        if (JwtRequestFilter.maPersonne().getRoleId().getNomRole().equals(constParam.roleA) || JwtRequestFilter.maPersonne().getRoleId().getNomRole().equals(constParam.roleP))
+
             bienRepository.save( bienVuMapper.toEntity(toUpdate) );
     }
 
@@ -146,7 +146,7 @@ public class BienService implements CrudService<BienVuDTO, Integer> {
             TextContrat textContrat = new TextContrat(
                     bailleur, // le Bailleur: personne ENTITY
                     preneur, // le Preneur: personne ENTITY
-                    bienDTO, // bien consernée: bienDTO
+                    bien, // bien consernée: bienDTO
                     LocalDate.now(), // jour-J
                     LocalDate.now().plusDays(bienDTO.getIdNNuit()) // jour-J + nombre de nuit
             );
@@ -197,7 +197,7 @@ public class BienService implements CrudService<BienVuDTO, Integer> {
         TextContrat textContrat = new TextContrat(
                 bailleur, // le Bailleur: personne ENTITY
                 preneur, // le Preneur: personne ENTITY
-                bienVuMapper.toDTO(bien), // bien consernée: bienDTO
+                bien, // bien consernée: bienDTO
                 reservationBienDTO.getDdArrivee(), // jour-J
                 reservationBienDTO.getDdDepart()
         );
@@ -309,15 +309,20 @@ public class BienService implements CrudService<BienVuDTO, Integer> {
         if( !bienRepository.existsById(bienDTO.getId()))
             throw new BienFoundExeption(bienDTO.getId());
 
-        List<Personne> listPersonne = personneReposytory.findAll();
-        for (Personne personne : listPersonne) {
-            if (personne.getLikedBien().contains(bienRepository.getOne(bienDTO.getId())))
-                personne.getLikedBien().removeIf(bien -> bien.getId() == bien.getId());
-        }
-        int cood = bienDTO.getCoordonnee().getId();
-        imageRepository.deleteAllByBienid(bienVuMapper.toEntity(bienDTO));
+        Personne maPersonne = JwtRequestFilter.maPersonne();
+        Bien monBien = bienRepository.getOne(bienDTO.getId());
+
+        if (maPersonne.getId() == monBien.getAppartient().getId()){
+
+            List<Personne> listPersonne = personneReposytory.findAll();
+            for (Personne personne : listPersonne) {
+                if (personne.getLikedBien().contains(monBien))
+                    personne.getLikedBien().removeIf(bien -> bien.getId() == bien.getId());
+            }
+            imageRepository.deleteAllByBienid(monBien);
 //        reservationRepository.deleteAllByBienReservation(bienVuMapper.toEntity(bienDTO));
-        bienRepository.deleteById(bienDTO.getId());
-        coordorRepository.deleteById(cood);
+            bienRepository.deleteById(monBien.getId());
+            coordorRepository.deleteById(monBien.getCoordonnee().getId());
+        }
     }
 }

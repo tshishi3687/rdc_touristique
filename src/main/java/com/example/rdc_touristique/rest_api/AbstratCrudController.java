@@ -31,7 +31,7 @@ public abstract class AbstratCrudController<DTO extends IdentifiedDTO<ID>,ID> im
 
     // READ_ONE - GET > http://localhost:8081/?/{id}
     @GetMapping("/{id}")
-    public ResponseEntity<DTO> getOne(@PathVariable ID id) throws ElementFoundException, FoundExeption {
+    public ResponseEntity<DTO> getOne(@PathVariable ID id) throws Exception {
         return ResponseEntity.ok( service.readOne(id) );
     }
 
@@ -39,7 +39,7 @@ public abstract class AbstratCrudController<DTO extends IdentifiedDTO<ID>,ID> im
 
     // READ_ALL - GET > http://localhost:8081/?
     @GetMapping
-    public ResponseEntity<ElementsContainer<DTO>> getAll(){
+    public ResponseEntity<ElementsContainer<DTO>> getAll() throws Exception {
         List<DTO> list = service.readAll();
         return ResponseEntity.ok( new ElementsContainer<>( list ) );
     }
@@ -53,7 +53,7 @@ public abstract class AbstratCrudController<DTO extends IdentifiedDTO<ID>,ID> im
 
     // DELETE - DELETE > http://localhost:8081/?/{id}
     @DeleteMapping("/{id}")
-    public ResponseEntity<DTO> delete(@PathVariable ID id) throws ElementFoundException, FoundExeption, NoSuchAlgorithmException, InvalidKeySpecException {
+    public ResponseEntity<DTO> delete(@PathVariable ID id) throws Exception {
         DTO dto = service.readOne(id);
         service.delete(id);
         return ResponseEntity.ok(dto);

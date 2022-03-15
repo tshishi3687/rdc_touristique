@@ -43,15 +43,17 @@ public class BienVuMapper implements Mapper<BienVuDTO, Bien>{
             likes = bien.getLikes().size();
         }
 
-        ServiceDTO dto = new ServiceDTO();
+
         List<ServiceDTO> serviceDTOS = new ArrayList<>();
         List<Service> serviceList = service.findAllByCoordonnee_Ville(bien.getCoordonnee().getVille());
         for (Service value : serviceList) {
+            ServiceDTO dto = new ServiceDTO();
             dto.setNom(value.getNom());
             dto.setType(typeMapper.toDTO(value.getType()));
             dto.setCoordonnee(coordonneeMapper.toDTO(value.getCoordonnee()));
             serviceDTOS.add(dto);
         }
+
         return new BienVuDTO(
                 bien.getId(),
                 type_bienMapper.toDTO(bien.getType()),

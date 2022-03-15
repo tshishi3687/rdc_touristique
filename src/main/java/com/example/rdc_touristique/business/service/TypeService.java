@@ -39,7 +39,7 @@ public class TypeService implements CrudService<Type_serviceDTO, Integer> {
 
     @Override
     public List<Type_serviceDTO> readAll() {
-        return typeRepository.findAll().stream()
+        return typeRepository.findByOrderByNomtype().stream()
                 .map(typeMapper::toDTO)
                 .collect(Collectors.toList());
     }

@@ -27,11 +27,9 @@ public class ContratMisEnLigneMapper implements Mapper<ContratMisEnLigneDTO, Con
 
         return new ContratMisEnLigneDTO(
                 contrat.getId(),
+                bienMapper.toDTO(contrat.getIdBien()),
                 contrat.getDdDebut(),
                 contrat.getDdFin(),
-                bienMapper.toDTO(contrat.getIdBien()),
-                personneMapper.toDTO(contrat.getBailleur()),
-                personneMapper.toDTO(contrat.getPreneur()),
                 contrat.isEnCour(),
                 contrat.getEntre(),
                 contrat.getEntre2(),

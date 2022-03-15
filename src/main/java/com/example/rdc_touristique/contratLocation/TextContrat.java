@@ -3,6 +3,7 @@ package com.example.rdc_touristique.contratLocation;
 
 import com.example.rdc_touristique.business.dto.BienDTO;
 import com.example.rdc_touristique.business.dto.BienVuDTO;
+import com.example.rdc_touristique.data_access.entity.Bien;
 import com.example.rdc_touristique.data_access.entity.Personne;
 
 import java.time.LocalDate;
@@ -11,11 +12,11 @@ public class TextContrat {
 
     private final Personne bailleur;
     private final Personne preneur;
-    private final BienVuDTO bienReservee;
+    private final Bien bienReservee;
     private final LocalDate dateArrivee;
     private final LocalDate dateDepart;
 
-    public TextContrat(Personne bailleur, Personne preneur, BienVuDTO bienReservee, LocalDate dateArrivee, LocalDate dateDepart) {
+    public TextContrat(Personne bailleur, Personne preneur, Bien bienReservee, LocalDate dateArrivee, LocalDate dateDepart) {
         this.bailleur = bailleur;
         this.preneur = preneur;
         this.bienReservee = bienReservee;
@@ -48,11 +49,11 @@ public class TextContrat {
     public String objet(){
         return "Le Bailleur met en location au Preneur le Bien suivant:" +
                 "\n" +
-                this.bienReservee.getType_bien().getNom() + " à l'adresse : " +
+                this.bienReservee.getType().getNom() + " à l'adresse : " +
                 this.bienReservee.getCoordonnee().getNum() + " " + this.bienReservee.getCoordonnee().getRue() + ", dans la ville de " +
                 this.bienReservee.getCoordonnee().getVille().getNomVille() + " en " + this.bienReservee.getCoordonnee().getVille().getProvince().getNomprovince() + "." +
                 "\n" +
-                this.bienReservee.getType_bien().getNom() + " est conçu pour héberger  " + this.bienReservee.getNpmax() + " personne(s) maximum." +
+                this.bienReservee.getType().getNom() + " est conçu pour héberger  " + this.bienReservee.getNpmax() + " personne(s) maximum." +
                 "\n" +
                 "A charge pour le Preneur de payer le loyer, d'apporter les soins d'un bon père de famille au Bien dans le même état à la fin du contrat.";
     }
