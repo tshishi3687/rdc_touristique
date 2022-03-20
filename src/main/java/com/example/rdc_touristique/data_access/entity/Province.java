@@ -24,4 +24,7 @@ public class Province extends BaseEntity{
 
     @OneToMany(mappedBy = "provinceID")
     private List<ImageProvince> imageProvinces;
+
+    @OneToMany(mappedBy = "province")
+    private List<Ville> villeList;
 }

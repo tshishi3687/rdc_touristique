@@ -3,7 +3,7 @@ package com.example.rdc_touristique.data_access.entity;
 import lombok.*;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Getter
@@ -23,16 +23,13 @@ public class Ville extends BaseEntity{
     @Column
     private int nhabitant;
 
-    @OneToOne
-    @JoinColumn(name = "province")
+    @ManyToOne
+    @JoinColumn(name = "province", referencedColumnName = "id", nullable = false)
     private Province province;
 
     @Column(length = 1000)
     private String desciption;
 
-//    @Column
-//    private LocalDateTime dateCreation;
-//
-//    @Column
-//    private int superid;
+    @OneToMany(mappedBy = "ville")
+    private List<ImageVille> imageVilles;
 }

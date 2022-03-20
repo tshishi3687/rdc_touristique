@@ -32,9 +32,25 @@ public class ImageProvinceService implements CrudService<ImageProvinceDTO,Intege
     private ImageProvinceRepository imageProvinceRepository;
     @Autowired
     private ProvinceRepository provinceRepository;
-    @Autowired
-    private Mapper<ProvinceDTO, Province> provinceMapper;
 
+
+    @Transactional
+    public List<ImageProvince> getImage(int idProvince){
+        if(idProvince<=0)
+            return null;
+
+        List<ImageProvince> listProvinve = imageProvinceRepository.findAllByProvinceID(provinceRepository.getOne(idProvince));
+        List<ImageProvince> newListProvince = new ArrayList<>();
+
+        for (ImageProvince imageProvince: listProvinve){
+            ImageProvince img = new ImageProvince();
+            img.setName(imageProvince.getName());
+            img.setType(imageProvince.getType());
+            img.setPicByte(decompressBytes(imageProvince.getPicByte()));
+            newListProvince.add(img);
+        }
+        return newListProvince;
+    }
 
     @Override
     public void creat(ImageProvinceDTO toDTO) throws ElementAlreadyExistsException, IOException, NoSuchAlgorithmException, InvalidKeySpecException, ActionFoundExeption {

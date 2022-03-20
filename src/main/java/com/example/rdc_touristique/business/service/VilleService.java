@@ -18,7 +18,7 @@ import java.util.stream.Collectors;
 public class VilleService implements CrudService<VilleDTO, Integer> {
 
     @Autowired
-    public Mapper<VilleDTO, Ville> villeMapper;
+    private Mapper<VilleDTO, Ville> villeMapper;
     @Autowired
     private VilleRepository villeRepository;
 
