@@ -54,9 +54,15 @@ public class ContratMisEnLigneService implements CrudService<ContratMisEnLigneDT
 
     @Transactional
     public List<ContratMisEnLigneDTO> selonLePrenneur() throws Exception {
-            return contratMisEnLigneRepository.findAllByPreneur(JwtRequestFilter.maPersonne()).stream()
-                .map(contratMisEnLigneMapper::toDTO)
-                .collect(Collectors.toList());
+        if (JwtRequestFilter.maPersonne().getRoleId().getNomRole().equals(constParam.roleA)){
+            return contratMisEnLigneRepository.findAllByBailleurOrderByCreatedAtDesc(JwtRequestFilter.maPersonne()).stream()
+                    .map(contratMisEnLigneMapper::toDTO)
+                    .collect(Collectors.toList());
+        }else {
+            return contratMisEnLigneRepository.findAllByPreneurOrderByCreatedAtDesc(JwtRequestFilter.maPersonne()).stream()
+                    .map(contratMisEnLigneMapper::toDTO)
+                    .collect(Collectors.toList());
+        }
 
     }
 

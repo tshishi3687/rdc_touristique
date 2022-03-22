@@ -7,6 +7,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 
 public interface ContratMisEnLigneRepository extends JpaRepository<ContratMisEnLigne, Integer> {
-    List<ContratMisEnLigne> findAllByBailleur(Personne personne);
-    List<ContratMisEnLigne> findAllByPreneur(Personne personne);
+    List<ContratMisEnLigne> findAllByBailleurOrderByCreatedAtDesc(Personne personne);
+    List<ContratMisEnLigne> findAllByPreneurOrderByCreatedAtDesc(Personne personne);
 }

@@ -51,6 +51,13 @@ public class ProvinceService implements CrudService<ProvinceDTO, Integer> {
                 .collect(Collectors.toList());
     }
 
+    @Transactional
+    public List<ProvinceDTO> all(){
+        return provinceRepository.findByOrderByNomprovinceAsc().stream()
+                .map(provinceMapper::toDTO)
+                .collect(Collectors.toList());
+    }
+
     @Override
     @Secured("Admin")
     public void update(ProvinceDTO toUpdate) throws ProvinceFoundExeption, NoSuchAlgorithmException, InvalidKeySpecException {
