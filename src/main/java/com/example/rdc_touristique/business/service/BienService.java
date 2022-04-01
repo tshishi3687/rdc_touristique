@@ -132,6 +132,9 @@ public class BienService implements CrudService<BienVuDTO, Integer> {
             // j'ai besoin de le transformer en personneSimple pour la partie 2
         PersonneSimpleDTO personneSimpleDTO = personneSimpleMapper.toDTO(personneReposytory.getOne(bien.getAppartient().getId()));
 
+        if (bien.getAppartient().getId() != personneSimpleDTO.getId())
+            throw new BienFoundExeption(bien.getId());
+
         // 2. verifi si le bien reccupéré n'est pas déja active et si la personne a déjà donnée ses info bancaire et ses coordonnée
         if (!bien.isModeActive() && personneService.infoBanAdreUser()){
 
