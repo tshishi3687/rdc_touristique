@@ -64,6 +64,9 @@ public class PersonneService implements CrudService<PersonneSimpleDTO, Integer> 
     @Autowired
     private UserDetailsService jwtInMemoryUserDetailsService;
 
+    @Autowired
+    private ContratMisEnLigneRepository contratMisEnLigneRepository;
+
 
     @Override
     public void creat(PersonneSimpleDTO toCreat) throws PersonneSimpleExisteExeption, NoSuchAlgorithmException, InvalidKeySpecException {
@@ -304,5 +307,18 @@ public class PersonneService implements CrudService<PersonneSimpleDTO, Integer> 
             hexString.append(hex);
         }
         return hexString.toString();
+    }
+
+    @Transactional
+    public void alertStopContrat(int dtoID) throws ContratMisEnLigneExisteExeption, NoSuchAlgorithmException, MessagingException {
+        Optional<ContratMisEnLigne> entity = contratMisEnLigneRepository.findById(dtoID);
+
+        if (entity.isEmpty())
+            throw new ContratMisEnLigneExisteExeption(dtoID);
+
+        String code =  codeActivation();
+        entity.get().getPreneur().setCodeActivation(code);
+        personneReposytory.save(entity.get().getPreneur());
+        mail.envoyer(entity.get().getPreneur().getContactUser().getEmail(),textMail.getSujetStopContrat(),textMail.alertStopContrat(entity.get(),code));
     }
 }

@@ -1,5 +1,7 @@
 package com.example.rdc_touristique.Email;
 
+import com.example.rdc_touristique.business.dto.ContratLocationDTO;
+import com.example.rdc_touristique.business.dto.ContratMisEnLigneDTO;
 import com.example.rdc_touristique.data_access.entity.Bien;
 import com.example.rdc_touristique.data_access.entity.ContratMisEnLigne;
 import com.example.rdc_touristique.data_access.entity.Personne;
@@ -19,6 +21,7 @@ public class StringText {
     private static final String sujetmodifMDP = "Demande de changement de mot-de-passe";
     private static final String sujetBienNonConforme = "Bien non conforme.";
     private static final String sujetConfirmationReservation = "Demande de Réservation";
+    private static final String sujetStopContrat = "***ATTENTION: TENTATIVE DE CESSATION DE CONTRAT";
 
 
     public String getSujetEnvoisConfMisEnLigne(){ return sujetEnvoisConfMisEnLigne; }
@@ -36,6 +39,50 @@ public class StringText {
     }
     public String getSujetBienNonConforme(){return sujetBienNonConforme;}
     public String getSujetConfirmationReservation(){return sujetConfirmationReservation;}
+    public String getSujetStopContrat(){return sujetStopContrat;}
+
+    public String alertStopContrat(ContratMisEnLigne entity, String code){
+        return "<p>" +
+                "Bonjour Madame, Monsieur " + entity.getPreneur().getNom() + ",</p>" +
+                "<br>" +
+                "<br>" +
+                "<h3>" +
+                "Un processus de cessation de contrat pour le bien nommé ci-dessous a été entamer." +
+                "</h3>" +
+                "<tableau>" +
+                "<tr>" +
+                "<th>" + "Type de Bien" + "</th>" +
+                "<th>" + "Adresse" + "</th>" +
+                "<th>" + "Prix" + "</th>" +
+                "</tr>" +
+                "<tr>" +
+                "<td>" + entity.getIdBien().getType().getNom() + "</td>" +
+                "<td>" + entity.getIdBien().getCoordonnee().getNum() + " "+ entity.getIdBien().getCoordonnee().getRue()+ ", " + entity.getIdBien().getCoordonnee().getVille().getNomVille() + " / " + entity.getIdBien().getCoordonnee().getVille().getProvince().getNomprovince() + "</td>" +
+                "<td>" + entity.getIdBien().getPrix() + "</td>" +
+                "</tr>" +
+                "</tableau>" +
+                "<br>" +
+                "<p>" +
+                "Cette action implique une redevence de " + entity.getIdBien().getPrix() + "€ au profit de Mobembo.cd, comme stipulé dans le contrat." +
+                "</p>" +
+                "<p>" +
+                "Si vous êtes conscient(e) du processus et si vous voulez continué" +
+                ", voici votre code de validation : \"" + code + "\"." +
+                "</p>" +
+                "<br>" +
+                "<br>" +
+                "<p>Ce n'est pas vous qui a entamée ce processus?<br> Conseil:</p>" +
+                "<ul>" +
+                "<li>" + "Modifier le mode passe de votre Bobembo.cd." +"</li>" +
+                "<li>" + "Modifier le mode passe de votre voite E-Mail associer au compte Mobembo.cd." +"</li>" +
+                "<li>" + "Contacter le service IT sur : "+ entity.getBailleur().getContactUser().getEmail() +"</li>" +
+                "</ul>" +
+                "<br>" +
+                "<br>" +
+                "A bientôt.<br><br><br>" +
+                "Tshibangu Cédrick<br>" +
+                "Développeur de Mobembo";
+    }
 
     public String creationMessageInscription(String codeCree, String nom){
         return "" +

@@ -3,6 +3,7 @@ package com.example.rdc_touristique.rest_api;
 import com.example.rdc_touristique.business.dto.*;
 import com.example.rdc_touristique.business.service.CrudService;
 import com.example.rdc_touristique.business.service.PersonneService;
+import com.example.rdc_touristique.exeption.ContratMisEnLigneExisteExeption;
 import com.example.rdc_touristique.exeption.PersonneSimpleExisteExeption;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -103,5 +104,11 @@ public class PersonneController extends AbstratCrudController<PersonneSimpleDTO,
     @ResponseStatus(HttpStatus.OK)
     public boolean modifMDP(@RequestBody ModifPassDTO modifMDPDTO) throws Exception {
         return ((PersonneService)service).modifMDP(modifMDPDTO);
+    }
+
+    @PostMapping("/alercontratM")
+    @ResponseStatus(HttpStatus.OK)
+    public void alertContrat(@RequestBody int dtoId) throws MessagingException, ContratMisEnLigneExisteExeption, NoSuchAlgorithmException {
+        ((PersonneService)service).alertStopContrat(dtoId);
     }
 }
