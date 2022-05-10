@@ -1,8 +1,6 @@
-package com.example.rdc_touristique.contratLocation;
+package com.example.rdc_touristique.contrat;
 
 
-import com.example.rdc_touristique.business.dto.BienDTO;
-import com.example.rdc_touristique.business.dto.BienVuDTO;
 import com.example.rdc_touristique.data_access.entity.Bien;
 import com.example.rdc_touristique.data_access.entity.Personne;
 

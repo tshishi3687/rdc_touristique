@@ -4,7 +4,7 @@ import com.example.rdc_touristique.Email.EngistrementEmail;
 import com.example.rdc_touristique.Email.StringText;
 import com.example.rdc_touristique.business.dto.*;
 import com.example.rdc_touristique.business.mapper.Mapper;
-import com.example.rdc_touristique.contratLocation.TextContrat;
+import com.example.rdc_touristique.contrat.TextContrat;
 import com.example.rdc_touristique.data_access.entity.*;
 import com.example.rdc_touristique.data_access.repository.*;
 import com.example.rdc_touristique.exeption.*;
@@ -21,7 +21,6 @@ import java.security.spec.InvalidKeySpecException;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
-import java.util.Optional;
 import java.util.Random;
 import java.util.stream.Collectors;
 
