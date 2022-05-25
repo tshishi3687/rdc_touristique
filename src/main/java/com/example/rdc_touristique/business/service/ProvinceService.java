@@ -1,6 +1,7 @@
 package com.example.rdc_touristique.business.service;
 
 import com.example.rdc_touristique.business.dto.ProvinceDTO;
+import com.example.rdc_touristique.business.dto.ProvinceVuDTO;
 import com.example.rdc_touristique.business.mapper.Mapper;
 import com.example.rdc_touristique.data_access.entity.Province;
 import com.example.rdc_touristique.data_access.repository.ProvinceRepository;
@@ -9,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
 import java.util.List;
@@ -23,7 +25,6 @@ public class ProvinceService implements CrudService<ProvinceDTO, Integer> {
     private ProvinceRepository provinceRepository;
 
     @Override
-    @Secured("Admin")
     public void creat(ProvinceDTO toCreat) throws ElementAlreadyExistsException, NoSuchAlgorithmException, InvalidKeySpecException {
         if (provinceRepository.existsById(toCreat.getId()))
             throw new ProvinceExisteExeption(toCreat.getId());
@@ -33,7 +34,6 @@ public class ProvinceService implements CrudService<ProvinceDTO, Integer> {
 
 
     @Override
-    @Secured("Admin")
     public ProvinceDTO readOne(Integer integer) throws ProvinceFoundExeption {
         Province entity = provinceRepository.findById(integer)
                 .orElseThrow(()-> new ProvinceFoundExeption(integer));
@@ -50,8 +50,9 @@ public class ProvinceService implements CrudService<ProvinceDTO, Integer> {
 
 
 
+
+
     @Override
-    @Secured("Admin")
     public void update(ProvinceDTO toUpdate) throws ProvinceFoundExeption, NoSuchAlgorithmException, InvalidKeySpecException {
         if( !provinceRepository.existsById( toUpdate.getId() ))
             throw new ProvinceFoundExeption(toUpdate.getId());
@@ -60,7 +61,6 @@ public class ProvinceService implements CrudService<ProvinceDTO, Integer> {
     }
 
     @Override
-    @Secured("Admin")
     public void delete(Integer toDelete) throws ProvinceFoundExeption {
         if( !provinceRepository.existsById(toDelete))
             throw new ProvinceFoundExeption(toDelete);

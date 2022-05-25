@@ -3,6 +3,7 @@ package com.example.rdc_touristique.business.service;
 import com.example.rdc_touristique.Email.EngistrementEmail;
 import com.example.rdc_touristique.Email.StringText;
 import com.example.rdc_touristique.business.dto.*;
+import com.example.rdc_touristique.business.mapper.ContratMisEnLigneMapper;
 import com.example.rdc_touristique.business.mapper.Mapper;
 import com.example.rdc_touristique.contrat.TextContrat;
 import com.example.rdc_touristique.data_access.entity.*;
@@ -11,6 +12,7 @@ import com.example.rdc_touristique.exeption.*;
 import com.example.rdc_touristique.security.config.JwtRequestFilter;
 import com.example.rdc_touristique.security.config.constParam;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,9 +22,9 @@ import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Service
 public class BienService implements CrudService<BienVuDTO, Integer> {
@@ -55,6 +57,11 @@ public class BienService implements CrudService<BienVuDTO, Integer> {
     private StringText textMail;
     @Autowired
     private ContratLocationRepository contratLocationRepository;
+    @Autowired
+    private Mapper<DetailsDTO, Details> detailsMapper;
+    @Autowired
+    private DetailsRepository detailsRepository;
+
 
     @Transactional
     public List<BienVuDTO> selonLaPersonne() throws NoSuchAlgorithmException, InvalidKeySpecException, BienFoundExeption {
@@ -99,8 +106,8 @@ public class BienService implements CrudService<BienVuDTO, Integer> {
     }
 
     @Override
-    public List<BienVuDTO> readAll() {
-        return bienRepository.findAllByModeActiveTrue().stream()
+    public List<BienVuDTO> readAll() throws NoSuchAlgorithmException, InvalidKeySpecException {
+        return bienRepository.findAllByModeActiveTrueOrderByIdDesc().stream()
                 .map(bienVuMapper::toDTO)
                 .collect(Collectors.toList());
     }
@@ -109,8 +116,7 @@ public class BienService implements CrudService<BienVuDTO, Integer> {
     public void update(BienVuDTO toUpdate) throws BienFoundExeption, NoSuchAlgorithmException, InvalidKeySpecException {
         if( !bienRepository.existsById( toUpdate.getId() ))
             throw new BienFoundExeption(toUpdate.getId());
-
-            bienRepository.save( bienVuMapper.toEntity(toUpdate) );
+            bienRepository.save( bienVuMapper.toEntity(toUpdate));
     }
 
     @Override
@@ -135,6 +141,12 @@ public class BienService implements CrudService<BienVuDTO, Integer> {
             throw new BienFoundExeption(bien.getId());
 
         // 2. verifi si le bien reccupéré n'est pas déja active et si la personne a déjà donnée ses info bancaire et ses coordonnée
+        for (ContratMisEnLigne cmel: contratRepository.findAllByIdBien(bien)){
+            if (cmel.isEnCour()){
+                cmel.setEnCour(false);
+                contratRepository.save(cmel);
+            }
+        }
         if (!bien.isModeActive() && personneService.infoBanAdreUser()){
 
             // Préparation du contrat liant le propiétaire du bien et Mobembo.cd
@@ -159,6 +171,7 @@ public class BienService implements CrudService<BienVuDTO, Integer> {
                 contrat.setDdDebut(LocalDate.now());
                 contrat.setDdFin(LocalDate.now().plusDays(bienDTO.getIdNNuit()));
                 contrat.setIdBien(bien);
+                contrat.getIdBien().setModeActive(true);
                 contrat.setBailleur(bailleur); // bailleur: personne ENTITY
                 contrat.setPreneur(preneur); // preneur: personne ENTITY
                 contrat.setEnCour(true);
@@ -169,50 +182,77 @@ public class BienService implements CrudService<BienVuDTO, Integer> {
                 contrat.setLoyer(textContrat.loyerMobembo());
                 contrat.setDuree(textContrat.dureeMobembo());
                 contrat.setDardl(textContrat.dARDL());
-;           contratRepository.save(contrat);
+          contratRepository.save(contrat);
 
-            // 8. je change le modeActive du bien en active
-            bien.setModeActive(true);
             bienRepository.save(bien);
         }
     }
 
     @Transactional
-    public boolean reservationBien(ReservationBienDTO reservationBienDTO) throws NoSuchAlgorithmException, InvalidKeySpecException {
-        List<ContratLocation> allContrat = contratLocationRepository.findAll();
+    public void annulationCMEL(PayPalDTO payPalDTO) throws NoSuchAlgorithmException, InvalidKeySpecException {
+        if (!contratRepository.existsById(payPalDTO.getId()))
+            throw  new RuntimeException();
+
+        ContratMisEnLigne cmel = contratRepository.getOne(payPalDTO.getId());
+
+        if (
+                cmel.getPreneur().getId() == JwtRequestFilter.maPersonne().getId() ||
+                        JwtRequestFilter.maPersonne().getRoleId().getId() == 1
+        ){
+
+            cmel.setEnCour(false);
+            cmel.setDdFin(LocalDate.now());
+            cmel.getIdBien().setModeActive(false);
+            cmel.getDetails().add(detailsRepository.save(detailsMapper.toEntity(payPalDTO.getDetails())));
+            contratRepository.save(cmel);
+        }else throw new RuntimeException();
+    }
+
+    @Transactional
+    public boolean isDisponible(ReservationBienDTO DTO){
+        List<ContratLocation> allContrat = contratLocationRepository.findAllByIdBien(bienRepository.getOne(DTO.getBienConserne().getId()));
+
+        for (ContratLocation contratLocation : allContrat) {
+            if (DTO.getDdArrivee().isAfter(DTO.getDdDepart()) || DTO.getDdArrivee().isBefore(contratLocation.getDdFin()))
+                return false;
+        }
+        return true;
+    }
+
+    @Transactional
+    public int reservationBien(PayPalRDTO paypalDTO) throws NoSuchAlgorithmException, InvalidKeySpecException, MessagingException {
+
+        List<ContratLocation> allContrat = contratLocationRepository.findAllByIdBien(bienRepository.getOne(paypalDTO.getReservationBienDTO().getBienConserne().getId()));
 
         for (ContratLocation contratLocation : allContrat) {
             if (
-                    (!reservationBienDTO.getDdArrivee().isBefore(LocalDate.now()) || !reservationBienDTO.getDdArrivee().equals(LocalDate.now())) || // si la date d'arrivé < la date du jour
-                            reservationBienDTO.getDdArrivee().isAfter(reservationBienDTO.getDdDepart()) || // si la date d'arrivé et avant la date de depart
-                            !contratLocation.getDdDebut().equals(reservationBienDTO.getDdArrivee()) || //
-                            (reservationBienDTO.getDdArrivee().isBefore(contratLocation.getDdFin()) && reservationBienDTO.getDdArrivee().isAfter(contratLocation.getDdDebut())) ||
-                            (reservationBienDTO.getDdDepart().isAfter(contratLocation.getDdDebut()) && reservationBienDTO.getDdDepart().isBefore(contratLocation.getDdFin()))
+                    paypalDTO.getReservationBienDTO().getDdArrivee().isAfter(paypalDTO.getReservationBienDTO().getDdDepart()) ||
+                            paypalDTO.getReservationBienDTO().getDdArrivee().isBefore(contratLocation.getDdFin())
             )
-                return false;
+                throw new RuntimeException();
         }
 
         Personne bailleur = personneReposytory.findByRoleId_NomRole(constParam.roleA);
-        Personne preneur = personneReposytory.getOne(reservationBienDTO.getFaitPar().getId());
-        Bien bien = bienRepository.getOne(reservationBienDTO.getBienConserne().getId());
+        Personne preneur = JwtRequestFilter.maPersonne();
+        Bien bien = bienRepository.getOne(paypalDTO.getReservationBienDTO().getBienConserne().getId());
 
         TextContrat textContrat = new TextContrat(
                 bailleur, // le Bailleur: personne ENTITY
                 preneur, // le Preneur: personne ENTITY
                 bien, // bien consernée: bienDTO
-                reservationBienDTO.getDdArrivee(), // jour-J
-                reservationBienDTO.getDdDepart()
+                paypalDTO.getReservationBienDTO().getDdArrivee(), // jour-J
+                paypalDTO.getReservationBienDTO().getDdDepart()
         );
 
         ContratLocation newContrat = new ContratLocation();
             newContrat.setId(0);
-            newContrat.setDdDebut(reservationBienDTO.getDdArrivee());
-            newContrat.setDdFin(reservationBienDTO.getDdDepart());
-            newContrat.setIdBien(bienMapper.toEntity(reservationBienDTO.getBienConserne()));
-            newContrat.setNPersonneSurLieu(reservationBienDTO.getNPersonneSurLieu());
+            newContrat.setDdDebut(paypalDTO.getReservationBienDTO().getDdArrivee());
+            newContrat.setDdFin(paypalDTO.getReservationBienDTO().getDdDepart());
+            newContrat.setIdBien(bienMapper.toEntity(paypalDTO.getReservationBienDTO().getBienConserne()));
+            newContrat.setNPersonneSurLieu(paypalDTO.getReservationBienDTO().getNPersonneSurLieu());
             newContrat.setBailleur(bailleur);
             newContrat.setPreneur(preneur);
-            newContrat.setEnCour(reservationBienDTO.getDdArrivee().equals(LocalDate.now()));
+            newContrat.setEnCour(paypalDTO.getReservationBienDTO().getDdArrivee().equals(LocalDate.now()));
             newContrat.setEntre(textContrat.EntreBailler());
             newContrat.setEntre2(textContrat.EntrePreneur());
             newContrat.setObjet(textContrat.objet());
@@ -220,10 +260,41 @@ public class BienService implements CrudService<BienVuDTO, Integer> {
             newContrat.setLoyer(textContrat.loyerMobembo());
             newContrat.setDuree(textContrat.dureeMobembo());
             newContrat.setDardl(textContrat.dARDL());
-        contratLocationRepository.save(newContrat);
 
-        return true;
+        int idcontrat = contratLocationRepository.save(newContrat).getId();
 
+
+        mail.envoyer(JwtRequestFilter.maPersonne().getContactUser().getEmail(), textMail.getSujetConfirmationReservation(),textMail.confimationEnvoisDemande(
+                paypalDTO.getReservationBienDTO().getBienConserne().getCoordonnee().getVille().getProvince().getNomprovince(),
+                paypalDTO.getReservationBienDTO().getBienConserne().getCoordonnee().getVille().getNomVille(),
+                paypalDTO.getReservationBienDTO().getBienConserne().getType_bien().getNom(),
+                paypalDTO.getReservationBienDTO().getBienConserne().getCoordonnee().getNum()+ " " +paypalDTO.getReservationBienDTO().getBienConserne().getCoordonnee().getRue(),
+                JwtRequestFilter.maPersonne().getNom(),
+                paypalDTO.getPrix(),
+                paypalDTO.getReservationBienDTO().getDdArrivee(),
+                paypalDTO.getReservationBienDTO().getDdDepart(),
+                paypalDTO.getDetails()) );
+
+        mail.envoyer(bien.getAppartient().getContactUser().getEmail(), textMail.getSujetEnvoisDemande() ,textMail.notificationReservation(
+                paypalDTO.getReservationBienDTO().getBienConserne().getCoordonnee().getVille().getProvince().getNomprovince(),
+                paypalDTO.getReservationBienDTO().getBienConserne().getCoordonnee().getVille().getNomVille(),
+                paypalDTO.getReservationBienDTO().getBienConserne().getType_bien().getNom(),
+                paypalDTO.getReservationBienDTO().getBienConserne().getCoordonnee().getNum()+ " " +paypalDTO.getReservationBienDTO().getBienConserne().getCoordonnee().getRue(),
+                JwtRequestFilter.maPersonne().getNom(),
+                paypalDTO.getReservationBienDTO().getDdArrivee(),
+                paypalDTO.getReservationBienDTO().getDdDepart()
+        ));
+        return idcontrat;
+    }
+
+    @Transactional
+    public void ajoutDetails(DetailesDTO detailesDTO) throws NoSuchAlgorithmException, InvalidKeySpecException {
+        if (!contratLocationRepository.existsById(detailesDTO.getId()))
+            throw new RuntimeException();
+        ContratLocation contratLocation = contratLocationRepository.getOne(detailesDTO.getId());
+        detailesDTO.getDetails().setId(detailesDTO.getDetails().getId());
+        contratLocation.getDetails().add(detailsRepository.save(detailsMapper.toEntity(detailesDTO.getDetails())));
+        contratLocationRepository.save(contratLocation);
     }
 
     @Transactional
@@ -322,6 +393,7 @@ public class BienService implements CrudService<BienVuDTO, Integer> {
                     personne.getLikedBien().removeIf(bien -> bien.getId() == bien.getId());
             }
             imageRepository.deleteAllByBienid(monBien);
+            contratRepository.deleteByBailleur(maPersonne);
 //        reservationRepository.deleteAllByBienReservation(bienVuMapper.toEntity(bienDTO));
             bienRepository.deleteById(monBien.getId());
             coordorRepository.deleteById(monBien.getCoordonnee().getId());

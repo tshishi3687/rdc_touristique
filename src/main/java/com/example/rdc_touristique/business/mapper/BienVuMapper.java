@@ -2,18 +2,21 @@ package com.example.rdc_touristique.business.mapper;
 
 import com.example.rdc_touristique.business.dto.*;
 import com.example.rdc_touristique.business.service.ImageModelService;
-import com.example.rdc_touristique.business.service.ServiceService;
 import com.example.rdc_touristique.data_access.entity.*;
+import com.example.rdc_touristique.data_access.repository.ContratLocationRepository;
 import com.example.rdc_touristique.data_access.repository.ContratMisEnLigneRepository;
 import com.example.rdc_touristique.data_access.repository.ServiceRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
 
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Component
 public class BienVuMapper implements Mapper<BienVuDTO, Bien>{
@@ -30,6 +33,10 @@ public class BienVuMapper implements Mapper<BienVuDTO, Bien>{
     private ServiceRepository service;
     @Autowired
     private Mapper<Type_serviceDTO, Type> typeMapper;
+    @Autowired
+    private ContratMisEnLigneRepository contratRepository;
+    @Autowired
+    private ContratLocationRepository contratLocationRepository;
 
     @Override
     public BienVuDTO toDTO(Bien bien) {
@@ -54,6 +61,29 @@ public class BienVuMapper implements Mapper<BienVuDTO, Bien>{
             serviceDTOS.add(dto);
         }
 
+        // list date de mise en ligne
+        Stream<LocalDate> date = null;
+            List<ContratMisEnLigne> contratMisEnLignes = contratRepository.findAllByIdBien(bien);
+            for (ContratMisEnLigne misEnLigne : contratMisEnLignes){
+                if (misEnLigne.isEnCour()){
+                     date = LocalDate.now().datesUntil(misEnLigne.getDdFin());
+                }
+            }
+
+        // list date réservé
+        Stream<LocalDate> date2 = null;
+            List<ContratLocation> contratLocations = contratLocationRepository.findAllByIdBien(bien);
+            List<LocalDate> dateReservation = new ArrayList<>();
+            for (ContratLocation location : contratLocations){
+                if (location.isEnCour()){
+                    date2 = location.getDdDebut().datesUntil(location.getDdFin());
+                }
+            }
+
+
+
+
+
         return new BienVuDTO(
                 bien.getId(),
                 type_bienMapper.toDTO(bien.getType()),
@@ -71,7 +101,9 @@ public class BienVuMapper implements Mapper<BienVuDTO, Bien>{
                 bien.isModeActive(),
                 imageModelService.getImage(bien.getId()),
                 serviceDTOS,
-                0
+                0,
+                date.collect(Collectors.toList()),
+                date2.collect(Collectors.toList())
         );
     }
 

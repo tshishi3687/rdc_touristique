@@ -10,6 +10,7 @@ import com.example.rdc_touristique.data_access.repository.CoordonneeRepository;
 import com.example.rdc_touristique.data_access.repository.ImageRepository;
 import com.example.rdc_touristique.exeption.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
@@ -39,8 +40,6 @@ public class ImageModelService implements CrudService<ImageModelDTO, Integer>{
     private BienRepository bienRepository;
     @Autowired
     private Mapper<BienDTO, Bien> bienMapper;
-    @Autowired
-    private CoordonneeRepository coordorRepository;
 
     @Override
     public void creat(ImageModelDTO toDTO) throws ElementAlreadyExistsException {

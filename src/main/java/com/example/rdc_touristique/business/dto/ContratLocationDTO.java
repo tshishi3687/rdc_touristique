@@ -25,5 +25,5 @@ public class ContratLocationDTO implements IdentifiedDTO<Integer>{
     private String loyer;
     private String duree;
     private String  dardl;
-
+    private DetailsDTO details;
 }

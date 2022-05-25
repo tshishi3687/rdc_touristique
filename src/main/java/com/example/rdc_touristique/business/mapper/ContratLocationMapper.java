@@ -1,21 +1,23 @@
 package com.example.rdc_touristique.business.mapper;
 
-import com.example.rdc_touristique.business.dto.BienVuDTO;
-import com.example.rdc_touristique.business.dto.ContratLocationDTO;
-import com.example.rdc_touristique.business.dto.ContratMisEnLigneDTO;
-import com.example.rdc_touristique.business.dto.PersonneSimpleDTO;
+import com.example.rdc_touristique.business.dto.*;
 import com.example.rdc_touristique.data_access.entity.Bien;
 import com.example.rdc_touristique.data_access.entity.ContratLocation;
+import com.example.rdc_touristique.data_access.entity.Details;
 import com.example.rdc_touristique.data_access.entity.Personne;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class ContratLocationMapper implements Mapper<ContratLocationDTO, ContratLocation>{
 
     @Autowired
     private Mapper<PersonneSimpleDTO, Personne> personneMapper;
+    @Autowired
+    private Mapper<DetailsDTO, Details> detailsMapper;
     @Autowired
     private Mapper<BienVuDTO, Bien> bienMapper;
 
@@ -39,7 +41,8 @@ public class ContratLocationMapper implements Mapper<ContratLocationDTO, Contrat
                 contratLocation.getEtatLieu(),
                 contratLocation.getLoyer(),
                 contratLocation.getDuree(),
-                contratLocation.getDardl()
+                contratLocation.getDardl(),
+                null
         );
     }
 

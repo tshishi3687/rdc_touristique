@@ -37,7 +37,8 @@ public class ContratMisEnLigneMapper implements Mapper<ContratMisEnLigneDTO, Con
                 contrat.getEtatLieu(),
                 contrat.getLoyer(),
                 contrat.getDuree(),
-                contrat.getDardl()
+                contrat.getDardl(),
+                null
         );
     }
 

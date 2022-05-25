@@ -8,4 +8,5 @@ import java.util.List;
 
 public interface ImageVilleRepository extends JpaRepository<ImageVille, Long> {
     List<ImageVille> findAllByVille(Ville ville);
+    void deleteAllByVille(Ville ville);
 }

@@ -49,9 +49,16 @@ public class BienController extends AbstratCrudController<BienVuDTO, Integer> {
 
     @PostMapping("/acti")
     @ResponseStatus(HttpStatus.OK)
-    public void activationBien(@RequestBody BienVuDTO bienDTO) throws BienFoundExeption, PersonneSimpleExisteExeption {
+    public void activationBien(@RequestBody BienVuDTO bienDTO) throws BienFoundExeption, PersonneSimpleExisteExeption, NoSuchAlgorithmException, InvalidKeySpecException {
         ((BienService)service).activationBien(bienDTO);
     }
+
+    @PostMapping("/annul_cmel")
+    @ResponseStatus(HttpStatus.OK)
+    public void annulationCMEL(@RequestBody PayPalDTO payPalDTO) throws NoSuchAlgorithmException, InvalidKeySpecException {
+        ((BienService)service).annulationCMEL(payPalDTO);
+    }
+
 
     @PostMapping("/env_mail")
     @ResponseStatus(HttpStatus.OK)
@@ -67,8 +74,20 @@ public class BienController extends AbstratCrudController<BienVuDTO, Integer> {
 
     @PostMapping("/reservation")
     @ResponseStatus(HttpStatus.OK)
-    public boolean reservation(@RequestBody ReservationBienDTO reservationBienDTO) throws NoSuchAlgorithmException, InvalidKeySpecException {
-       return ((BienService)service).reservationBien(reservationBienDTO);
+    public int reservation(@RequestBody PayPalRDTO payPalDTO) throws NoSuchAlgorithmException, InvalidKeySpecException, MessagingException {
+        return ((BienService) service).reservationBien(payPalDTO);
+    }
+
+    @PostMapping("/details")
+    @ResponseStatus(HttpStatus.OK)
+    public void ajoutDetails(@RequestBody DetailesDTO detailesDTO) throws NoSuchAlgorithmException, InvalidKeySpecException, MessagingException {
+        ((BienService) service).ajoutDetails(detailesDTO);
+    }
+
+    @PostMapping("/dispo")
+    @ResponseStatus(HttpStatus.OK)
+    public boolean isDisponible(@RequestBody ReservationBienDTO DTO) throws NoSuchAlgorithmException, InvalidKeySpecException, MessagingException {
+        return ((BienService) service).isDisponible(DTO);
     }
 
 

@@ -8,6 +8,7 @@ import lombok.Setter;
 import javax.persistence.*;
 import javax.validation.constraints.Size;
 import java.time.LocalDate;
+import java.util.List;
 
 @Entity
 @Getter
@@ -73,4 +74,12 @@ public class ContratMisEnLigne extends BaseEntity{
     @Column(length = 1000, nullable = false)
     @Size(min = 20, max = 1000)
     private String  dardl;
+
+    @ManyToMany
+    @JoinTable(
+            name = "contratMisEnLigne_Details",
+            joinColumns = @JoinColumn(name = "contratMisEnLigneId"),
+            inverseJoinColumns = @JoinColumn(name = "detailsId")
+    )
+    private List<Details> details;
 }

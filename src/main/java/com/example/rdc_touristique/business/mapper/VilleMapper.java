@@ -46,8 +46,6 @@ public class VilleMapper implements Mapper<VilleDTO, Ville>{
         ville.setNhabitant(villeDTO.getNhabitant());
         ville.setProvince(provinceRepository.getOne(villeDTO.getProvince().getId()));
         ville.setDesciption(villeDTO.getDescription());
-//        ville.setDateCreation(LocalDateTime.now());
-//        ville.setSuperid(0);
 
         return ville;
     }

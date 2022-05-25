@@ -2,6 +2,7 @@ package com.example.rdc_touristique.Email;
 
 import com.example.rdc_touristique.business.dto.ContratLocationDTO;
 import com.example.rdc_touristique.business.dto.ContratMisEnLigneDTO;
+import com.example.rdc_touristique.business.dto.DetailsDTO;
 import com.example.rdc_touristique.data_access.entity.Bien;
 import com.example.rdc_touristique.data_access.entity.ContratMisEnLigne;
 import com.example.rdc_touristique.data_access.entity.Personne;
@@ -96,10 +97,12 @@ public class StringText {
                 "Développeur de Mobembo";
     }
 
-    public String confimationEnvoisDemande(String province, String ville, String typeBien, String adressBien, String nom, int num, String etatDemande, LocalDate dateArrive, LocalDate dateFin){
-        return ""
-                + nom + " votre réservation a été enregistrée avec succès :)- <br><br>" +
-                "La demande portant la référence nkdir:" + num + " a bien été transférée. <br><br>" +
+    public String confimationEnvoisDemande(
+            String province, String ville, String typeBien,
+            String adressBien, String nom, int prix,
+            LocalDate dateArrive, LocalDate dateFin, DetailsDTO detailsDTO){
+        return "Bonjour Madame, Monsieur "
+                + nom + ".<br>votre réservation a été enregistrée avec succès :)- <br><br>" +
                 "Détails du Bien : <br>" +
                 "Province : " + province + "<br>" +
                 "Ville : " + ville + "<br>" +
@@ -107,6 +110,60 @@ public class StringText {
                 "Adresse : " + adressBien + "<br>" +
                 "Date d'arrivée : " + dateArrive + "<br>" +
                 "Date de départ : " + dateFin + "<br>" +
+                "<br>" +
+                "<h3>Information de payement</h3>" +
+                "<table>" +
+                "<thead>" +
+                "<tr>" +
+                "<th>Id</th>" +
+                "<th>Payer ID</th>" +
+                "<th>Create Time</th>" +
+                "<th>Update Time</th>" +
+                "<th>Intent</th>" +
+                "<th>status</th>" +
+                "<th>Prix</th>" +
+                "</tr>" +
+                "</thead>" +
+                "<tbody>" +
+                "<tr>" +
+                "<th>" + detailsDTO.getId() + "</th>" +
+                "<th>" + detailsDTO.getPayerId() + "</th>" +
+                "<th>" + detailsDTO.getCreateTime() + "</th>" +
+                "<th>" + detailsDTO.getUpdateTime() + "</th>" +
+                "<th>" + detailsDTO.getIntent() + "</th>" +
+                "<th>" + detailsDTO.getStatus() + "</th>" +
+                "<th>" + prix + "</th>" +
+                "</tr>" +
+                "</tbody>" +
+                "</table>" +
+                "<table>" +
+                "<thead>" +
+                "<tr>" +
+                "<th>Nom</th>" +
+                "<th>Prenom</th>" +
+                "<th>E-mail</th>" +
+                "<th>Adresse Line</th>" +
+                "<th>Admin Area 1</th>" +
+                "<th>Admin Area 2</th>" +
+                "<th>Country Code</th>" +
+                "<th>Postal Code</th>" +
+                "</tr>" +
+                "</thead>" +
+                "<tbody>" +
+                "<tr>" +
+                "<th>" + detailsDTO.getNom() + "<th>" +
+                "<th>" + detailsDTO.getPrenom() + "<th>" +
+                "<th>" + detailsDTO.getEmail() + "<th>" +
+                "<th>" + detailsDTO.getAdressLine1() + "<th>" +
+                "<th>" + detailsDTO.getAdminArea1() + "<th>" +
+                "<th>" + detailsDTO.getAdminArea2() + "<th>" +
+                "<th>" + detailsDTO.getCountryCode() + "<th>" +
+                "<th>" + detailsDTO.getPostalcode() + "<th>" +
+                "</tr>" +
+                "</tbody>" +
+                "</table>" +
+                "<br>" +
+                "<br>" +
                 "Il vous est possible de lire le contrat de la reservation sur MOBEMBO.cd" +
                 "<br><br>" +
                 "A bientôt.<br><br><br>" +
@@ -114,10 +171,9 @@ public class StringText {
                 "Développeur de Mobembo";
     }
 
-    public String notificationDEmande(String province, String ville, String typeBien, String adressBien, String nom, int num, String etatDemande, LocalDate dateArrive, LocalDate dateFin, String faitPart){
-        return ""
-                + nom + " l'un de vos Bien a tapé dans l'oeil :)- <br><br>" +
-                "Le Bien portant la référence nkdir_" + num + " fait l'objet d'une réservation. <br><br>" +
+    public String notificationReservation(String province, String ville, String typeBien, String adressBien, String nom, LocalDate dateArrive, LocalDate dateFin){
+        return "Bonjour Madame, Monsieur "
+                + nom + "<br>l'un de vos Bien a tapé dans l'oeil :)- <br><br>" +
                 "Détails du Bien : <br>"  +
                 "Province : " + province + "<br>" +
                 "Ville : " + ville + "<br>" +

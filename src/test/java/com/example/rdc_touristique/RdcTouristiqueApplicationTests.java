@@ -22,7 +22,7 @@ class RdcTouristiqueApplicationTests {
 
 	@Test
 	void contextLoads() {
-		List<BienVuDTO> list = bienRepository.findAllByModeActiveTrue().stream()
+		List<BienVuDTO> list = bienRepository.findByModeActiveOrderByIdDesc().stream()
 				.map(bienVuDTOBienMapper::toDTO)
 				.collect(Collectors.toList());
 		System.out.println(list);

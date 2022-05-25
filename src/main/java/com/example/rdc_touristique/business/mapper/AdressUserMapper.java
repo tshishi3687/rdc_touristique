@@ -28,7 +28,10 @@ public class AdressUserMapper implements Mapper<AdressUserDTO, AdressePersonne>{
     private PaysRepository paysRepository;
 
 
-
+    /**
+     * @param adresse
+     * @return
+     */
     @Override
     public AdressUserDTO toDTO(AdressePersonne adresse) {
         if (adresse ==null)
@@ -42,6 +45,12 @@ public class AdressUserMapper implements Mapper<AdressUserDTO, AdressePersonne>{
         );
     }
 
+    /**
+     * @param adressUserDTO
+     * @return
+     * @throws NoSuchAlgorithmException
+     * @throws InvalidKeySpecException
+     */
     @Override
     public AdressePersonne toEntity(AdressUserDTO adressUserDTO) throws NoSuchAlgorithmException, InvalidKeySpecException {
         if (adressUserDTO==null)

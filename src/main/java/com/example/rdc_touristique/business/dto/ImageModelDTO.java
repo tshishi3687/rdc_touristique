@@ -14,10 +14,8 @@ import java.sql.Blob;
 @AllArgsConstructor
 @ToString
 public class ImageModelDTO implements IdentifiedDTO<Integer> {
-    private Integer id;
-    private byte[] img_byte;
-    private String type;
+    private Integer Id;
     private String Name;
-    private String FileName;
-    private int size;
+    private String type;
+    private byte[] picByte;
 }

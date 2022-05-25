@@ -50,7 +50,7 @@ public class AladispositionMapper implements Mapper<AladispositionDTO, Aladispos
         aladisposition.setLingeMaison(aladispositionDTO.isLingeMaison());
         aladisposition.setEauFroide(aladispositionDTO.isEauFroide());
         aladisposition.setEauChaude(aladispositionDTO.isEauChaude());
-        aladisposition.setEauPotable(aladisposition.isEauPotable());
+        aladisposition.setEauPotable(aladispositionDTO.isEauPotable());
         aladisposition.setJardin(aladispositionDTO.isJardin());
         aladisposition.setCour(aladispositionDTO.isCour());
         aladisposition.setTerrasse(aladispositionDTO.isTerrasse());

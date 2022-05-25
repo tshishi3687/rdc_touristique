@@ -14,6 +14,10 @@ public class ImageModelMapper implements Mapper<ImageModelDTO, ImageBien>{
             return null;
 
         return new ImageModelDTO(
+                0,
+                imageModel.getName(),
+                imageModel.getType(),
+                imageModel.getPicByte()
         );
     }
 

@@ -50,6 +50,7 @@ public class PersonneController extends AbstratCrudController<PersonneSimpleDTO,
     @PostMapping("/user")
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<?> login(@RequestBody MdpDTO dto) throws Exception {
+        System.out.println(dto);
         return ((PersonneService)service).seloguer(dto);
     }
 

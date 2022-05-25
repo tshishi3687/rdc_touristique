@@ -2,12 +2,15 @@ package com.example.rdc_touristique.business.service;
 
 import com.example.rdc_touristique.business.dto.VilleDTO;
 import com.example.rdc_touristique.business.mapper.Mapper;
+import com.example.rdc_touristique.data_access.entity.ImageVille;
 import com.example.rdc_touristique.data_access.entity.Ville;
+import com.example.rdc_touristique.data_access.repository.ImageVilleRepository;
 import com.example.rdc_touristique.data_access.repository.VilleRepository;
 import com.example.rdc_touristique.exeption.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
@@ -21,9 +24,10 @@ public class VilleService implements CrudService<VilleDTO, Integer> {
     private Mapper<VilleDTO, Ville> villeMapper;
     @Autowired
     private VilleRepository villeRepository;
+    @Autowired
+    private ImageVilleRepository imageVilleRepository;
 
     @Override
-    @Secured("Admin")
     public void creat(VilleDTO toCreat) throws ElementAlreadyExistsException, NoSuchAlgorithmException, InvalidKeySpecException {
         if (villeRepository.existsById(toCreat.getId())) {
             throw new VilleExisteExeption(toCreat.getId());
@@ -49,7 +53,6 @@ public class VilleService implements CrudService<VilleDTO, Integer> {
     }
 
     @Override
-    @Secured("Admin")
     public void update(VilleDTO toUpdate) throws VilleFoundExeption, NoSuchAlgorithmException, InvalidKeySpecException {
         if( !villeRepository.existsById( toUpdate.getId() ))
             throw new VilleFoundExeption(toUpdate.getId());
@@ -58,11 +61,19 @@ public class VilleService implements CrudService<VilleDTO, Integer> {
     }
 
     @Override
-    @Secured("Admin")
     public void delete(Integer toDelete) throws VilleFoundExeption {
         if( !villeRepository.existsById(toDelete))
             throw new VilleFoundExeption(toDelete);
 
+        List<ImageVille> villeList = imageVilleRepository.findAllByVille(villeRepository.getOne(toDelete));
+
+        if (!villeList.isEmpty())
+            imageVilleRepository.deleteAllByVille(villeRepository.getOne(toDelete));
         villeRepository.deleteById(toDelete);
+    }
+
+    @Transactional
+    public void deleteVille(int id){
+
     }
 }

@@ -11,6 +11,7 @@ import java.util.List;
 @RequestMapping("province")
 public class ProvinceController extends AbstratCrudController<ProvinceDTO, Integer>{
     public ProvinceController(CrudService<ProvinceDTO, Integer> service) {
+
         super(service);
     }
    }
