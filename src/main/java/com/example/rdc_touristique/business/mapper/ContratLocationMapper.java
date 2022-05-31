@@ -6,12 +6,14 @@ import com.example.rdc_touristique.data_access.entity.ContratLocation;
 import com.example.rdc_touristique.data_access.entity.Details;
 import com.example.rdc_touristique.data_access.entity.Personne;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
 import java.util.ArrayList;
 import java.util.List;
 
+@Component
 public class ContratLocationMapper implements Mapper<ContratLocationDTO, ContratLocation>{
 
     @Autowired

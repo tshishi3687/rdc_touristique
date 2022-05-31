@@ -61,6 +61,8 @@ public class BienService implements CrudService<BienVuDTO, Integer> {
     private Mapper<DetailsDTO, Details> detailsMapper;
     @Autowired
     private DetailsRepository detailsRepository;
+    @Autowired
+    private Mapper<ContratLocationDTO, ContratLocation> contratLocationMapper;
 
 
     @Transactional
@@ -114,9 +116,9 @@ public class BienService implements CrudService<BienVuDTO, Integer> {
 
     @Override
     public void update(BienVuDTO toUpdate) throws BienFoundExeption, NoSuchAlgorithmException, InvalidKeySpecException {
-        if( !bienRepository.existsById( toUpdate.getId() ))
+        if(!bienRepository.existsById( toUpdate.getId() ))
             throw new BienFoundExeption(toUpdate.getId());
-            bienRepository.save( bienVuMapper.toEntity(toUpdate));
+        bienRepository.save( bienVuMapper.toEntity(toUpdate));
     }
 
     @Override
@@ -252,7 +254,7 @@ public class BienService implements CrudService<BienVuDTO, Integer> {
             newContrat.setNPersonneSurLieu(paypalDTO.getReservationBienDTO().getNPersonneSurLieu());
             newContrat.setBailleur(bailleur);
             newContrat.setPreneur(preneur);
-            newContrat.setEnCour(paypalDTO.getReservationBienDTO().getDdArrivee().equals(LocalDate.now()));
+            newContrat.setEnCour(true);
             newContrat.setEntre(textContrat.EntreBailler());
             newContrat.setEntre2(textContrat.EntrePreneur());
             newContrat.setObjet(textContrat.objet());
@@ -292,8 +294,9 @@ public class BienService implements CrudService<BienVuDTO, Integer> {
         if (!contratLocationRepository.existsById(detailesDTO.getId()))
             throw new RuntimeException();
         ContratLocation contratLocation = contratLocationRepository.getOne(detailesDTO.getId());
+        Details details = detailsRepository.save(detailsMapper.toEntity(detailesDTO.getDetails()));
         detailesDTO.getDetails().setId(detailesDTO.getDetails().getId());
-        contratLocation.getDetails().add(detailsRepository.save(detailsMapper.toEntity(detailesDTO.getDetails())));
+        contratLocation.getDetails().add(details);
         contratLocationRepository.save(contratLocation);
     }
 
@@ -378,25 +381,44 @@ public class BienService implements CrudService<BienVuDTO, Integer> {
     }
 
     @Transactional
-    public void deleteBien(BienVuDTO bienDTO) throws BienFoundExeption, NoSuchAlgorithmException, InvalidKeySpecException {
+    public void deleteBien(BienVuDTO bienDTO) throws Exception {
         if( !bienRepository.existsById(bienDTO.getId()))
             throw new BienFoundExeption(bienDTO.getId());
 
         Personne maPersonne = JwtRequestFilter.maPersonne();
         Bien monBien = bienRepository.getOne(bienDTO.getId());
 
-        if (maPersonne.getId() == monBien.getAppartient().getId()){
+        if (!contratLocationRepository.findAllByIdBien(monBien).isEmpty()) {
+            throw new Exception("ce bien ne peut être supprimé");
+        }
 
+        if (!contratRepository.findAllByIdBien(monBien).isEmpty())
+            throw new Exception("Ce bien ne peut être supprimé");
+
+        if (maPersonne.getId() == monBien.getAppartient().getId()){
             List<Personne> listPersonne = personneReposytory.findAll();
             for (Personne personne : listPersonne) {
                 if (personne.getLikedBien().contains(monBien))
                     personne.getLikedBien().removeIf(bien -> bien.getId() == bien.getId());
             }
+
             imageRepository.deleteAllByBienid(monBien);
-            contratRepository.deleteByBailleur(maPersonne);
-//        reservationRepository.deleteAllByBienReservation(bienVuMapper.toEntity(bienDTO));
             bienRepository.deleteById(monBien.getId());
             coordorRepository.deleteById(monBien.getCoordonnee().getId());
+        }
+    }
+
+    @Transactional
+    public List<ContratLocationDTO> voirReservation(){
+        if (JwtRequestFilter.maPersonne().getRoleId().getId() == 1) {
+            return contratLocationRepository.findAllByBailleurOrderByIdDesc(JwtRequestFilter.maPersonne()).stream()
+                    .map(contratLocationMapper::toDTO)
+                    .collect(Collectors.toList());
+
+        }else {
+            return contratLocationRepository.findAllByPreneurOrderByIdDesc(JwtRequestFilter.maPersonne()).stream()
+                    .map(contratLocationMapper::toDTO)
+                    .collect(Collectors.toList());
         }
     }
 }

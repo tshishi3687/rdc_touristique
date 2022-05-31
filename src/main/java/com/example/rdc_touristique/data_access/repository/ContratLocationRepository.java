@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 
 public interface ContratLocationRepository extends JpaRepository<ContratLocation, Integer> {
-    List<ContratLocation> findAllByPreneur(Personne personne);
+    List<ContratLocation> findAllByPreneurOrderByIdDesc(Personne personne);
+    List<ContratLocation> findAllByBailleurOrderByIdDesc(Personne personne);
     List<ContratLocation> findAllByIdBien(Bien bien);
 }

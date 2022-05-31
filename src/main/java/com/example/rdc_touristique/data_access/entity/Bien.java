@@ -1,15 +1,11 @@
 package com.example.rdc_touristique.data_access.entity;
 
-import com.example.rdc_touristique.business.dto.ContratLocationDTO;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
-import javax.validation.constraints.Max;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
@@ -52,7 +48,7 @@ public class Bien extends BaseEntity{
     @Column
     private int superficie;
 
-    @Column(length = 1000)
+    @Column(length = 3000)
     private String description;
 
     @ManyToOne

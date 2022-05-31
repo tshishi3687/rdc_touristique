@@ -43,7 +43,7 @@ public class BienController extends AbstratCrudController<BienVuDTO, Integer> {
 
     @PostMapping("/deletebien")
     @ResponseStatus(HttpStatus.OK)
-    public void deleteBien(@RequestBody BienVuDTO bienDTO) throws BienFoundExeption, NoSuchAlgorithmException, InvalidKeySpecException {
+    public void deleteBien(@RequestBody BienVuDTO bienDTO) throws Exception {
         ((BienService)service).deleteBien(bienDTO);
     }
 
@@ -90,6 +90,10 @@ public class BienController extends AbstratCrudController<BienVuDTO, Integer> {
         return ((BienService) service).isDisponible(DTO);
     }
 
+    @GetMapping("/reservations")
+    public List<ContratLocationDTO> voirReservations() throws Exception {
+        return ((BienService)service).voirReservation();
 
+    }
 
 }

@@ -33,22 +33,11 @@ public class BienVuMapper implements Mapper<BienVuDTO, Bien>{
     private ServiceRepository service;
     @Autowired
     private Mapper<Type_serviceDTO, Type> typeMapper;
-    @Autowired
-    private ContratMisEnLigneRepository contratRepository;
-    @Autowired
-    private ContratLocationRepository contratLocationRepository;
 
     @Override
     public BienVuDTO toDTO(Bien bien) {
         if (bien==null)
             return null;
-
-        int likes;
-        if((bien.getLikes()== null) || (bien.getLikes().size()<=0)){
-            likes = 0;
-        }else{
-            likes = bien.getLikes().size();
-        }
 
 
         List<ServiceDTO> serviceDTOS = new ArrayList<>();
@@ -63,26 +52,30 @@ public class BienVuMapper implements Mapper<BienVuDTO, Bien>{
 
         // list date de mise en ligne
         Stream<LocalDate> date = null;
-            List<ContratMisEnLigne> contratMisEnLignes = contratRepository.findAllByIdBien(bien);
-            for (ContratMisEnLigne misEnLigne : contratMisEnLignes){
-                if (misEnLigne.isEnCour()){
-                     date = LocalDate.now().datesUntil(misEnLigne.getDdFin());
+        List<LocalDate> ListDateMEL = new ArrayList<>();
+            List<ContratMisEnLigne> contratMisEnLignes = bien.getContratMisEnLigneList();
+            if (contratMisEnLignes != null) {
+                for (ContratMisEnLigne misEnLigne : contratMisEnLignes) {
+                    if (misEnLigne.isEnCour()) {
+                        date = LocalDate.now().datesUntil(misEnLigne.getDdFin());
+                        ListDateMEL.addAll(date.collect(Collectors.toList()));
+                    }
                 }
             }
 
         // list date réservé
         Stream<LocalDate> date2 = null;
-            List<ContratLocation> contratLocations = contratLocationRepository.findAllByIdBien(bien);
-            List<LocalDate> dateReservation = new ArrayList<>();
-            for (ContratLocation location : contratLocations){
-                if (location.isEnCour()){
-                    date2 = location.getDdDebut().datesUntil(location.getDdFin());
+            List<LocalDate> ListDateReserv = new ArrayList<>();
+            List<ContratLocation> contratLocations = bien.getContratLocationList();
+            if (contratLocations != null) {
+                for (ContratLocation location : contratLocations) {
+                    if (location.isEnCour()) {
+
+                        date2 = location.getDdDebut().datesUntil(location.getDdFin().plusDays(1));
+                        ListDateReserv.addAll(date2.collect(Collectors.toList()));
+                    }
                 }
             }
-
-
-
-
 
         return new BienVuDTO(
                 bien.getId(),
@@ -97,13 +90,13 @@ public class BienVuMapper implements Mapper<BienVuDTO, Bien>{
                 bien.getSuperficie(),
                 bien.getDescription(),
                 coordonneeMapper.toDTO(bien.getCoordonnee()),
-                likes,
+                bien.getLikes().size(),
                 bien.isModeActive(),
                 imageModelService.getImage(bien.getId()),
                 serviceDTOS,
                 0,
-                date.collect(Collectors.toList()),
-                date2.collect(Collectors.toList())
+                ListDateMEL,
+                ListDateReserv
         );
     }
 
