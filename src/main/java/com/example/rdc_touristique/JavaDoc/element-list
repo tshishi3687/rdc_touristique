@@ -1,0 +1,14 @@
+com.example.rdc_touristique
+com.example.rdc_touristique.business.dto
+com.example.rdc_touristique.business.mapper
+com.example.rdc_touristique.business.service
+com.example.rdc_touristique.contrat
+com.example.rdc_touristique.data_access.entity
+com.example.rdc_touristique.data_access.repository
+com.example.rdc_touristique.Email
+com.example.rdc_touristique.exeption
+com.example.rdc_touristique.rest_api
+com.example.rdc_touristique.rest_api.edviser
+com.example.rdc_touristique.rest_api.model.container
+com.example.rdc_touristique.rest_api.model.raport
+com.example.rdc_touristique.security.config
