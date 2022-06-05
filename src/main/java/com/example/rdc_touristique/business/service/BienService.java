@@ -259,8 +259,8 @@ public class BienService implements CrudService<BienVuDTO, Integer> {
             newContrat.setEntre2(textContrat.EntrePreneur());
             newContrat.setObjet(textContrat.objet());
             newContrat.setEtatLieu(textContrat.etatLieu());
-            newContrat.setLoyer(textContrat.loyerMobembo());
-            newContrat.setDuree(textContrat.dureeMobembo());
+            newContrat.setLoyer(textContrat.loyer());
+            newContrat.setDuree(textContrat.dureeClient());
             newContrat.setDardl(textContrat.dARDL());
 
         int idcontrat = contratLocationRepository.save(newContrat).getId();
@@ -388,24 +388,40 @@ public class BienService implements CrudService<BienVuDTO, Integer> {
         Personne maPersonne = JwtRequestFilter.maPersonne();
         Bien monBien = bienRepository.getOne(bienDTO.getId());
 
-        if (!contratLocationRepository.findAllByIdBien(monBien).isEmpty()) {
-            throw new Exception("ce bien ne peut être supprimé");
-        }
+        List<ContratLocation> contratLocations = contratLocationRepository.findAllByIdBien(monBien);
+        List<ContratMisEnLigne> contratMisEnLigneList = contratRepository.findAllByIdBien(monBien);
 
-        if (!contratRepository.findAllByIdBien(monBien).isEmpty())
-            throw new Exception("Ce bien ne peut être supprimé");
+        // si le bien n'a pas de contrat lié on l'efface directement
+        if (contratLocations.isEmpty() && contratMisEnLigneList.isEmpty()){
+            if (maPersonne.getId() == monBien.getAppartient().getId()){
+                List<Personne> listPersonne = personneReposytory.findAll();
+                for (Personne personne : listPersonne) {
+                    if (personne.getLikedBien().contains(monBien))
+                        personne.getLikedBien().removeIf(bien -> bien.getId() == bien.getId());
+                }
 
-        if (maPersonne.getId() == monBien.getAppartient().getId()){
-            List<Personne> listPersonne = personneReposytory.findAll();
-            for (Personne personne : listPersonne) {
-                if (personne.getLikedBien().contains(monBien))
-                    personne.getLikedBien().removeIf(bien -> bien.getId() == bien.getId());
+                imageRepository.deleteAllByBienid(monBien);
+                bienRepository.deleteById(monBien.getId());
+                coordorRepository.deleteById(monBien.getCoordonnee().getId());
             }
+            // sinon je je change le propriétaire diu bien
+        }else {
+            if (!JwtRequestFilter.maPersonne().getContactUser().getEmail().equals("tshishi@outlook.be") && monBien.getAppartient().getId() == maPersonne.getId()) {
+                monBien.setAppartient(personneReposytory.findByContactUser_Email("tshishi@outlook.be"));
+                for (ContratLocation contratLocation : contratLocations) {
+                    contratLocation.setIdBien(bienRepository.save(monBien));
+                    contratLocationRepository.save(contratLocation);
+                }
 
-            imageRepository.deleteAllByBienid(monBien);
-            bienRepository.deleteById(monBien.getId());
-            coordorRepository.deleteById(monBien.getCoordonnee().getId());
+                for (ContratMisEnLigne contratMisEnLigne : contratMisEnLigneList) {
+                    contratMisEnLigne.setIdBien(bienRepository.save(monBien));
+                    contratRepository.save(contratMisEnLigne);
+                }
+
+            }
         }
+
+
     }
 
     @Transactional

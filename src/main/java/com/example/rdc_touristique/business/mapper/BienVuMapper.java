@@ -77,6 +77,14 @@ public class BienVuMapper implements Mapper<BienVuDTO, Bien>{
                 }
             }
 
+
+        int likes;
+        if((bien.getLikes()== null) || (bien.getLikes().size()<=0)){
+            likes = 0;
+        }else{
+            likes = bien.getLikes().size();
+        }
+
         return new BienVuDTO(
                 bien.getId(),
                 type_bienMapper.toDTO(bien.getType()),
@@ -90,7 +98,7 @@ public class BienVuMapper implements Mapper<BienVuDTO, Bien>{
                 bien.getSuperficie(),
                 bien.getDescription(),
                 coordonneeMapper.toDTO(bien.getCoordonnee()),
-                bien.getLikes().size(),
+                likes,
                 bien.isModeActive(),
                 imageModelService.getImage(bien.getId()),
                 serviceDTOS,
