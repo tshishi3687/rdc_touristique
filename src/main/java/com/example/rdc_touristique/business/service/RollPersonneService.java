@@ -25,7 +25,7 @@ public class RollPersonneService implements CrudService<RollDTO, Integer> {
 
     @Override
     @Secured("Admin")
-    public void creat(RollDTO toDTO) throws ElementAlreadyExistsException, IOException, NoSuchAlgorithmException, InvalidKeySpecException, RollExisteExeption {
+    public void creat(RollDTO toDTO) throws ElementAlreadyExistsException, IOException, NoSuchAlgorithmException, InvalidKeySpecException {
         if(rollRepository.existsById(toDTO.getId()))
             throw new RollExisteExeption(toDTO.getId());
         rollRepository.save(rollMapper.toEntity(toDTO));

@@ -1,16 +1,11 @@
 package com.example.rdc_touristique.business.service;
 
 import com.example.rdc_touristique.business.dto.ImageProvinceDTO;
-import com.example.rdc_touristique.business.dto.ProvinceDTO;
-import com.example.rdc_touristique.business.mapper.Mapper;
 import com.example.rdc_touristique.data_access.entity.ImageProvince;
-import com.example.rdc_touristique.data_access.entity.Province;
 import com.example.rdc_touristique.data_access.repository.ImageProvinceRepository;
 import com.example.rdc_touristique.data_access.repository.ProvinceRepository;
 import com.example.rdc_touristique.exeption.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 

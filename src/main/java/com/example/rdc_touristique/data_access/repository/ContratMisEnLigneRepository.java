@@ -10,7 +10,5 @@ import java.util.List;
 public interface ContratMisEnLigneRepository extends JpaRepository<ContratMisEnLigne, Integer> {
     List<ContratMisEnLigne> findAllByBailleurOrderByCreatedAtDesc(Personne personne);
     List<ContratMisEnLigne> findAllByPreneurOrderByCreatedAtDesc(Personne personne);
-    void deleteByBailleur(Personne personne);
-
     List<ContratMisEnLigne> findAllByIdBien(Bien bien);
 }

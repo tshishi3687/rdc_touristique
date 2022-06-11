@@ -31,5 +31,6 @@ public class Ville extends BaseEntity{
     private String desciption;
 
     @OneToMany(mappedBy = "ville")
+    @ToString.Exclude
     private List<ImageVille> imageVilles;
 }

@@ -10,13 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -24,8 +18,6 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.mail.MessagingException;
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
-import java.util.List;
-import java.util.stream.Collectors;
 
 
 @RestController
@@ -49,13 +41,13 @@ public class PersonneController extends AbstratCrudController<PersonneSimpleDTO,
 
     @PostMapping("/user")
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<?> login(@RequestBody MdpDTO dto) throws Exception {
+    public ResponseEntity<?> login(@RequestBody MdpDTO dto) {
         return ((PersonneService)service).seloguer(dto);
     }
 
     @PostMapping("/ibau")
     @ResponseStatus(HttpStatus.OK)
-    public boolean verifIBAU() throws PersonneSimpleExisteExeption {
+    public boolean verifIBAU() {
         return ((PersonneService)service).infoBanAdreUser();
     }
 
@@ -79,7 +71,7 @@ public class PersonneController extends AbstratCrudController<PersonneSimpleDTO,
 
     @PostMapping("/change_passe")
     @ResponseStatus(HttpStatus.OK)
-    public boolean changePasse(@RequestBody CreatPersonneDTO dto) throws NoSuchAlgorithmException, InvalidKeySpecException, PersonneSimpleExisteExeption, MessagingException {
+    public boolean changePasse(@RequestBody CreatPersonneDTO dto) throws NoSuchAlgorithmException, MessagingException {
         return ((PersonneService) service).modifMDP(dto);
     }
 

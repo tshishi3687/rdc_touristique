@@ -60,7 +60,7 @@ public class DocOfficielService implements CrudService<DocOfficielDTO, Integer>{
     }
 
     @Transactional
-    public ResponseEntity.BodyBuilder uploadDoc(List<MultipartFile> file, int id) throws IOException, NoSuchAlgorithmException, InvalidKeySpecException  {
+    public ResponseEntity.BodyBuilder uploadDoc(List<MultipartFile> file, int id) throws IOException {
 
         for (MultipartFile multipartFile : file) {
             DocOfficielPersonne doc = new DocOfficielPersonne();

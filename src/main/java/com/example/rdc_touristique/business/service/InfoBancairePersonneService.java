@@ -2,12 +2,9 @@ package com.example.rdc_touristique.business.service;
 
 
 import com.example.rdc_touristique.business.dto.InfoBancaireDTO;
-import com.example.rdc_touristique.business.dto.PersonneSimplifierDTO;
 import com.example.rdc_touristique.business.mapper.Mapper;
 import com.example.rdc_touristique.data_access.entity.InfoBancairePersonne;
-import com.example.rdc_touristique.data_access.entity.Personne;
 import com.example.rdc_touristique.data_access.repository.InfoBancaireRepository;
-import com.example.rdc_touristique.data_access.repository.PersonneReposytory;
 import com.example.rdc_touristique.exeption.*;
 import com.example.rdc_touristique.security.config.JwtRequestFilter;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,13 +21,9 @@ import java.util.stream.Collectors;
 public class InfoBancairePersonneService implements CrudService<InfoBancaireDTO, Integer> {
 
     @Autowired
-    private Mapper<PersonneSimplifierDTO, Personne> personneMapper;
-    @Autowired
     private Mapper<InfoBancaireDTO, InfoBancairePersonne> infoBancaireMapper;
     @Autowired
     private InfoBancaireRepository infoBancaireRepository;
-    @Autowired
-    private PersonneReposytory personneReposytory;
 
     @Override
     public void creat(InfoBancaireDTO toDTO) throws ElementAlreadyExistsException, IOException, NoSuchAlgorithmException, InvalidKeySpecException, ActionFoundExeption {

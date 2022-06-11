@@ -7,7 +7,6 @@ import com.example.rdc_touristique.exeption.BienExisteExeption;
 import com.example.rdc_touristique.exeption.BienFoundExeption;
 import com.example.rdc_touristique.exeption.PersonneSimpleExisteExeption;
 import org.springframework.http.HttpStatus;
-import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.mail.MessagingException;
@@ -26,7 +25,7 @@ public class BienController extends AbstratCrudController<BienVuDTO, Integer> {
 
     @PostMapping("/user")
     @ResponseStatus(HttpStatus.OK)
-    public List<BienVuDTO> getAllByUser(@RequestBody PersonneSimplifierDTO dto) throws NoSuchAlgorithmException, InvalidKeySpecException, BienFoundExeption {
+    public List<BienVuSimplifierDTO> getAllByUser(@RequestBody PersonneSimplifierDTO dto) {
         return ((BienService)service).selonLaPersonne();
     }
 
@@ -37,7 +36,7 @@ public class BienController extends AbstratCrudController<BienVuDTO, Integer> {
     }
 
     @GetMapping("/bien_likes")
-    public int count_like(@RequestBody BienVuDTO toDTO) throws Exception {
+    public int count_like(@RequestBody BienVuDTO toDTO) {
         return 0;
 
     }
@@ -50,7 +49,7 @@ public class BienController extends AbstratCrudController<BienVuDTO, Integer> {
 
     @PostMapping("/acti")
     @ResponseStatus(HttpStatus.OK)
-    public void activationBien(@RequestBody BienVuDTO bienDTO) throws BienFoundExeption, PersonneSimpleExisteExeption, NoSuchAlgorithmException, InvalidKeySpecException {
+    public void activationBien(@RequestBody BienVuDTO bienDTO) throws BienFoundExeption, PersonneSimpleExisteExeption {
         ((BienService)service).activationBien(bienDTO);
     }
 
@@ -63,13 +62,13 @@ public class BienController extends AbstratCrudController<BienVuDTO, Integer> {
 
     @PostMapping("/env_mail")
     @ResponseStatus(HttpStatus.OK)
-    public void envoiMail(@RequestBody BienVuDTO bienDTO) throws BienFoundExeption, PersonneSimpleExisteExeption, MessagingException, BienExisteExeption, NoSuchAlgorithmException {
+    public void envoiMail(@RequestBody BienVuDTO bienDTO) throws MessagingException, BienExisteExeption, NoSuchAlgorithmException {
         ((BienService)service).maildeconfirmationBienMisEnLigne(bienDTO);
     }
 
     @PostMapping("/envo_mail")
     @ResponseStatus(HttpStatus.OK)
-    public long envoiMailReservation(@RequestBody ReservationBienDTO reservationBienDTO) throws BienFoundExeption, PersonneSimpleExisteExeption, MessagingException, BienExisteExeption, NoSuchAlgorithmException {
+    public long envoiMailReservation(@RequestBody ReservationBienDTO reservationBienDTO) throws MessagingException, BienExisteExeption, NoSuchAlgorithmException {
        return ((BienService)service).maildeconfirmationBienReserve(reservationBienDTO);
     }
 
@@ -81,28 +80,24 @@ public class BienController extends AbstratCrudController<BienVuDTO, Integer> {
 
     @PostMapping("/details")
     @ResponseStatus(HttpStatus.OK)
-    public void ajoutDetails(@RequestBody DetailesDTO detailesDTO) throws NoSuchAlgorithmException, InvalidKeySpecException, MessagingException {
+    public void ajoutDetails(@RequestBody DetailesDTO detailesDTO) throws NoSuchAlgorithmException, InvalidKeySpecException {
         ((BienService) service).ajoutDetails(detailesDTO);
     }
 
     @PostMapping("/dispo")
     @ResponseStatus(HttpStatus.OK)
-    public boolean isDisponible(@RequestBody ReservationBienDTO DTO) throws NoSuchAlgorithmException, InvalidKeySpecException, MessagingException {
+    public boolean isDisponible(@RequestBody ReservationBienDTO DTO) {
         return ((BienService) service).isDisponible(DTO);
     }
 
     @GetMapping("/reservations")
-    public List<ContratLocationDTO> voirReservations() throws Exception {
+    public List<ContratLocationDTO> voirReservations() {
         return ((BienService)service).voirReservation();
     }
 
-    @GetMapping("/count")
-    public int countBien(){
-        return ((BienService)service).countBiens();
-    }
 
     @GetMapping("/allBiens")
-    public List<BienVuSimplifierDTO> tousBiens(@Valid TryListAllBiens tryListAllBiens){
+    public TryListAllBiens tousBiens(@Valid TryListAllBiens tryListAllBiens){
         return ((BienService)service).tousBiens(tryListAllBiens);
     }
 

@@ -1,6 +1,5 @@
 package com.example.rdc_touristique.rest_api;
 
-import com.example.rdc_touristique.business.dto.BienDTO;
 import com.example.rdc_touristique.business.dto.CoordonneeDTO;
 import com.example.rdc_touristique.business.service.CrudService;
 import org.springframework.web.bind.annotation.RequestMapping;

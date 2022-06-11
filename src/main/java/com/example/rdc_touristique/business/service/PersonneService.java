@@ -7,11 +7,9 @@ import com.example.rdc_touristique.business.mapper.Mapper;
 import com.example.rdc_touristique.data_access.entity.*;
 import com.example.rdc_touristique.data_access.repository.*;
 import com.example.rdc_touristique.exeption.*;
-//import com.example.rdc_touristique.security.config.JwtRequestFilter;
 import com.example.rdc_touristique.security.config.JwtRequestFilter;
 import com.example.rdc_touristique.security.config.JwtResponse;
 import com.example.rdc_touristique.security.config.JwtTokenUtil;
-import com.example.rdc_touristique.security.config.constParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -105,7 +103,7 @@ public class PersonneService implements CrudService<PersonneSimpleDTO, Integer> 
      }
 
     @Transactional
-    public boolean infoBanAdreUser() throws PersonneSimpleExisteExeption {
+    public boolean infoBanAdreUser() {
             return JwtRequestFilter.maPersonne().getInfoBancaires() != null && JwtRequestFilter.maPersonne().getAdresse() != null;
     }
 
@@ -118,7 +116,7 @@ public class PersonneService implements CrudService<PersonneSimpleDTO, Integer> 
     }
 
     @Transactional
-    public ResponseEntity<?> seloguer(MdpDTO mdp) throws Exception {
+    public ResponseEntity<?> seloguer(MdpDTO mdp) {
 
         authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(mdp.getMail(), mdp.getMdp()));
         final UserDetails userDetails = jwtInMemoryUserDetailsService
@@ -129,23 +127,23 @@ public class PersonneService implements CrudService<PersonneSimpleDTO, Integer> 
 
     }
 
-    @Transactional
-    public PersonneSimpleDTO seloguerSansJWT(MdpDTO mdp) throws NoSuchAlgorithmException {
-        if (mdp == null)
-            throw new NoSuchAlgorithmException();
-
-        Optional<ContactPersonne> contactUser = contactUserRepository.findByEmail(mdp.getMail());
-
-        if (contactUser.isPresent()){
-            PassWord passWord = passWordRepository.findByAppartienA(contactUser.get().getAppartienA());
-
-            if (bCryptPasswordEncoder.matches(mdp.getMdp(), passWord.getMdp())){
-                return personneMapper.toDTO(contactUser.get().getAppartienA());
-            }
-
-        }
-        return null;
-    }
+//    @Transactional
+//    public PersonneSimpleDTO seloguerSansJWT(MdpDTO mdp) throws NoSuchAlgorithmException {
+//        if (mdp == null)
+//            throw new NoSuchAlgorithmException();
+//
+//        Optional<ContactPersonne> contactUser = contactUserRepository.findByEmail(mdp.getMail());
+//
+//        if (contactUser.isPresent()){
+//            PassWord passWord = passWordRepository.findByAppartienA(contactUser.get().getAppartienA());
+//
+//            if (bCryptPasswordEncoder.matches(mdp.getMdp(), passWord.getMdp())){
+//                return personneMapper.toDTO(contactUser.get().getAppartienA());
+//            }
+//
+//        }
+//        return null;
+//    }
 
     @Transactional
     public PersonneVuDTO infoPersonne(){

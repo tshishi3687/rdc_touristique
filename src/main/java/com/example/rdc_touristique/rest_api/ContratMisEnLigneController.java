@@ -15,7 +15,7 @@ public class ContratMisEnLigneController extends AbstratCrudController<ContratMi
     public ContratMisEnLigneController(CrudService<ContratMisEnLigneDTO,Integer>service){super(service);}
 
     @GetMapping("/mis_en_ligne")
-    public List<ContratMisEnLigneDTO> selonPreuneur() throws Exception {
+    public List<ContratMisEnLigneDTO> selonPreuneur() {
         return ((ContratMisEnLigneService)service).selonLePrenneur();
     }
 }

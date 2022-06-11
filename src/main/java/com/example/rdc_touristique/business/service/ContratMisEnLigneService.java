@@ -5,21 +5,15 @@ import com.example.rdc_touristique.Email.StringText;
 import com.example.rdc_touristique.business.dto.*;
 import com.example.rdc_touristique.business.mapper.Mapper;
 import com.example.rdc_touristique.data_access.entity.ContratMisEnLigne;
-import com.example.rdc_touristique.data_access.entity.Personne;
 import com.example.rdc_touristique.data_access.repository.ContratMisEnLigneRepository;
-import com.example.rdc_touristique.data_access.repository.PersonneReposytory;
 import com.example.rdc_touristique.exeption.*;
 import com.example.rdc_touristique.security.config.JwtRequestFilter;
 import com.example.rdc_touristique.security.config.constParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.w3c.dom.Document;
 
 import javax.mail.MessagingException;
 import javax.transaction.Transactional;
-import java.awt.*;
-import java.io.FileOutputStream;
-import java.io.IOException;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -31,10 +25,6 @@ public class ContratMisEnLigneService implements CrudService<ContratMisEnLigneDT
     private ContratMisEnLigneRepository contratMisEnLigneRepository;
     @Autowired
     private Mapper<ContratMisEnLigneDTO, ContratMisEnLigne> contratMisEnLigneMapper;
-    @Autowired
-    private Mapper<PersonneSimpleDTO, Personne> personneSimpleDTOMapper;
-    @Autowired
-    private PersonneReposytory personneReposytory;
     @Autowired
     private EngistrementEmail mail;
     @Autowired
@@ -53,7 +43,7 @@ public class ContratMisEnLigneService implements CrudService<ContratMisEnLigneDT
     }
 
     @Transactional
-    public List<ContratMisEnLigneDTO> selonLePrenneur() throws Exception {
+    public List<ContratMisEnLigneDTO> selonLePrenneur() {
         if (JwtRequestFilter.maPersonne().getRoleId().getNomRole().equals(constParam.roleA)){
             return contratMisEnLigneRepository.findAllByBailleurOrderByCreatedAtDesc(JwtRequestFilter.maPersonne()).stream()
                     .map(contratMisEnLigneMapper::toDTO)

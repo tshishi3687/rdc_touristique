@@ -65,10 +65,10 @@ public class BienService implements CrudService<BienVuDTO, Integer> {
 
 
     @Transactional
-    public List<BienVuDTO> selonLaPersonne() {
+    public List<BienVuSimplifierDTO> selonLaPersonne() {
 
         return bienRepository.findAllByAppartientAndModeActiveFalse(JwtRequestFilter.maPersonne()).stream()
-        .map(bienVuMapper::toDTO)
+        .map(bienVuSimplierMapper::toDTO)
         .collect(Collectors.toList());
     }
 
@@ -112,58 +112,23 @@ public class BienService implements CrudService<BienVuDTO, Integer> {
     }
 
     @Transactional
-    public List<BienVuSimplifierDTO> tousBiens(TryListAllBiens tryListAllBiens){
+    public TryListAllBiens tousBiens(TryListAllBiens tryListAllBiens){
         Pageable pageable = PageRequest.of(tryListAllBiens.getPage() - 1, 6);
 
-        // par type
-        if (tryListAllBiens.getTypeId() > 0 && tryListAllBiens.getProvinceId() <= 0 && tryListAllBiens.getVilleId() <= 0)
-            return bienRepository.findByType_IdAndModeActiveTrueOrderByIdDesc(tryListAllBiens.getTypeId(), pageable)
-                    .stream()
-                    .map(bienVuSimplierMapper::toDTO)
-                    .collect(Collectors.toList());
-
-        // par province
-        if (tryListAllBiens.getTypeId() <= 0 && tryListAllBiens.getProvinceId() > 0 && tryListAllBiens.getVilleId() <= 0)
-            return bienRepository.findByCoordonnee_Ville_Province_IdAndModeActiveTrueOrderByIdDesc(tryListAllBiens.getProvinceId(), pageable)
-                    .stream()
-                    .map(bienVuSimplierMapper::toDTO)
-                    .collect(Collectors.toList());
-
-        // par type et province
-        if (tryListAllBiens.getTypeId() > 0 && tryListAllBiens.getProvinceId() > 0 && tryListAllBiens.getVilleId() <= 0)
-            return bienRepository.findByType_IdAndCoordonnee_Ville_Province_IdAndModeActiveTrueOrderByIdDesc(tryListAllBiens.getTypeId(), tryListAllBiens.getProvinceId(), pageable)
-                    .stream()
-                    .map(bienVuSimplierMapper::toDTO)
-                    .collect(Collectors.toList());
-
-        // par ville et province
-        if (tryListAllBiens.getTypeId() <= 0 && tryListAllBiens.getProvinceId() > 0 && tryListAllBiens.getVilleId() > 0)
-            return bienRepository.findByCoordonnee_Ville_IdAndCoordonnee_Ville_Province_IdAndModeActiveTrueOrderByIdDesc(tryListAllBiens.getVilleId(), tryListAllBiens.getProvinceId(), pageable)
-                    .stream()
-                    .map(bienVuSimplierMapper::toDTO)
-                    .collect(Collectors.toList());
-
-        // par type, ville et province
-        if (tryListAllBiens.getTypeId() > 0 && tryListAllBiens.getProvinceId() > 0 && tryListAllBiens.getVilleId() > 0)
-            return bienRepository.findByType_IdAndCoordonnee_Ville_IdAndCoordonnee_Ville_Province_IdAndModeActiveTrueOrderByIdDesc(tryListAllBiens.getTypeId(), tryListAllBiens.getVilleId(), tryListAllBiens.getProvinceId(), pageable)
-                    .stream()
-                    .map(bienVuSimplierMapper::toDTO)
-                    .collect(Collectors.toList());
-        // sans trie
-        else return bienRepository.findAllByModeActiveTrueOrderByIdDesc(pageable)
+        TryListAllBiens newTryListAllBiens = new TryListAllBiens();
+        newTryListAllBiens.setList(bienRepository.findByType_NomContainingAndCoordonnee_Ville_NomVilleContainingAndCoordonnee_Ville_Province_NomprovinceContainingAndModeActiveTrueOrderByIdDesc(
+                        tryListAllBiens.getTypeId(), tryListAllBiens.getVilleId(), tryListAllBiens.getProvinceId(), pageable
+                )
                 .stream()
                 .map(bienVuSimplierMapper::toDTO)
-                .collect(Collectors.toList());
+                .collect(Collectors.toList()));
+        newTryListAllBiens.setNbPage(bienRepository.countByType_NomContainingAndCoordonnee_Ville_NomVilleContainingAndCoordonnee_Ville_Province_NomprovinceContainingAndModeActiveTrue(tryListAllBiens.getTypeId(), tryListAllBiens.getVilleId(), tryListAllBiens.getProvinceId()));
+        return newTryListAllBiens;
     }
 
     @Transactional
     public BienVuDTO infoBien(int idBien){
         return bienVuMapper.toDTO(bienRepository.getOne(idBien));
-    }
-
-    @Transactional
-    public int countBiens(){
-        return bienRepository.findAllByModeActiveTrueOrderByIdDesc().size();
     }
 
     @Override

@@ -2,10 +2,7 @@ package com.example.rdc_touristique.rest_api;
 
 import com.example.rdc_touristique.business.dto.ProvinceDTO;
 import com.example.rdc_touristique.business.service.CrudService;
-import com.example.rdc_touristique.business.service.ProvinceService;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("province")

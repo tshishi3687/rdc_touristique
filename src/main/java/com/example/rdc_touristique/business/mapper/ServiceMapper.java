@@ -6,7 +6,6 @@ import com.example.rdc_touristique.business.dto.Type_serviceDTO;
 import com.example.rdc_touristique.data_access.entity.Coordonnee;
 import com.example.rdc_touristique.data_access.entity.Service;
 import com.example.rdc_touristique.data_access.entity.Type;
-import com.example.rdc_touristique.data_access.repository.CoordonneeRepository;
 import com.example.rdc_touristique.data_access.repository.TypeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -21,8 +20,7 @@ public class ServiceMapper implements Mapper<ServiceDTO, Service>{
     private Mapper<CoordonneeDTO, Coordonnee> coordonneeMapper;
     @Autowired
     private Mapper<Type_serviceDTO, Type> typeMapper;
-    @Autowired
-    private CoordonneeRepository coordorRepository;
+
     @Autowired
     private TypeRepository typeRepository;
 

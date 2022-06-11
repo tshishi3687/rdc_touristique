@@ -1,16 +1,12 @@
 package com.example.rdc_touristique.business.service;
 
 import com.example.rdc_touristique.business.dto.ProvinceDTO;
-import com.example.rdc_touristique.business.dto.ProvinceVuDTO;
 import com.example.rdc_touristique.business.mapper.Mapper;
 import com.example.rdc_touristique.data_access.entity.Province;
 import com.example.rdc_touristique.data_access.repository.ProvinceRepository;
 import com.example.rdc_touristique.exeption.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Service;
-
-import javax.transaction.Transactional;
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
 import java.util.List;
@@ -47,10 +43,6 @@ public class ProvinceService implements CrudService<ProvinceDTO, Integer> {
                 .map(provinceMapper::toDTO)
                 .collect(Collectors.toList());
     }
-
-
-
-
 
     @Override
     public void update(ProvinceDTO toUpdate) throws ProvinceFoundExeption, NoSuchAlgorithmException, InvalidKeySpecException {

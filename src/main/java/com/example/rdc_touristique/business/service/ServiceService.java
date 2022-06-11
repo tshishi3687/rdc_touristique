@@ -1,22 +1,12 @@
 package com.example.rdc_touristique.business.service;
 
-import com.example.rdc_touristique.business.dto.BienDTO;
 import com.example.rdc_touristique.business.dto.ServiceDTO;
-import com.example.rdc_touristique.business.dto.VilleDTO;
 import com.example.rdc_touristique.business.mapper.Mapper;
-import com.example.rdc_touristique.business.mapper.ServiceMapper;
-import com.example.rdc_touristique.business.mapper.VilleMapper;
-import com.example.rdc_touristique.data_access.entity.Bien;
-import com.example.rdc_touristique.data_access.entity.Ville;
-import com.example.rdc_touristique.data_access.repository.BienRepository;
 import com.example.rdc_touristique.data_access.repository.CoordonneeRepository;
 import com.example.rdc_touristique.data_access.repository.ServiceRepository;
-import com.example.rdc_touristique.data_access.repository.VilleRepository;
 import com.example.rdc_touristique.exeption.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import javax.transaction.Transactional;
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
 import java.util.List;
@@ -31,17 +21,6 @@ public class ServiceService implements CrudService<ServiceDTO, Integer> {
     private ServiceRepository serviceRepository;
     @Autowired
     private CoordonneeRepository coordorRepository;
-    @Autowired
-    private Mapper<VilleDTO, Ville> villeMapper;
-    @Autowired
-    private VilleRepository villeRepository;
-
-
-    public List<ServiceDTO> selonLaVille(VilleDTO ville) throws NoSuchAlgorithmException, InvalidKeySpecException {
-        return serviceRepository.findAllByCoordonnee_Ville(villeRepository.getOne(ville.getId())).stream()
-                .map(serviceMapper::toDTO)
-                .collect(Collectors.toList());
-    }
 
     @Override
     public void creat(ServiceDTO toCreat) throws ElementAlreadyExistsException, NoSuchAlgorithmException, InvalidKeySpecException {

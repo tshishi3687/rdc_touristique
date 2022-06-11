@@ -4,7 +4,6 @@ import com.example.rdc_touristique.business.dto.InfoBancaireDTO;
 import com.example.rdc_touristique.business.dto.PersonneSimplifierDTO;
 import com.example.rdc_touristique.data_access.entity.InfoBancairePersonne;
 import com.example.rdc_touristique.data_access.entity.Personne;
-import com.example.rdc_touristique.data_access.repository.PersonneReposytory;
 import com.example.rdc_touristique.security.config.JwtRequestFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -16,8 +15,6 @@ import java.security.spec.InvalidKeySpecException;
 public class InfoBancaireMapper implements Mapper<InfoBancaireDTO, InfoBancairePersonne> {
     @Autowired
     private Mapper<PersonneSimplifierDTO, Personne> personneMapper;
-    @Autowired
-    private PersonneReposytory personneReposytory;
 
     @Override
     public InfoBancaireDTO toDTO(InfoBancairePersonne infoBancaire) {

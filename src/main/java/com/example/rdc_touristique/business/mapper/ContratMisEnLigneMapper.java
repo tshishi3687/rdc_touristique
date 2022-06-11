@@ -1,11 +1,9 @@
 package com.example.rdc_touristique.business.mapper;
 
-import com.example.rdc_touristique.business.dto.BienVuDTO;
+import com.example.rdc_touristique.business.dto.BienVuSimplifierDTO;
 import com.example.rdc_touristique.business.dto.ContratMisEnLigneDTO;
-import com.example.rdc_touristique.business.dto.PersonneSimpleDTO;
 import com.example.rdc_touristique.data_access.entity.Bien;
 import com.example.rdc_touristique.data_access.entity.ContratMisEnLigne;
-import com.example.rdc_touristique.data_access.entity.Personne;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -16,9 +14,7 @@ import java.security.spec.InvalidKeySpecException;
 public class ContratMisEnLigneMapper implements Mapper<ContratMisEnLigneDTO, ContratMisEnLigne> {
 
     @Autowired
-    private Mapper<PersonneSimpleDTO, Personne> personneMapper;
-    @Autowired
-    private Mapper<BienVuDTO, Bien> bienMapper;
+    private Mapper<BienVuSimplifierDTO, Bien> bienMapper;
 
     @Override
     public ContratMisEnLigneDTO toDTO(ContratMisEnLigne contrat) {

@@ -1,6 +1,5 @@
 package com.example.rdc_touristique.Email;
 
-import com.sun.mail.smtp.SMTPMessage;
 import org.springframework.stereotype.Service;
 
 import javax.mail.*;

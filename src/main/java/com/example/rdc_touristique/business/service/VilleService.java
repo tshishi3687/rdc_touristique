@@ -8,10 +8,7 @@ import com.example.rdc_touristique.data_access.repository.ImageVilleRepository;
 import com.example.rdc_touristique.data_access.repository.VilleRepository;
 import com.example.rdc_touristique.exeption.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
 import java.util.List;
@@ -70,10 +67,5 @@ public class VilleService implements CrudService<VilleDTO, Integer> {
         if (!villeList.isEmpty())
             imageVilleRepository.deleteAllByVille(villeRepository.getOne(toDelete));
         villeRepository.deleteById(toDelete);
-    }
-
-    @Transactional
-    public void deleteVille(int id){
-
     }
 }

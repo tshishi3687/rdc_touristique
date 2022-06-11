@@ -50,15 +50,19 @@ public class Personne extends BaseEntity{
     private InfoBancairePersonne infoBancaires;
 
     @OneToMany(mappedBy= "personneId")
+    @ToString.Exclude
     private List<DocOfficielPersonne> docOfficiels;
 
     @OneToMany(mappedBy = "appartient")
+    @ToString.Exclude
     private List<Bien> bien;
 
     @OneToMany(mappedBy = "preneur")
+    @ToString.Exclude
     private List<ContratMisEnLigne> contratsPreneur;
 
     @OneToMany(mappedBy = "bailleur")
+    @ToString.Exclude
     private List<ContratMisEnLigne> contratsBailleur;
 
     @ManyToMany
@@ -66,5 +70,6 @@ public class Personne extends BaseEntity{
             name = "personne_like_bien",
             joinColumns = @JoinColumn(name = "PersonneID"),
             inverseJoinColumns = @JoinColumn(name = "bienID"))
+    @ToString.Exclude
     private List<Bien> likedBien;
 }

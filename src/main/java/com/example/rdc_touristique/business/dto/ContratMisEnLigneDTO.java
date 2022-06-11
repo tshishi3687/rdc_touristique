@@ -10,7 +10,7 @@ import java.time.LocalDate;
 @ToString
 public class ContratMisEnLigneDTO implements IdentifiedDTO<Integer> {
     private Integer Id;
-    private BienVuDTO bienVuDTO;
+    private BienVuSimplifierDTO bienVuDTO;
     private LocalDate ddDebut;
     private LocalDate ddFin;
     private boolean enCour;

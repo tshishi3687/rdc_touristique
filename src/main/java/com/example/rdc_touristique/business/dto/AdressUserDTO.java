@@ -1,8 +1,6 @@
 package com.example.rdc_touristique.business.dto;
 import lombok.*;
 
-import javax.persistence.Column;
-
 @Getter
 @Setter
 @NoArgsConstructor

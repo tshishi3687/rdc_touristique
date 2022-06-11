@@ -1,20 +1,14 @@
 package com.example.rdc_touristique.business.mapper;
 
-import com.example.rdc_touristique.business.dto.ImageProvinceDTO;
 import com.example.rdc_touristique.business.dto.ProvinceDTO;
-import com.example.rdc_touristique.business.dto.VilleDTO;
 import com.example.rdc_touristique.business.dto.VilleVuDTO;
-import com.example.rdc_touristique.business.service.ImageModelService;
 import com.example.rdc_touristique.business.service.ImageProvinceService;
-import com.example.rdc_touristique.data_access.entity.ImageProvince;
 import com.example.rdc_touristique.data_access.entity.Province;
 import com.example.rdc_touristique.data_access.entity.Ville;
-import com.example.rdc_touristique.data_access.repository.ImageProvinceRepository;
 import com.example.rdc_touristique.data_access.repository.VilleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.time.LocalDateTime;
 import java.util.stream.Collectors;
 
 @Component

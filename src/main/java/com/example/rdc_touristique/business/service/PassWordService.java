@@ -1,10 +1,8 @@
 package com.example.rdc_touristique.business.service;
 
 import com.example.rdc_touristique.business.dto.PassWordDTO;
-import com.example.rdc_touristique.business.dto.PersonneSimplifierDTO;
 import com.example.rdc_touristique.business.mapper.Mapper;
 import com.example.rdc_touristique.data_access.entity.PassWord;
-import com.example.rdc_touristique.data_access.entity.Personne;
 import com.example.rdc_touristique.data_access.repository.PassWordRepository;
 import com.example.rdc_touristique.exeption.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,8 +16,6 @@ import java.util.List;
 @Service
 public class PassWordService implements CrudService<PassWordDTO, Integer> {
 
-    @Autowired
-    private Mapper<PersonneSimplifierDTO, Personne> mapper;
     @Autowired
     private Mapper<PassWordDTO, PassWord> passWordMapper;
     @Autowired

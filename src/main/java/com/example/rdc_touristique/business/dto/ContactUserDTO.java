@@ -1,6 +1,5 @@
 package com.example.rdc_touristique.business.dto;
 
-import com.example.rdc_touristique.data_access.entity.Personne;
 import lombok.*;
 
 @Getter

@@ -12,8 +12,6 @@ import com.example.rdc_touristique.business.service.ImageModelService;
 import com.example.rdc_touristique.data_access.entity.ImageBien;
 import com.example.rdc_touristique.exeption.BienExisteExeption;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.http.ResponseEntity.BodyBuilder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 

@@ -3,7 +3,6 @@ package com.example.rdc_touristique.data_access.entity;
 import lombok.*;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
@@ -23,8 +22,10 @@ public class Province extends BaseEntity{
     private String description;
 
     @OneToMany(mappedBy = "provinceID")
+    @ToString.Exclude
     private List<ImageProvince> imageProvinces;
 
     @OneToMany(mappedBy = "province")
+    @ToString.Exclude
     private List<Ville> villeList;
 }

@@ -1,12 +1,9 @@
 package com.example.rdc_touristique.business.service;
 
 import com.example.rdc_touristique.business.dto.AdressUserDTO;
-import com.example.rdc_touristique.business.dto.PersonneSimplifierDTO;
 import com.example.rdc_touristique.business.mapper.Mapper;
 import com.example.rdc_touristique.data_access.entity.AdressePersonne;
-import com.example.rdc_touristique.data_access.entity.Personne;
 import com.example.rdc_touristique.data_access.repository.AdressUserReposytory;
-import com.example.rdc_touristique.data_access.repository.PersonneReposytory;
 import com.example.rdc_touristique.exeption.*;
 import com.example.rdc_touristique.security.config.JwtRequestFilter;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,13 +20,9 @@ import java.util.stream.Collectors;
 public class AdressePersonneService implements CrudService<AdressUserDTO, Integer>{
 
     @Autowired
-    private Mapper<PersonneSimplifierDTO, Personne> personneMapper;
-    @Autowired
     private Mapper<AdressUserDTO, AdressePersonne> adressUserMapper;
     @Autowired
     private AdressUserReposytory adressUserReposytory;
-    @Autowired
-    private PersonneReposytory personneReposytory;
 
     @Override
     public void creat(AdressUserDTO toDTO) throws ElementAlreadyExistsException, IOException, NoSuchAlgorithmException, InvalidKeySpecException{

@@ -3,15 +3,12 @@ package com.example.rdc_touristique.business.mapper;
 import com.example.rdc_touristique.business.dto.*;
 import com.example.rdc_touristique.data_access.entity.Bien;
 import com.example.rdc_touristique.data_access.entity.ContratLocation;
-import com.example.rdc_touristique.data_access.entity.Details;
 import com.example.rdc_touristique.data_access.entity.Personne;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
-import java.util.ArrayList;
-import java.util.List;
 
 @Component
 public class ContratLocationMapper implements Mapper<ContratLocationDTO, ContratLocation>{
@@ -19,9 +16,7 @@ public class ContratLocationMapper implements Mapper<ContratLocationDTO, Contrat
     @Autowired
     private Mapper<PersonneSimpleDTO, Personne> personneMapper;
     @Autowired
-    private Mapper<DetailsDTO, Details> detailsMapper;
-    @Autowired
-    private Mapper<BienVuDTO, Bien> bienMapper;
+    private Mapper<BienVuSimplifierDTO, Bien> bienMapper;
 
     @Override
     public ContratLocationDTO toDTO(ContratLocation contratLocation) {

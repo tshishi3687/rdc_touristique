@@ -3,7 +3,6 @@ package com.example.rdc_touristique.rest_api;
 import com.example.rdc_touristique.business.dto.IdentifiedDTO;
 import com.example.rdc_touristique.business.service.CrudService;
 import com.example.rdc_touristique.exeption.*;
-import com.example.rdc_touristique.rest_api.model.container.ElementsContainer;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

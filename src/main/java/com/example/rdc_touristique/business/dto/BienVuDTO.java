@@ -1,12 +1,9 @@
 package com.example.rdc_touristique.business.dto;
 
-
-import com.example.rdc_touristique.data_access.entity.Details;
 import com.example.rdc_touristique.data_access.entity.ImageBien;
 import lombok.*;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.List;
 
 @Getter

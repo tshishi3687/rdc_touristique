@@ -13,7 +13,7 @@ public class ContratLocationDTO implements IdentifiedDTO<Integer>{
     private Integer id;
     private LocalDate ddDebut;
     private LocalDate ddFin;
-    private BienVuDTO bienVuDTO;
+    private BienVuSimplifierDTO bienVuDTO;
     private int nPersonneSurLieu;
     private PersonneSimpleDTO preneur;
     private PersonneSimpleDTO bailleur;

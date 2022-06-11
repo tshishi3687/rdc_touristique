@@ -3,11 +3,8 @@ package com.example.rdc_touristique.business.mapper;
 import com.example.rdc_touristique.business.dto.*;
 import com.example.rdc_touristique.business.service.ImageModelService;
 import com.example.rdc_touristique.data_access.entity.*;
-import com.example.rdc_touristique.data_access.repository.ContratLocationRepository;
-import com.example.rdc_touristique.data_access.repository.ContratMisEnLigneRepository;
 import com.example.rdc_touristique.data_access.repository.ServiceRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
 
 import java.security.NoSuchAlgorithmException;

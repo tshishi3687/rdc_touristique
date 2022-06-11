@@ -1,6 +1,5 @@
 package com.example.rdc_touristique.business.service;
 
-import com.example.rdc_touristique.data_access.entity.ImageProvince;
 import com.example.rdc_touristique.data_access.entity.ImageVille;
 import com.example.rdc_touristique.data_access.repository.ImageVilleRepository;
 import com.example.rdc_touristique.data_access.repository.VilleRepository;

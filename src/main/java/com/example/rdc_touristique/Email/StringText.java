@@ -1,7 +1,5 @@
 package com.example.rdc_touristique.Email;
 
-import com.example.rdc_touristique.business.dto.ContratLocationDTO;
-import com.example.rdc_touristique.business.dto.ContratMisEnLigneDTO;
 import com.example.rdc_touristique.business.dto.DetailsDTO;
 import com.example.rdc_touristique.data_access.entity.Bien;
 import com.example.rdc_touristique.data_access.entity.ContratMisEnLigne;
