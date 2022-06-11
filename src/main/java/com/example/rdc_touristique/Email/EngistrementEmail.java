@@ -1,5 +1,6 @@
 package com.example.rdc_touristique.Email;
 
+import com.sun.mail.smtp.SMTPMessage;
 import org.springframework.stereotype.Service;
 
 import javax.mail.*;
@@ -13,7 +14,7 @@ public class EngistrementEmail {
     public void envoyer(String adresse, String sujet, String message) throws MessagingException {
 
         String from = "mobembotshishi";
-        String pass = "ASplig.3687";
+        String pass = "boraxnlygtbqbnkc";
         String[] to = {adresse};
         String host = "smtp.gmail.com";
 
@@ -38,6 +39,7 @@ public class EngistrementEmail {
         for (InternetAddress address : toAddress) {
             msg.setRecipient(Message.RecipientType.TO, address);
         }
+
 
         msg.setSubject(sujet);
         msg.setContent(message, "text/html; charset=utf-8");

@@ -19,8 +19,6 @@ public class BienMapper implements Mapper<BienDTO, Bien>{
     @Autowired
     private Type_bienRepository type_bienRepository;
     @Autowired
-    private PersonneReposytory personneReposytory;
-    @Autowired
     private Mapper<AladispositionDTO, Aladisposition> aladispositionMapper;
 
     @Override

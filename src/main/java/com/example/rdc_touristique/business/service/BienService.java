@@ -3,7 +3,6 @@ package com.example.rdc_touristique.business.service;
 import com.example.rdc_touristique.Email.EngistrementEmail;
 import com.example.rdc_touristique.Email.StringText;
 import com.example.rdc_touristique.business.dto.*;
-import com.example.rdc_touristique.business.mapper.ContratMisEnLigneMapper;
 import com.example.rdc_touristique.business.mapper.Mapper;
 import com.example.rdc_touristique.contrat.TextContrat;
 import com.example.rdc_touristique.data_access.entity.*;
@@ -12,7 +11,8 @@ import com.example.rdc_touristique.exeption.*;
 import com.example.rdc_touristique.security.config.JwtRequestFilter;
 import com.example.rdc_touristique.security.config.constParam;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -24,7 +24,6 @@ import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.*;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 @Service
 public class BienService implements CrudService<BienVuDTO, Integer> {
@@ -37,8 +36,6 @@ public class BienService implements CrudService<BienVuDTO, Integer> {
     private BienRepository bienRepository;
     @Autowired
     private CoordonneeRepository coordorRepository;
-    @Autowired
-    private Mapper<PersonneSimplifierDTO, Personne> personneMapper;
     @Autowired
     private Mapper<PersonneSimpleDTO, Personne> personneSimpleMapper;
     @Autowired
@@ -63,10 +60,12 @@ public class BienService implements CrudService<BienVuDTO, Integer> {
     private DetailsRepository detailsRepository;
     @Autowired
     private Mapper<ContratLocationDTO, ContratLocation> contratLocationMapper;
+    @Autowired
+    private Mapper<BienVuSimplifierDTO, Bien> bienVuSimplierMapper;
 
 
     @Transactional
-    public List<BienVuDTO> selonLaPersonne() throws NoSuchAlgorithmException, InvalidKeySpecException, BienFoundExeption {
+    public List<BienVuDTO> selonLaPersonne() {
 
         return bienRepository.findAllByAppartientAndModeActiveFalse(JwtRequestFilter.maPersonne()).stream()
         .map(bienVuMapper::toDTO)
@@ -109,9 +108,62 @@ public class BienService implements CrudService<BienVuDTO, Integer> {
 
     @Override
     public List<BienVuDTO> readAll() throws NoSuchAlgorithmException, InvalidKeySpecException {
-        return bienRepository.findAllByModeActiveTrueOrderByIdDesc().stream()
-                .map(bienVuMapper::toDTO)
+        return null;
+    }
+
+    @Transactional
+    public List<BienVuSimplifierDTO> tousBiens(TryListAllBiens tryListAllBiens){
+        Pageable pageable = PageRequest.of(tryListAllBiens.getPage() - 1, 6);
+
+        // par type
+        if (tryListAllBiens.getTypeId() > 0 && tryListAllBiens.getProvinceId() <= 0 && tryListAllBiens.getVilleId() <= 0)
+            return bienRepository.findByType_IdAndModeActiveTrueOrderByIdDesc(tryListAllBiens.getTypeId(), pageable)
+                    .stream()
+                    .map(bienVuSimplierMapper::toDTO)
+                    .collect(Collectors.toList());
+
+        // par province
+        if (tryListAllBiens.getTypeId() <= 0 && tryListAllBiens.getProvinceId() > 0 && tryListAllBiens.getVilleId() <= 0)
+            return bienRepository.findByCoordonnee_Ville_Province_IdAndModeActiveTrueOrderByIdDesc(tryListAllBiens.getProvinceId(), pageable)
+                    .stream()
+                    .map(bienVuSimplierMapper::toDTO)
+                    .collect(Collectors.toList());
+
+        // par type et province
+        if (tryListAllBiens.getTypeId() > 0 && tryListAllBiens.getProvinceId() > 0 && tryListAllBiens.getVilleId() <= 0)
+            return bienRepository.findByType_IdAndCoordonnee_Ville_Province_IdAndModeActiveTrueOrderByIdDesc(tryListAllBiens.getTypeId(), tryListAllBiens.getProvinceId(), pageable)
+                    .stream()
+                    .map(bienVuSimplierMapper::toDTO)
+                    .collect(Collectors.toList());
+
+        // par ville et province
+        if (tryListAllBiens.getTypeId() <= 0 && tryListAllBiens.getProvinceId() > 0 && tryListAllBiens.getVilleId() > 0)
+            return bienRepository.findByCoordonnee_Ville_IdAndCoordonnee_Ville_Province_IdAndModeActiveTrueOrderByIdDesc(tryListAllBiens.getVilleId(), tryListAllBiens.getProvinceId(), pageable)
+                    .stream()
+                    .map(bienVuSimplierMapper::toDTO)
+                    .collect(Collectors.toList());
+
+        // par type, ville et province
+        if (tryListAllBiens.getTypeId() > 0 && tryListAllBiens.getProvinceId() > 0 && tryListAllBiens.getVilleId() > 0)
+            return bienRepository.findByType_IdAndCoordonnee_Ville_IdAndCoordonnee_Ville_Province_IdAndModeActiveTrueOrderByIdDesc(tryListAllBiens.getTypeId(), tryListAllBiens.getVilleId(), tryListAllBiens.getProvinceId(), pageable)
+                    .stream()
+                    .map(bienVuSimplierMapper::toDTO)
+                    .collect(Collectors.toList());
+        // sans trie
+        else return bienRepository.findAllByModeActiveTrueOrderByIdDesc(pageable)
+                .stream()
+                .map(bienVuSimplierMapper::toDTO)
                 .collect(Collectors.toList());
+    }
+
+    @Transactional
+    public BienVuDTO infoBien(int idBien){
+        return bienVuMapper.toDTO(bienRepository.getOne(idBien));
+    }
+
+    @Transactional
+    public int countBiens(){
+        return bienRepository.findAllByModeActiveTrueOrderByIdDesc().size();
     }
 
     @Override
@@ -301,7 +353,7 @@ public class BienService implements CrudService<BienVuDTO, Integer> {
     }
 
     @Transactional
-    public void maildeconfirmationBienMisEnLigne(BienVuDTO bienVuDTO) throws BienExisteExeption, NoSuchAlgorithmException, MessagingException, PersonneSimpleExisteExeption {
+    public void maildeconfirmationBienMisEnLigne(BienVuDTO bienVuDTO) throws BienExisteExeption, NoSuchAlgorithmException, MessagingException{
         if (!bienRepository.existsById(bienVuDTO.getId()))
             throw  new BienExisteExeption(bienVuDTO.getId());
 
@@ -316,7 +368,7 @@ public class BienService implements CrudService<BienVuDTO, Integer> {
     }
 
     @Transactional
-    public long maildeconfirmationBienReserve(ReservationBienDTO reservationBienDTO) throws BienExisteExeption, NoSuchAlgorithmException, MessagingException, PersonneSimpleExisteExeption {
+    public long maildeconfirmationBienReserve(ReservationBienDTO reservationBienDTO) throws BienExisteExeption, NoSuchAlgorithmException, MessagingException{
         if (!bienRepository.existsById(reservationBienDTO.getBienConserne().getId()))
             throw  new BienExisteExeption(reservationBienDTO.getBienConserne().getId());
 
@@ -338,24 +390,25 @@ public class BienService implements CrudService<BienVuDTO, Integer> {
     private String codeActivation() throws NoSuchAlgorithmException {
         Random rand = new Random();
 
-        String str1="", str2="";
+        StringBuilder str1= new StringBuilder();
+        StringBuilder str2= new StringBuilder();
         int str3;
         do{
             str3 = (int)(Math.random() * ((1000 - 1) + 1));
 
             for(int i = 0 ; i < 4 ; i++){
                 char c = (char)(rand.nextInt(26) + 97);
-                str1 += c;
+                str1.append(c);
             }
 
             for(int i = 0 ; i < 2 ; i++){
                 char c = (char)(rand.nextInt(26) + 97);
-                str2 += c;
+                str2.append(c);
             }
-        }while(personneReposytory.findByCodeActivation(hasMdp(str1 + str3 + str2)).isPresent());
+        }while(personneReposytory.findByCodeActivation(hasMdp(str1.toString() + str3 + str2)).isPresent());
 
 
-        return str1+str3+str2;
+        return str1.toString() +str3+str2;
     }
 
     private String hasMdp(String mdp) throws NoSuchAlgorithmException {
@@ -366,12 +419,12 @@ public class BienService implements CrudService<BienVuDTO, Integer> {
 
         //convertir le tableau de bits en une format hexadécimal - méthode 1
         StringBuffer sb = new StringBuffer();
-        for (int i = 0; i < byteData.length; i++) {
-            sb.append(Integer.toString((byteData[i] & 0xff) + 0x100, 16).substring(1));
+        for (byte datum : byteData) {
+            sb.append(Integer.toString((datum & 0xff) + 0x100, 16).substring(1));
         }
 
         //convertir le tableau de bits en une format hexadécimal - méthode 2
-        StringBuffer hexString = new StringBuffer();
+        StringBuilder hexString = new StringBuilder();
         for (byte byteDatum : byteData) {
             String hex = Integer.toHexString(0xff & byteDatum);
             if (hex.length() == 1) hexString.append('0');

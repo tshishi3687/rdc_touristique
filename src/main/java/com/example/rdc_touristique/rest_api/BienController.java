@@ -11,6 +11,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.web.bind.annotation.*;
 
 import javax.mail.MessagingException;
+import javax.validation.Valid;
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
 import java.util.List;
@@ -93,7 +94,22 @@ public class BienController extends AbstratCrudController<BienVuDTO, Integer> {
     @GetMapping("/reservations")
     public List<ContratLocationDTO> voirReservations() throws Exception {
         return ((BienService)service).voirReservation();
+    }
 
+    @GetMapping("/count")
+    public int countBien(){
+        return ((BienService)service).countBiens();
+    }
+
+    @GetMapping("/allBiens")
+    public List<BienVuSimplifierDTO> tousBiens(@Valid TryListAllBiens tryListAllBiens){
+        return ((BienService)service).tousBiens(tryListAllBiens);
+    }
+
+    @PostMapping("/infoBien")
+    @ResponseStatus(HttpStatus.OK)
+    public BienVuDTO infoBien(@RequestBody int idBien){
+        return ((BienService)service).infoBien(idBien);
     }
 
 }

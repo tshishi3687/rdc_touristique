@@ -128,24 +128,24 @@ public class PersonneService implements CrudService<PersonneSimpleDTO, Integer> 
         return ResponseEntity.ok(new JwtResponse(token));
 
     }
-//
-//    @Transactional
-//    public PersonneSimpleDTO seloguerSansJWT(MdpDTO mdp) throws NoSuchAlgorithmException {
-//        if (mdp == null)
-//            throw new NoSuchAlgorithmException();
-//
-//        Optional<ContactPersonne> contactUser = contactUserRepository.findByEmail(mdp.getMail());
-//
-//        if (contactUser.isPresent()){
-//            PassWord passWord = passWordRepository.findByAppartienA(contactUser.get().getAppartienA());
-//
-//            if (bCryptPasswordEncoder.matches(mdp.getMdp(), passWord.getMdp())){
-//                return personneMapper.toDTO(contactUser.get().getAppartienA());
-//            }
-//
-//        }
-//        return null;
-//    }
+
+    @Transactional
+    public PersonneSimpleDTO seloguerSansJWT(MdpDTO mdp) throws NoSuchAlgorithmException {
+        if (mdp == null)
+            throw new NoSuchAlgorithmException();
+
+        Optional<ContactPersonne> contactUser = contactUserRepository.findByEmail(mdp.getMail());
+
+        if (contactUser.isPresent()){
+            PassWord passWord = passWordRepository.findByAppartienA(contactUser.get().getAppartienA());
+
+            if (bCryptPasswordEncoder.matches(mdp.getMdp(), passWord.getMdp())){
+                return personneMapper.toDTO(contactUser.get().getAppartienA());
+            }
+
+        }
+        return null;
+    }
 
     @Transactional
     public PersonneVuDTO infoPersonne(){

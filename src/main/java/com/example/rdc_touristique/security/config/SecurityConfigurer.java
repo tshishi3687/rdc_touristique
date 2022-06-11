@@ -34,6 +34,7 @@ public class SecurityConfigurer extends WebSecurityConfigurerAdapter {
     private BCryptPasswordEncoder bCryptPasswordEncoder;
     @Autowired
     private JwtRequestFilter jwtRequestFilter;
+
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth.userDetailsService(myUserDetailsService).passwordEncoder(bCryptPasswordEncoder);
@@ -50,7 +51,7 @@ public class SecurityConfigurer extends WebSecurityConfigurerAdapter {
 
                 .authorizeRequests().antMatchers("/personne/user", "/personne/creat", "/personne/email", "/personne/change_passe", "/personne/mdp_modif", "/personne/activation_compte").permitAll()
                 .and()
-                .authorizeRequests().antMatchers(HttpMethod.GET,"/bien", "/province", "/ville", "/typebien").permitAll()
+                .authorizeRequests().antMatchers(HttpMethod.GET,"/bien/count", "/bien/allBiens", "/province", "/ville", "/typebien").permitAll()
                 .and()
                 .authorizeRequests().antMatchers(HttpMethod.POST, "/ville/*", "/province/*", "/service/*", "/typebien/*", "/type/*", "/personne")
                 .hasAuthority("Admin")
@@ -84,7 +85,7 @@ public class SecurityConfigurer extends WebSecurityConfigurerAdapter {
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration corsConfiguration = new CorsConfiguration();
         corsConfiguration.setAllowCredentials(true);
-        corsConfiguration.addAllowedOrigin("http://10.48.217.120:4200");
+        corsConfiguration.addAllowedOrigin("http://localhost:4200");
         corsConfiguration.addAllowedMethod("*");
         corsConfiguration.addAllowedHeader("*");
         corsConfiguration.addExposedHeader(constParam.JWT_NAME);

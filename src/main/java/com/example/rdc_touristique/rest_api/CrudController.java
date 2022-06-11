@@ -12,6 +12,7 @@ import javax.mail.MessagingException;
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
+import java.util.List;
 
 public interface CrudController<DTO extends IdentifiedDTO<ID>, ID> {
 
@@ -20,7 +21,7 @@ public interface CrudController<DTO extends IdentifiedDTO<ID>, ID> {
 
     // Read
     ResponseEntity<DTO> getOne(@PathVariable ID id) throws Exception;
-    ResponseEntity<ElementsContainer<DTO>> getAll() throws Exception;
+    ResponseEntity<List<DTO>> getAll() throws Exception;
 
     // Update
     ResponseEntity<String> update(@RequestBody DTO dto) throws ElementFoundException, FoundExeption, NoSuchAlgorithmException, InvalidKeySpecException, MessagingException, ContratMisEnLigneExisteExeption;
