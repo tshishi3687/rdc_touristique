@@ -319,4 +319,9 @@ public class PersonneService implements CrudService<PersonneSimpleDTO, Integer> 
         personneReposytory.save(entity.get().getPreneur());
         mail.envoyer(entity.get().getPreneur().getContactUser().getEmail(),textMail.getSujetStopContrat(),textMail.alertStopContrat(entity.get(),code));
     }
+
+    @Transactional
+    public int nbCompte(){
+        return personneReposytory.countAllByRoleId_Id(2);
+    }
 }

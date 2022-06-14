@@ -99,11 +99,16 @@ public class BienService implements CrudService<BienVuDTO, Integer> {
 
     @Override
     public BienVuDTO readOne(Integer integer) throws  BienFoundExeption {
+       return null;
+    }
+
+    @Transactional
+    public BienVuSimplifierDTO readOneBien(Integer integer) throws  BienFoundExeption {
         Bien entity = bienRepository.findById(integer)
                 .orElseThrow(()-> new BienFoundExeption(integer));
-
-
-        return bienVuMapper.toDTO(entity);
+        if (JwtRequestFilter.maPersonne().getId() == entity.getAppartient().getId()|| JwtRequestFilter.maPersonne().getRoleId().getId() == 1)
+            return bienVuSimplierMapper.toDTO(entity);
+        return null;
     }
 
     @Override
@@ -144,7 +149,7 @@ public class BienService implements CrudService<BienVuDTO, Integer> {
     }
 
     @Transactional
-    public void activationBien(BienVuDTO bienDTO) throws BienFoundExeption, PersonneSimpleExisteExeption {
+    public void activationBien(BienVuDTO bienDTO) throws BienFoundExeption {
         if( !bienRepository.existsById(bienDTO.getId()))
             throw new BienFoundExeption(bienDTO.getId());
 
@@ -173,7 +178,7 @@ public class BienService implements CrudService<BienVuDTO, Integer> {
                 // 3.1 Preneur: c'est la le propiétaire du bien
             Personne preneur = JwtRequestFilter.maPersonne();
                 // 3.2 Bailleur: Le représenttant de Mobembo.cd (pour le test c'est l'Admin)
-            Personne bailleur = personneReposytory.findByRoleId_NomRole(constParam.roleA);
+            Personne bailleur = personneReposytory.findByRoleId_Id(1);
 
             // 4 crée le text du contrat
             TextContrat textContrat = new TextContrat(
@@ -229,29 +234,31 @@ public class BienService implements CrudService<BienVuDTO, Integer> {
 
     @Transactional
     public boolean isDisponible(ReservationBienDTO DTO){
-        List<ContratLocation> allContrat = contratLocationRepository.findAllByIdBien(bienRepository.getOne(DTO.getBienConserne().getId()));
+        List<ContratLocation> allContrat = contratLocationRepository.findAllByIdBienAndEnCourTrue(bienRepository.getOne(DTO.getBienConserne().getId()));
 
         for (ContratLocation contratLocation : allContrat) {
-            if (DTO.getDdArrivee().isAfter(DTO.getDdDepart()) || DTO.getDdArrivee().isBefore(contratLocation.getDdFin()))
+            if (
+                    DTO.getDdArrivee().isAfter(DTO.getDdDepart()) || //si la date de départ est avant la date d'arrivé
+                    (DTO.getDdArrivee().isBefore(contratLocation.getDdDebut()) && DTO.getDdDepart().isAfter(contratLocation.getDdDebut())) ||
+                    ((DTO.getDdArrivee().isAfter(contratLocation.getDdDebut()) || (DTO.getDdArrivee().equals(contratLocation.getDdDebut())))
+                            && ((DTO.getDdDepart().isBefore(contratLocation.getDdFin()) || (DTO.getDdDepart().equals(contratLocation.getDdFin()))))
+                    ) ||
+                    ((DTO.getDdArrivee().isBefore(contratLocation.getDdFin()) || DTO.getDdArrivee().equals(contratLocation.getDdFin()))
+                            && ((DTO.getDdDepart().isAfter(contratLocation.getDdFin())) || (DTO.getDdDepart().equals(contratLocation.getDdFin())))
+                    )
+            )
                 return false;
         }
         return true;
     }
 
     @Transactional
-    public int reservationBien(PayPalRDTO paypalDTO) throws NoSuchAlgorithmException, InvalidKeySpecException, MessagingException {
+    public int reservationBien(PayPalRDTO paypalDTO) throws NoSuchAlgorithmException, InvalidKeySpecException, MessagingException, ContratLocationFoundExeption {
 
-        List<ContratLocation> allContrat = contratLocationRepository.findAllByIdBien(bienRepository.getOne(paypalDTO.getReservationBienDTO().getBienConserne().getId()));
+        if (!isDisponible(paypalDTO.getReservationBienDTO()))
+            throw new ContratLocationFoundExeption(404);
 
-        for (ContratLocation contratLocation : allContrat) {
-            if (
-                    paypalDTO.getReservationBienDTO().getDdArrivee().isAfter(paypalDTO.getReservationBienDTO().getDdDepart()) ||
-                            paypalDTO.getReservationBienDTO().getDdArrivee().isBefore(contratLocation.getDdFin())
-            )
-                throw new RuntimeException();
-        }
-
-        Personne bailleur = personneReposytory.findByRoleId_NomRole(constParam.roleA);
+        Personne bailleur = personneReposytory.findByRoleId_Id(1);
         Personne preneur = JwtRequestFilter.maPersonne();
         Bien bien = bienRepository.getOne(paypalDTO.getReservationBienDTO().getBienConserne().getId());
 
@@ -259,8 +266,8 @@ public class BienService implements CrudService<BienVuDTO, Integer> {
                 bailleur, // le Bailleur: personne ENTITY
                 preneur, // le Preneur: personne ENTITY
                 bien, // bien consernée: bienDTO
-                paypalDTO.getReservationBienDTO().getDdArrivee(), // jour-J
-                paypalDTO.getReservationBienDTO().getDdDepart()
+                paypalDTO.getReservationBienDTO().getDdArrivee(), // date d'arrivé
+                paypalDTO.getReservationBienDTO().getDdDepart() // date de départ
         );
 
         ContratLocation newContrat = new ContratLocation();

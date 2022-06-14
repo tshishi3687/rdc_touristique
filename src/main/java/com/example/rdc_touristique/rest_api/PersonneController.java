@@ -86,6 +86,11 @@ public class PersonneController extends AbstratCrudController<PersonneSimpleDTO,
         return ((PersonneService)service).infoPersonne();
     }
 
+    @GetMapping("/nbcompte")
+    public int nbCompte(){
+        return ((PersonneService)service).nbCompte();
+    }
+
     @PostMapping("/favory")
     @ResponseStatus(HttpStatus.OK)
     public void favory(@RequestBody FavoryDTO favory) throws Exception {

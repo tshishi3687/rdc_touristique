@@ -5,7 +5,9 @@ import com.example.rdc_touristique.business.service.BienService;
 import com.example.rdc_touristique.business.service.CrudService;
 import com.example.rdc_touristique.exeption.BienExisteExeption;
 import com.example.rdc_touristique.exeption.BienFoundExeption;
+import com.example.rdc_touristique.exeption.ContratLocationFoundExeption;
 import com.example.rdc_touristique.exeption.PersonneSimpleExisteExeption;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
@@ -27,6 +29,12 @@ public class BienController extends AbstratCrudController<BienVuDTO, Integer> {
     @ResponseStatus(HttpStatus.OK)
     public List<BienVuSimplifierDTO> getAllByUser(@RequestBody PersonneSimplifierDTO dto) {
         return ((BienService)service).selonLaPersonne();
+    }
+
+    @PostMapping("/readOneBien")
+    @ResponseStatus(HttpStatus.OK)
+    public BienVuSimplifierDTO readOneBien(@RequestBody int idBien) throws BienFoundExeption {
+        return ((BienService)service).readOneBien(idBien);
     }
 
     @PostMapping("/creatt")
@@ -74,7 +82,7 @@ public class BienController extends AbstratCrudController<BienVuDTO, Integer> {
 
     @PostMapping("/reservation")
     @ResponseStatus(HttpStatus.OK)
-    public int reservation(@RequestBody PayPalRDTO payPalDTO) throws NoSuchAlgorithmException, InvalidKeySpecException, MessagingException {
+    public int reservation(@RequestBody PayPalRDTO payPalDTO) throws NoSuchAlgorithmException, InvalidKeySpecException, MessagingException, ContratLocationFoundExeption {
         return ((BienService) service).reservationBien(payPalDTO);
     }
 

@@ -11,4 +11,5 @@ public interface ContratLocationRepository extends JpaRepository<ContratLocation
     List<ContratLocation> findAllByPreneurOrderByIdDesc(Personne personne);
     List<ContratLocation> findAllByBailleurOrderByIdDesc(Personne personne);
     List<ContratLocation> findAllByIdBien(Bien bien);
+    List<ContratLocation> findAllByIdBienAndEnCourTrue(Bien bien);
 }

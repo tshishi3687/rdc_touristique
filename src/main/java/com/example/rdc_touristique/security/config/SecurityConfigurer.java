@@ -45,7 +45,7 @@ public class SecurityConfigurer extends WebSecurityConfigurerAdapter {
 
                 .authorizeRequests().antMatchers("/personne/user", "/personne/creat", "/personne/email", "/personne/change_passe", "/personne/mdp_modif", "/personne/activation_compte").permitAll()
                 .and()
-                .authorizeRequests().antMatchers(HttpMethod.GET,"/bien/count", "/bien/allBiens", "/province", "/ville", "/typebien").permitAll()
+                .authorizeRequests().antMatchers(HttpMethod.GET,"/bien/count", "/bien/allBiens", "/province", "/ville", "/typebien", "/personne/nbcompte").permitAll()
                 .and()
                 .authorizeRequests().antMatchers(HttpMethod.POST, "/ville/*", "/province/*", "/service/*", "/typebien/*", "/type/*", "/personne")
                 .hasAuthority("Admin")
@@ -79,6 +79,8 @@ public class SecurityConfigurer extends WebSecurityConfigurerAdapter {
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration corsConfiguration = new CorsConfiguration();
         corsConfiguration.setAllowCredentials(true);
+        corsConfiguration.addAllowedOrigin("http://mobembo.hopto.org:4200");
+        corsConfiguration.addAllowedOrigin("http://10.10.19.91:4200");
         corsConfiguration.addAllowedOrigin("http://localhost:4200");
         corsConfiguration.addAllowedMethod("*");
         corsConfiguration.addAllowedHeader("*");

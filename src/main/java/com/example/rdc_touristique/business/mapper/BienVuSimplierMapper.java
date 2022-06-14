@@ -41,16 +41,12 @@ public class BienVuSimplierMapper implements Mapper<BienVuSimplifierDTO, Bien>{
                 type_bienMapper.toDTO(bien.getType()),
                 aladispositionMapper.toDTO(bien.getAladisposition()),
                 bien.getPrix(),
-                bien.getNpmin(),
                 bien.getNpmax(),
                 bien.getNchambre(),
                 bien.getNsdb(),
-                bien.getNwc(),
                 bien.getSuperficie(),
-                bien.getDescription(),
                 coordonneeMapper.toDTO(bien.getCoordonnee()),
                 likes,
-                bien.isModeActive(),
                 imageModelService.getImage(bien.getId()).get(0)
         );
     }
