@@ -20,10 +20,6 @@
 
 	<dependencies>
 		<dependency>
-			<groupId>net.logstash.logback</groupId>
-			<artifactId>logstash-logback-encoder</artifactId>
-		</dependency>
-		<dependency>
 			<groupId>com.microsoft.sqlserver</groupId>
 			<artifactId>mssql-jdbc</artifactId>
 			<version>10.2.0.jre17</version>
@@ -103,15 +99,8 @@
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
 				<configuration>
-					<appender name="consoleAppender" class="ch.qos.logback.core.ConsoleAppender">
-						<encoder class="net.logstash.logback.encoder.LogstashEncoder"/>
-					</appender>
-					<logger name="jsonLogger" additivity="false" level="DEBUG">
-						<appender-ref ref="consoleAppender"/>
-					</logger>
-					<root level="INFO">
-						<appender-ref ref="consoleAppender"/>
-					</root>
+					<source>1.8</source>
+					<target>1.8</target>
 				</configuration>
 			</plugin>
 		</plugins>
