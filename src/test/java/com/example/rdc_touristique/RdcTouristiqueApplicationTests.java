@@ -20,12 +20,12 @@ class RdcTouristiqueApplicationTests {
 	@Autowired
 	private Mapper<BienVuDTO, Bien> bienVuDTOBienMapper;
 
-	@Test
-	void contextLoads() {
-		List<BienVuDTO> list = bienRepository.findByModeActiveOrderByIdDesc().stream()
-				.map(bienVuDTOBienMapper::toDTO)
-				.collect(Collectors.toList());
-		System.out.println(list);
-	}
+//	@Test
+//	void contextLoads() {
+//		List<BienVuDTO> list = bienRepository.findByModeActiveOrderByIdDesc().stream()
+//				.map(bienVuDTOBienMapper::toDTO)
+//				.collect(Collectors.toList());
+//		System.out.println(list);
+//	}
 
 }

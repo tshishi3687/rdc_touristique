@@ -1,0 +1,12 @@
+spring:
+  datasource:
+    url: jdbc:mysql://localhost:3306/mobembo?serverTimezone=UTC
+    username: root
+    password: lilo.3687
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    generate-ddl:   true
+    show-sql:   false
+server:
+  port: 8081
