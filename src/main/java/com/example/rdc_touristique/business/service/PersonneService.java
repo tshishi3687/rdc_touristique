@@ -321,7 +321,7 @@ public class PersonneService implements CrudService<PersonneSimpleDTO, Integer> 
     }
 
     @Transactional
-    public int nbCompte(){
-        return personneReposytory.countAllByRoleId_Id(2);
+    public long nbCompte(){
+        return personneReposytory.count();
     }
 }

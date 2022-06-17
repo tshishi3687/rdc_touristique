@@ -20,5 +20,5 @@ public class BienVuSimplifierDTO {
     private int superficie;
     private CoordonneeDTO coordonnee;
     private int likes;
-    private ImageBien image;
+    private ImageModelDTO image;
 }

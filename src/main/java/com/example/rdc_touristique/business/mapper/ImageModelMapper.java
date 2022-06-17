@@ -11,7 +11,7 @@ public class ImageModelMapper implements Mapper<ImageModelDTO, ImageBien>{
     @Override
     public ImageModelDTO toDTO(ImageBien imageModel) {
         if (imageModel== null)
-            return null;
+            return new ImageModelDTO();
 
         return new ImageModelDTO(
                 0,

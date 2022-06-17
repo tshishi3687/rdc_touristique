@@ -87,7 +87,7 @@ public class PersonneController extends AbstratCrudController<PersonneSimpleDTO,
     }
 
     @GetMapping("/nbcompte")
-    public int nbCompte(){
+    public long nbCompte(){
         return ((PersonneService)service).nbCompte();
     }
 

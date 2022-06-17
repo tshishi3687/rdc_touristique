@@ -11,6 +11,5 @@ public interface PersonneReposytory extends JpaRepository<Personne, Integer> {
 
     Personne findByContactUser_Email(String email);
 
-    int countAllByRoleId_Id(int id);
 }
 

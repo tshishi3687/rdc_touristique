@@ -1,19 +1,17 @@
 package com.example.rdc_touristique.business.mapper;
 
-import com.example.rdc_touristique.business.dto.AladispositionDTO;
-import com.example.rdc_touristique.business.dto.BienVuSimplifierDTO;
-import com.example.rdc_touristique.business.dto.CoordonneeDTO;
-import com.example.rdc_touristique.business.dto.Type_bienDTO;
+import com.example.rdc_touristique.business.dto.*;
 import com.example.rdc_touristique.business.service.ImageModelService;
-import com.example.rdc_touristique.data_access.entity.Aladisposition;
-import com.example.rdc_touristique.data_access.entity.Bien;
-import com.example.rdc_touristique.data_access.entity.Coordonnee;
-import com.example.rdc_touristique.data_access.entity.Type_bien;
+import com.example.rdc_touristique.data_access.entity.*;
+import com.example.rdc_touristique.data_access.repository.BienRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.awt.*;
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Component
 public class BienVuSimplierMapper implements Mapper<BienVuSimplifierDTO, Bien>{
@@ -26,9 +24,17 @@ public class BienVuSimplierMapper implements Mapper<BienVuSimplifierDTO, Bien>{
     private Mapper<AladispositionDTO, Aladisposition> aladispositionMapper;
     @Autowired
     private ImageModelService imageModelService;
+    @Autowired
+    private Mapper<ImageModelDTO, ImageBien> imageModelServiceMapper;
+    @Autowired
+    private BienRepository bienRepository;
 
     @Override
     public BienVuSimplifierDTO toDTO(Bien bien) {
+
+        if (imageModelService.getImage(bien.getId()).size() <= 0)
+            bienRepository.deleteById(bien.getId());
+
         int likes;
         if((bien.getLikes()== null) || (bien.getLikes().size()<=0)){
             likes = 0;
@@ -47,7 +53,7 @@ public class BienVuSimplierMapper implements Mapper<BienVuSimplifierDTO, Bien>{
                 bien.getSuperficie(),
                 coordonneeMapper.toDTO(bien.getCoordonnee()),
                 likes,
-                imageModelService.getImage(bien.getId()).get(0)
+                imageModelServiceMapper.toDTO(imageModelService.getImage(bien.getId()).get(0))
         );
     }
 
