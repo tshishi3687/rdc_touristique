@@ -1,6 +1,7 @@
 package com.example.rdc_touristique;
 
-import com.example.rdc_touristique.business.dto.BienVuDTO;
+
+import com.example.rdc_touristique.business.dto.BienVuSimplifierDTO;
 import com.example.rdc_touristique.business.mapper.Mapper;
 import com.example.rdc_touristique.data_access.entity.Bien;
 import com.example.rdc_touristique.data_access.repository.BienRepository;
@@ -18,14 +19,14 @@ class RdcTouristiqueApplicationTests {
 	@Autowired
 	private BienRepository bienRepository;
 	@Autowired
-	private Mapper<BienVuDTO, Bien> bienVuDTOBienMapper;
+	private Mapper<BienVuSimplifierDTO, Bien> bienVuDTOBienMapper;
 
-//	@Test
-//	void contextLoads() {
-//		List<BienVuDTO> list = bienRepository.findByModeActiveOrderByIdDesc().stream()
-//				.map(bienVuDTOBienMapper::toDTO)
-//				.collect(Collectors.toList());
-//		System.out.println(list);
-//	}
+	@Test
+	void contextLoads() {
+		List<BienVuSimplifierDTO> list = bienRepository.findByModeActiveTrueOrderByIdDesc().stream()
+				.map(bienVuDTOBienMapper::toDTO)
+				.collect(Collectors.toList());
+		System.out.println(list.size());
+	}
 
 }
