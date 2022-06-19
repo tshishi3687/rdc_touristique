@@ -67,7 +67,7 @@ public class BienService implements CrudService<BienVuDTO, Integer> {
     @Transactional
     public List<BienVuSimplifierDTO> selonLaPersonne() {
 
-        return bienRepository.findAllByAppartientAndModeActiveFalse(JwtRequestFilter.maPersonne()).stream()
+        return bienRepository.findAllByAppartientAndModeActiveFalseOrderByIdDesc(JwtRequestFilter.maPersonne()).stream()
         .map(bienVuSimplierMapper::toDTO)
         .collect(Collectors.toList());
     }

@@ -265,24 +265,25 @@ public class PersonneService implements CrudService<PersonneSimpleDTO, Integer> 
     private String codeActivation() throws NoSuchAlgorithmException {
         Random rand = new Random();
 
-        String str1="", str2="";
+        StringBuilder str1= new StringBuilder();
+        StringBuilder str2= new StringBuilder();
         int str3;
         do{
             str3 = (int)(Math.random() * ((1000 - 1) + 1));
 
             for(int i = 0 ; i < 4 ; i++){
                 char c = (char)(rand.nextInt(26) + 97);
-                str1 += c;
+                str1.append(c);
             }
 
             for(int i = 0 ; i < 2 ; i++){
                 char c = (char)(rand.nextInt(26) + 97);
-                str2 += c;
+                str2.append(c);
             }
-        }while(personneReposytory.findByCodeActivation(hasMdp(str1 + str3 + str2)).isPresent());
+        }while(personneReposytory.findByCodeActivation(hasMdp(str1.toString() + str3 + str2)).isPresent());
 
 
-        return str1+str3+str2;
+        return str1.toString() +str3+str2;
     }
 
     private String hasMdp(String mdp) throws NoSuchAlgorithmException {
@@ -293,8 +294,8 @@ public class PersonneService implements CrudService<PersonneSimpleDTO, Integer> 
 
         //convertir le tableau de bits en une format hexadécimal - méthode 1
         StringBuffer sb = new StringBuffer();
-        for (int i = 0; i < byteData.length; i++) {
-            sb.append(Integer.toString((byteData[i] & 0xff) + 0x100, 16).substring(1));
+        for (byte datum : byteData) {
+            sb.append(Integer.toString((datum & 0xff) + 0x100, 16).substring(1));
         }
 
         //convertir le tableau de bits en une format hexadécimal - méthode 2

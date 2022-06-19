@@ -7,13 +7,13 @@ import com.example.rdc_touristique.data_access.repository.BienRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.awt.*;
+import javax.transaction.Transactional;
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
-import java.util.Optional;
-import java.util.stream.Collectors;
+import java.util.List;
 
 @Component
+@Transactional
 public class BienVuSimplierMapper implements Mapper<BienVuSimplifierDTO, Bien>{
 
     @Autowired
@@ -29,18 +29,14 @@ public class BienVuSimplierMapper implements Mapper<BienVuSimplifierDTO, Bien>{
     @Autowired
     private BienRepository bienRepository;
 
+
     @Override
     public BienVuSimplifierDTO toDTO(Bien bien) {
 
         if (imageModelService.getImage(bien.getId()).size() <= 0)
             bienRepository.deleteById(bien.getId());
 
-        int likes;
-        if((bien.getLikes()== null) || (bien.getLikes().size()<=0)){
-            likes = 0;
-        }else{
-            likes = bien.getLikes().size();
-        }
+        List<Personne> personneList = bien.getLikes();
 
         return new BienVuSimplifierDTO(
                 bien.getId(),
@@ -52,7 +48,7 @@ public class BienVuSimplierMapper implements Mapper<BienVuSimplifierDTO, Bien>{
                 bien.getNsdb(),
                 bien.getSuperficie(),
                 coordonneeMapper.toDTO(bien.getCoordonnee()),
-                likes,
+                personneList.size(),
                 imageModelServiceMapper.toDTO(imageModelService.getImage(bien.getId()).get(0))
         );
     }
