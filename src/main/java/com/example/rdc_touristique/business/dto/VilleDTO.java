@@ -11,7 +11,6 @@ import java.util.List;
 @AllArgsConstructor
 @ToString
 public class VilleDTO implements IdentifiedDTO<Integer>{
-
     private Integer id;
     private String nomVille;
     private Integer nhabitant;

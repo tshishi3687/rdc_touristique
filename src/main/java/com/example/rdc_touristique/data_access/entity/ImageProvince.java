@@ -62,5 +62,4 @@ public class ImageProvince extends BaseEntity{
     public void setPicByte(byte[] picByte) {
         this.picByte = picByte;
     }
-
 }

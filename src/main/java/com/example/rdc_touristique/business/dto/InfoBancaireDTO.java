@@ -10,7 +10,6 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @ToString
 public class InfoBancaireDTO implements IdentifiedDTO<Integer>{
-
     private Integer id;
     private String nomBanque;
     private String numCarte;

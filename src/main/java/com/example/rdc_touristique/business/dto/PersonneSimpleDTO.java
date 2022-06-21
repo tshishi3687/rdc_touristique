@@ -10,7 +10,6 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @ToString
 public class PersonneSimpleDTO implements IdentifiedDTO<Integer>{
-
     private Integer id;
     private String nom;
     private String prenom;

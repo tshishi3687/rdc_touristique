@@ -8,8 +8,6 @@ import java.util.Optional;
 public interface PersonneReposytory extends JpaRepository<Personne, Integer> {
     Optional<Personne> findByCodeActivation(String codeActivation);
     Personne findByRoleId_Id(int idRole);
-
     Personne findByContactUser_Email(String email);
-
 }
 

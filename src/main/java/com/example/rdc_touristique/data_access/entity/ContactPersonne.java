@@ -27,5 +27,4 @@ public class ContactPersonne extends BaseEntity{
     @OneToOne
     @JoinColumn(name = "appartien_a", nullable = false)
     private Personne appartienA;
-
 }

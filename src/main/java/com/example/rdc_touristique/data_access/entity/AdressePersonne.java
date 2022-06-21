@@ -34,7 +34,4 @@ public class AdressePersonne extends BaseEntity{
     @OneToOne
     @JoinColumn(name = "adressUser", nullable = false)
     private Personne appartienA;
-
-
-
 }

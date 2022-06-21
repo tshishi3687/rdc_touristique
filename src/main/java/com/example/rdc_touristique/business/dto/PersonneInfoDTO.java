@@ -10,7 +10,6 @@ import java.util.List;
 @AllArgsConstructor
 @ToString
 public class PersonneInfoDTO implements IdentifiedDTO<Integer>{
-
     private Integer id;
     private List<BienDTO> bien;
     private InfoBancaireDTO infoBancaires;

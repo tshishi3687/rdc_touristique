@@ -10,7 +10,6 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @ToString
 public class ServiceDTO implements IdentifiedDTO<Integer>{
-
     private Integer id;
     private String nom;
     private Type_serviceDTO type;

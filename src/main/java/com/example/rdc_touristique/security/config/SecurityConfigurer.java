@@ -85,6 +85,7 @@ public class SecurityConfigurer extends WebSecurityConfigurerAdapter {
         corsConfiguration.addAllowedOrigin("http://mobembo.hopto.org:4200");
         corsConfiguration.addAllowedOrigin("http://91.86.33.4:4200");
         corsConfiguration.addAllowedOrigin("http://localhost:4200");
+        corsConfiguration.addAllowedOrigin("http://10.10.19.45:4200");
         corsConfiguration.addAllowedMethod("*");
         corsConfiguration.addAllowedHeader("*");
         corsConfiguration.addExposedHeader(constParam.JWT_NAME);

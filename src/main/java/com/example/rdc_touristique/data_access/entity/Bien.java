@@ -74,5 +74,4 @@ public class Bien extends BaseEntity{
     @Column
     private boolean modeActive;
 
-
 }
