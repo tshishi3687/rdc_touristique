@@ -6,6 +6,6 @@ import com.example.rdc_touristique.data_access.entity.ImageBien;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface ImageRepository extends JpaRepository<ImageBien, Long> {
-    List<ImageBien> findAllByBienid(Bien bien);
+    List<ImageBien> findByBienid_Id(int bien);
     void deleteAllByBienid(Bien bienId);
 }

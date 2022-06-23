@@ -27,9 +27,9 @@ public class AdressUserMapper implements Mapper<AdressUserDTO, AdressePersonne>{
             return null;
         return new AdressUserDTO(
                 adresse.getId(),
-                adresse.getNumHabitation().charAt(0) + "**",
-                adresse.getNomRue().charAt(0) + "*******",
-                adresse.getCodePostal().charAt(0) + "*****",
+                adresse.getNumHabitation().isEmpty() ? null : adresse.getNumHabitation().charAt(0) + "**",
+                adresse.getNomRue().isEmpty() ? null : adresse.getNomRue().charAt(0) + "*******",
+                adresse.getCodePostal().isEmpty() ? null :adresse.getCodePostal().charAt(0) + "*****",
                 paysMapper.toDTO(adresse.getPays())
         );
     }

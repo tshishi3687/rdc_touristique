@@ -80,7 +80,7 @@ public class ImageModelService implements CrudService<ImageModelDTO, Integer>{
         if(idBien <= 0)
             return null;
 
-        List<ImageBien> listBien = imageRepository.findAllByBienid(bienRepository.getOne(idBien));
+        List<ImageBien> listBien = imageRepository.findByBienid_Id(idBien);
         List<ImageBien> newListImageBien = new ArrayList<>();
 
         for (ImageBien imageBien : listBien) {

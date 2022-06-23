@@ -97,7 +97,7 @@ public class BienVuMapper implements Mapper<BienVuDTO, Bien>{
                 coordonneeMapper.toDTO(bien.getCoordonnee()),
                 likes,
                 bien.isModeActive(),
-                imageModelService.getImage(bien.getId()),
+                imageModelService.getImage(bien.getId()).isEmpty() ? null : imageModelService.getImage(bien.getId()),
                 serviceDTOS,
                 0,
                 ListDateMEL,

@@ -33,10 +33,9 @@ public class BienVuSimplierMapper implements Mapper<BienVuSimplifierDTO, Bien>{
     @Override
     public BienVuSimplifierDTO toDTO(Bien bien) {
 
-        if (imageModelService.getImage(bien.getId()).size() <= 0)
-            bienRepository.deleteById(bien.getId());
+        int i = Math.max(bien.getLikes().size(), 0);
 
-        List<Personne> personneList = bien.getLikes();
+
 
         return new BienVuSimplifierDTO(
                 bien.getId(),
@@ -48,8 +47,8 @@ public class BienVuSimplierMapper implements Mapper<BienVuSimplifierDTO, Bien>{
                 bien.getNsdb(),
                 bien.getSuperficie(),
                 coordonneeMapper.toDTO(bien.getCoordonnee()),
-                personneList.size(),
-                imageModelServiceMapper.toDTO(imageModelService.getImage(bien.getId()).get(0))
+                i,
+                imageModelService.getImage(bien.getId()).isEmpty() ? null : imageModelServiceMapper.toDTO(imageModelService.getImage(bien.getId()).get(0))
         );
     }
 

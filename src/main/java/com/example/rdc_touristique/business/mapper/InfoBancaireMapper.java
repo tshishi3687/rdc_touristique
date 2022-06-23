@@ -23,9 +23,9 @@ public class InfoBancaireMapper implements Mapper<InfoBancaireDTO, InfoBancaireP
 
         return new InfoBancaireDTO(
                 infoBancaire.getId(),
-                infoBancaire.getNomBanque().charAt(0) + "****",
-                "**** **** **** ***" + infoBancaire.getNumCarte().charAt(infoBancaire.getNumCarte().length() -1),
-                "**** **** **** ***" + infoBancaire.getNumCompte().charAt(infoBancaire.getNumCompte().length() - 1),
+                infoBancaire.getNomBanque().isEmpty() ? null : "****" + infoBancaire.getNomBanque().charAt(infoBancaire.getNomBanque().length() - 1),
+                infoBancaire.getNumCarte().isEmpty() ? null : "**** **** **** ***" + infoBancaire.getNumCarte().charAt(infoBancaire.getNumCarte().length() -1),
+                infoBancaire.getNumCompte().isEmpty() ? null : "**** **** **** ***" + infoBancaire.getNumCompte().charAt(infoBancaire.getNumCompte().length() - 1),
                 infoBancaire.getDateExpiration(),
                 personneMapper.toDTO(infoBancaire.getAppartienA())
         );
