@@ -13,13 +13,15 @@ public class TextContrat {
     private final Bien bienReservee;
     private final LocalDate dateArrivee;
     private final LocalDate dateDepart;
+    private final long nNuit;
 
-    public TextContrat(Personne bailleur, Personne preneur, Bien bienReservee, LocalDate dateArrivee, LocalDate dateDepart) {
+    public TextContrat(Personne bailleur, Personne preneur, Bien bienReservee, LocalDate dateArrivee, LocalDate dateDepart, long nNuit) {
         this.bailleur = bailleur;
         this.preneur = preneur;
         this.bienReservee = bienReservee;
         this.dateArrivee = dateArrivee;
         this.dateDepart = dateDepart;
+        this.nNuit = nNuit;
     }
 
     public String EntreBailler(){
@@ -64,9 +66,9 @@ public class TextContrat {
 
     public String loyer(){
         return "Le Bail est consenti en contrepartie d un loyer de " + this.bienReservee.getPrix() + " euros" +
-                " par nuit, paye en une fois." +
-                "Le paiement du loyer se fait a la signature du bail par le Preneur sur le site MOBEMBO.cd." +
-                "Le loyer est paye, sauf nouvelles instructions du Bailleur, sur le compte en banque suivant:" +
+                " par nuit, paye en une fois. Pour une somme total de " + (this.bienReservee.getPrix() * nNuit) + " euro." +
+                "Le paiement du loyer se fait lors de la conclusion du bail par le Preneur sur le site MOBEMBO.cd." +
+                "Le loyer est paye, sauf nouvelles instructions du Bailleur, sur Mobembo.cd ou sur le compte du groupe TSHISHI-RDC :" +
                 " " + this.bailleur.getInfoBancaires().getNumCompte();
     }
 

@@ -29,7 +29,7 @@ public class PersonneCreaMapper implements Mapper<CreatPersonneDTO, Personne>{
         personne.setId(0);
         personne.setNom(creatPersonne.getNom());
         personne.setPrenom(creatPersonne.getPrenom());
-        personne.setDdn(creatPersonne.getDdn());
+        personne.setDdn(creatPersonne.getDdn().plusDays(1));
         personne.setRoleId(rollRepository.getOne(2));
         personne.setActive(false);
 

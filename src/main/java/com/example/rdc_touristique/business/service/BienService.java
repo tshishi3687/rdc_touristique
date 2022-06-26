@@ -187,7 +187,8 @@ public class BienService implements CrudService<BienVuDTO, Integer> {
                     preneur, // le Preneur: personne ENTITY
                     bien, // bien consernée: bienDTO
                     bienDTO.getAppartirDe(), // jour-J
-                    bienDTO.getAppartirDe().plusDays(bienDTO.getIdNNuit()) // jour-J + nombre de nuit
+                    bienDTO.getAppartirDe().plusDays(bienDTO.getIdNNuit()), // jour-J + nombre de nuit,
+                    0
             );
 
             bien.setAppartirDe(bienDTO.getAppartirDe());
@@ -228,7 +229,7 @@ public class BienService implements CrudService<BienVuDTO, Integer> {
         ){
 
             cmel.setEnCour(false);
-            cmel.setDdFin(LocalDate.now());
+            cmel.setDdFin(LocalDate.now().plusDays(1));
             cmel.getIdBien().setModeActive(false);
             cmel.getDetails().add(detailsRepository.save(detailsMapper.toEntity(payPalDTO.getDetails())));
             contratRepository.save(cmel);
@@ -264,12 +265,15 @@ public class BienService implements CrudService<BienVuDTO, Integer> {
         Personne preneur = JwtRequestFilter.maPersonne();
         Bien bien = bienRepository.getOne(paypalDTO.getReservationBienDTO().getBienConserne().getId());
 
+        long nJour = ChronoUnit.DAYS.between(paypalDTO.getReservationBienDTO().getDdArrivee(), paypalDTO.getReservationBienDTO().getDdDepart());
+
         TextContrat textContrat = new TextContrat(
                 bailleur, // le Bailleur: personne ENTITY
                 preneur, // le Preneur: personne ENTITY
                 bien, // bien consernée: bienDTO
                 paypalDTO.getReservationBienDTO().getDdArrivee(), // date d'arrivé
-                paypalDTO.getReservationBienDTO().getDdDepart() // date de départ
+                paypalDTO.getReservationBienDTO().getDdDepart(), // date de départ
+                nJour
         );
 
         ContratLocation newContrat = new ContratLocation();
