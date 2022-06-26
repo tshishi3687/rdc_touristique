@@ -14,12 +14,12 @@ public class StringText {
 
         // création
     private static final String sujetCrea = "Confirmer votre compte";
-    private static final String sujetEnvoisDemande = "Confirmation de réservation";
+    private static final String sujetEnvoisDemande = "Confirmation de reservation";
     private static final String sujetEnvoisConfMisEnLigne = "Confirmation de mise en ligne.";
-    private static final String sujetDemanderecu = "Nouvelle réservation reçue";
-    private static final String sujetmodifMDP = "Demande de changement de mot-de-passe";
+    private static final String sujetDemanderecu = "Nouvelle reservation recue";
+    private static final String sujetmodifMDP = "Demande de changement de mot de passe";
     private static final String sujetBienNonConforme = "Bien non conforme.";
-    private static final String sujetConfirmationReservation = "Demande de Réservation";
+    private static final String sujetConfirmationReservation = "Demande de Reservation";
     private static final String sujetStopContrat = "***ATTENTION: TENTATIVE DE CESSATION DE CONTRAT";
 
 
@@ -42,11 +42,11 @@ public class StringText {
 
     public String alertStopContrat(ContratMisEnLigne entity, String code){
         return "<p>" +
-                "Bonjour Madame, Monsieur " + entity.getPreneur().getNom() + ",</p>" +
+                "Madame, Monsieur " + entity.getPreneur().getNom() + ",</p>" +
                 "<br>" +
                 "<br>" +
                 "<h3>" +
-                "Un processus de cessation de contrat pour le bien nommé ci-dessous a été entamer." +
+                "Un processus de cessation de contrat pour le bien nomme ci dessous a ete entamer." +
                 "</h3>" +
                 "<tableau>" +
                 "<tr>" +
@@ -62,54 +62,54 @@ public class StringText {
                 "</tableau>" +
                 "<br>" +
                 "<p>" +
-                "Cette action implique une redevence de " + entity.getIdBien().getPrix() + "€ au profit de Mobembo.cd, comme stipulé dans le contrat." +
+                "Cette action implique une redevence de " + entity.getIdBien().getPrix() + "euro au profit de Mobembo.cd, comme stipule dans le contrat." +
                 "</p>" +
                 "<p>" +
-                "Si vous êtes conscient(e) du processus et si vous voulez continué" +
+                "Si vous etes conscient(e) du processus et si vous voulez continue" +
                 ", voici votre code de validation : \"" + code + "\"." +
                 "</p>" +
                 "<br>" +
                 "<br>" +
-                "<p>Ce n'est pas vous qui a entamée ce processus?<br> Conseil:</p>" +
+                "<p>Si ce n est pas vous...<br> Conseil:</p>" +
                 "<ul>" +
-                "<li>" + "Modifier le mode passe de votre Bobembo.cd." +"</li>" +
-                "<li>" + "Modifier le mode passe de votre voite E-Mail associer au compte Mobembo.cd." +"</li>" +
+                "<li>" + "Modifier le mode passe de votre Mobembo.cd." +"</li>" +
+                "<li>" + "Modifier le mode passe de votre boite E-Mail associer au compte Mobembo.cd." +"</li>" +
                 "<li>" + "Contacter le service IT sur : "+ entity.getBailleur().getContactUser().getEmail() +"</li>" +
                 "</ul>" +
                 "<br>" +
                 "<br>" +
-                "A bientôt.<br><br><br>" +
-                "Tshibangu Cédrick<br>" +
-                "Développeur de Mobembo";
+                "A bientot.<br><br><br>" +
+                "Tshibangu Cedrick<br>" +
+                "Developpeur de Mobembo.cd";
     }
 
     public String creationMessageInscription(String codeCree, String nom){
         return "" +
-                "Félicitation " + nom + " !!!!!! <br><br>" +
-                "Votre compte à été créé avec succés :).<br>" +
-                "Néanmoins, pour pouvoir profiter de nos services, veuillez retaper le code: \"" + codeCree + "\"<br>" +
-                "dans l'application Mobembo.cd." +
+                "Felicitation " + nom + " !!!!!! <br><br>" +
+                "Votre compte a ete cree avec succes :).<br>" +
+                "Neanmoins, pour pouvoir profiter de nos services, veuillez retaper le code: \"" + codeCree + "\"<br>" +
+                "dans l application Mobembo.cd." +
                 "<br><br>" +
-                "A bientôt.<br><br><br>" +
-                "Tshibangu Cédrick<br>" +
-                "Développeur de Mobembo";
+                "A bientot.<br><br><br>" +
+                "Tshibangu Cedrick<br>" +
+                "Developpeur de Mobembo.cd";
     }
 
     public String confimationEnvoisDemande(
             String province, String ville, String typeBien,
             String adressBien, String nom, int prix,
             LocalDate dateArrive, LocalDate dateFin, DetailsDTO detailsDTO){
-        return "Bonjour Madame, Monsieur "
-                + nom + ".<br>votre réservation a été enregistrée avec succès :)- <br><br>" +
-                "Détails du Bien : <br>" +
+        return "Madame, Monsieur "
+                + nom + ".<br>votre reservation a ete enregistree avec succes :)- <br><br>" +
+                "Details du bien : <br>" +
                 "Province : " + province + "<br>" +
                 "Ville : " + ville + "<br>" +
                 "Type de Bien : " + typeBien + "<br>" +
                 "Adresse : " + adressBien + "<br>" +
-                "Date d'arrivée : " + dateArrive + "<br>" +
-                "Date de départ : " + dateFin + "<br>" +
+                "Date d arrivee : " + dateArrive + "<br>" +
+                "Date de depart : " + dateFin + "<br>" +
                 "<br>" +
-                "<h3>Information de payement</h3>" +
+                "<h3>Information de paiement</h3>" +
                 "<table>" +
                 "<thead>" +
                 "<tr>" +
@@ -139,7 +139,7 @@ public class StringText {
                 "<tr>" +
                 "<th>Nom</th>" +
                 "<th>Prenom</th>" +
-                "<th>E-mail</th>" +
+                "<th>E mail</th>" +
                 "<th>Adresse Line</th>" +
                 "<th>Admin Area 1</th>" +
                 "<th>Admin Area 2</th>" +
@@ -164,140 +164,140 @@ public class StringText {
                 "<br>" +
                 "Il vous est possible de lire le contrat de la reservation sur MOBEMBO.cd" +
                 "<br><br>" +
-                "A bientôt.<br><br><br>" +
-                "Tshibangu Cédrick<br>" +
-                "Développeur de Mobembo";
+                "A bientot.<br><br><br>" +
+                "Tshibangu Cedrick<br>" +
+                "Developpeur de Mobembo.cd";
     }
 
     public String notificationReservation(String province, String ville, String typeBien, String adressBien, String nom, LocalDate dateArrive, LocalDate dateFin){
-        return "Bonjour Madame, Monsieur "
-                + nom + "<br>l'un de vos Bien a tapé dans l'oeil :)- <br><br>" +
-                "Détails du Bien : <br>"  +
+        return "Madame, Monsieur "
+                + nom + "<br>L'un de vos bien a du succes :)- <br><br>" +
+                "Details du bien : <br>"  +
                 "Province : " + province + "<br>" +
                 "Ville : " + ville + "<br>" +
-                "Type de Bien : " + typeBien + "<br>" +
+                "Type de bien : " + typeBien + "<br>" +
                 "Adresse : " + adressBien + "<br>" +
-                "Date d'arrivé : " + dateArrive + "<br>" +
-                "Date de départ : " + dateFin + "<br>" +
+                "Date d arrive : " + dateArrive + "<br>" +
+                "Date de depart : " + dateFin + "<br>" +
                 "<br><br>" +
-                "A bientôt.<br><br><br>" +
-                "Tshibangu Cédrick<br>" +
-                "Développeur de Mobembo";
+                "A bientot.<br><br><br>" +
+                "Tshibangu Cedrick<br>" +
+                "Developpeur de Mobembo.cd";
     }
 
     public String confirmationMisEnLigne(Personne personne, Bien bien,int jours, String code){
-        return "Bonjour Madame, Monsieur " + personne.getNom() + "," +
+        return "Madame, Monsieur " + personne.getNom() + "," +
                 "<br>" +
                 "<br>" +
-                "Nous constatons que vous êtes sur le point de mettre votre: <br>" +
+                "Nous constatons que vous etes sur le point de mettre votre: <br>" +
                 "<ul>" +
                     "<li>" +
                         bien.getType().getNom() +
                     "</li>" +
                     "<li>" +
-                        "A " + bien.getPrix() + "/ €" +
+                        "A " + bien.getPrix() + "/ euro" +
                     "</li>" +
                     "<li>" +
                         "Adresse : " + bien.getCoordonnee().getNum() + " " + bien.getCoordonnee().getRue() + ", " + bien.getCoordonnee().getVille().getNomVille() + " " + bien.getCoordonnee().getVille().getProvince().getNomprovince() +
                     "</li>" +
                 "</ul> " +
                 "" +
-                " En ligne pour une durée de " + jours + " jours." +
+                " En ligne pour une duree de " + jours + " jours." +
                 "<br>" +
                 "<br>" +
-                "Si vous êtes d'accord avec les informations indiquées ci-avant, voici votre code : " +
+                "Si vous etes d accord avec les informations indiquees ci avant, voici votre code : " +
                 "\"" + code + "\"<br>" +
-                "En mettant ce code sur MOBEMBO.cd, vous acceptez les termes et conditions liés à la mise en ligne d'un Bien sur MOBEMBO.cd." +
+                "En mettant ce code sur MOBEMBO.cd, vous acceptez les termes et conditions lies a la mise en ligne d'un bien sur MOBEMBO.cd." +
                 "<br>" +
                 "<br>" +
-                "Bien à vous," +
+                "Bien a vous," +
                 "<br>" +
                 "<br>" +
-                "Tshibangu Cédrcik" +
+                "Tshibangu Cedrick" +
                 "<br>" +
-                "Créateur et developpeur de MOBEMBO.cd.";
+                "Createur et developpeur de MOBEMBO.cd.";
     }
 
     public String confirmationReservation(Personne personne, Bien bien,long jours, String code){
-        return "Bonjour Madame, Monsieur " + personne.getNom() + "," +
+        return "Madame, Monsieur " + personne.getNom() + "," +
                 "<br>" +
                 "<br>" +
-                "Nous constatons que vous êtes sur le point de faire la réservation du Bien suivant: <br>" +
+                "Nous constatons que vous etes sur le point de faire la reservation du bien suivant: <br>" +
                 "<ul>" +
                     "<li>" +
                         bien.getType().getNom() +
                     "</li>" +
                     "<li>" +
-                        "A " + bien.getPrix() + "/ €" +
+                        "A " + bien.getPrix() + "/ euro" +
                     "</li>" +
                     "<li>" +
                         "Adresse : " + bien.getCoordonnee().getNum() + " " + bien.getCoordonnee().getRue() + ", " + bien.getCoordonnee().getVille().getNomVille() + " " + bien.getCoordonnee().getVille().getProvince().getNomprovince() +
                     "</li>" +
                 "</ul> " +
                 "" +
-                " Pour une durée de " + jours + " jours." +
+                " Pour une duree de " + jours + " jours." +
                 "<br>" +
                 "<br>" +
-                "Si vous êtes d'accord avec les informations indiquées ci-avant, voici votre code : " +
+                "Si vous etes d accord avec les informations indiquees ci avant, voici votre code : " +
                 "\"" + code + "\"<br>" +
-                "En mettant ce code sur MOBEMBO.cd, vous acceptez les termes et conditions liés à la mise en ligne d'un Bien sur MOBEMBO.cd." +
+                "En mettant ce code sur MOBEMBO.cd, vous acceptez les termes et conditions lies a la mise en ligne d'un bien sur MOBEMBO.cd." +
                 "<br>" +
                 "<br>" +
-                "Bien à vous," +
+                "Bien a vous," +
                 "<br>" +
                 "<br>" +
-                "Tshibangu Cédrcik" +
+                "Tshibangu Cedrick" +
                 "<br>" +
-                "Créateur et developpeur de MOBEMBO.cd.";
+                "Createur et developpeur de MOBEMBO.cd.";
     }
 
     public String demandeModifMDP( Personne entity, String code){
-        return "Bonjour " + entity.getNom() + " " + entity.getPrenom() +
+        return "Madame, Monsieur, " + entity.getNom() + " " + entity.getPrenom() +
                 "<br>" +
-                "Nous venons de recevoir une demande de modification du mot de passe lié à votre compte. <br>" +
+                "Nous venons de recevoir une demande de modification du mot de passe lie a votre compte. <br>" +
                 "Si ce n'est pas vous, veuillez ignorer ce message." +
                 "<br>" +
                 "<br>" +
-                "Sinon, votre code de vérification est " + code +
+                "Sinon, votre code de verification est \"" + code + "\" " +
                 "<br>" +
                 "<br>" +
-                "Bien à vous" +
+                "Bien a vous" +
                 "<br>" +
                 "<br>" +
-                "Tshibangu Cédrcik" +
+                "Tshibangu Cedrick" +
                 "<br>" +
-                "Créateur et developpeur de MOBEMBO.cd.";
+                "Createur et developpeur de MOBEMBO.cd.";
     }
 
     public String bienNonConforme(ContratMisEnLigne contrat){
-        return "Bonjour " + contrat.getPreneur().getNom() + " " + contrat.getPreneur().getPrenom() +
+        return "Madame, Monsieur, " + contrat.getPreneur().getNom() + " " + contrat.getPreneur().getPrenom() +
                 "<br>" +
-                "<h1>Le contrat pour le bien portant le numéro NKDIR_" + contrat.getIdBien() + " a été annunée par nos soin.</h1>" +
+                "<h1>Le contrat pour le bien portant le numero NKDIR_" + contrat.getIdBien() + " a ete annulee par nos soins.</h1>" +
                 "<br>" +
                 "<h3>Cause :</h3>" +
-                "<ul><li>Le Bien décrit ci-dessous de répond pas à la qualité attendu sur Mobembo.cd.</li></ul>" +
+                "<ul><li>Le bien decrit ci dessous ne repond pas a la qualite attendue sur Mobembo.cd.</li></ul>" +
                 "<ul>" +
                 "<br>" +
-                "Détail du bien :" +
+                "Detail du bien :" +
                 "<li> Type : " +
                 contrat.getIdBien().getType().getNom() +
                 "</li>" +
                 "<li> Prix : " +
-                "A " + contrat.getIdBien().getPrix() + "/ €" +
+                "A " + contrat.getIdBien().getPrix() + "/ euro" +
                 "</li>" +
                 "<li> Adresse : " +
-                "Adresse : " + contrat.getIdBien().getCoordonnee().getNum() + " " + contrat.getIdBien().getCoordonnee().getRue() + ", " + contrat.getIdBien().getCoordonnee().getVille().getNomVille() + " " + contrat.getIdBien().getCoordonnee().getVille().getProvince().getNomprovince() +
+                "" + contrat.getIdBien().getCoordonnee().getNum() + " " + contrat.getIdBien().getCoordonnee().getRue() + ", " + contrat.getIdBien().getCoordonnee().getVille().getNomVille() + " " + contrat.getIdBien().getCoordonnee().getVille().getProvince().getNomprovince() +
                 "</li>" +
                 "</ul> " +
-                "L'annulation de se contrat prend fin dès aujourd'hui " + LocalDate.now() + ". " +
-                "Et a pour effet le retrait du Bien cité ci-deçu de la vue de tous." +
+                "L annulation de ce contrat prend fin des aujourd hui " + LocalDate.now() + ". " +
+                "Et a pour effet le retrait du bien, cite ci dessus, de la vue de tous." +
                 "<br>" +
                 "<br>" +
-                "Bien à vous" +
+                "Bien a vous" +
                 "<br>" +
                 "<br>" +
-                "Tshibangu Cédrcik" +
+                "Tshibangu Cedrick" +
                 "<br>" +
-                "Créateur et developpeur de MOBEMBO.cd.";
+                "Createur et developpeur de MOBEMBO.cd.";
     }
 }

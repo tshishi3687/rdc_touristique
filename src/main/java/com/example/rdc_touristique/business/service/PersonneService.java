@@ -108,13 +108,13 @@ public class PersonneService implements CrudService<PersonneSimpleDTO, Integer> 
         if (JwtRequestFilter.maPersonne().getRoleId().getId() != 1) {
             validator.setIbau(JwtRequestFilter.maPersonne().getInfoBancaires() != null && JwtRequestFilter.maPersonne().getAdresse() != null);
             validator.setReservation(JwtRequestFilter.maPersonne().getContratsLocationsPreneur().isEmpty());
-            validator.setMel((JwtRequestFilter.maPersonne().getContratsPreneur().isEmpty()));
-            validator.setBiensNonMel(bienRepository.findAllByAppartientAndModeActiveFalseOrderByIdDesc(JwtRequestFilter.maPersonne()).isEmpty());
+            validator.setMel(!JwtRequestFilter.maPersonne().getContratsPreneur().isEmpty());
+            validator.setBiensNonMel(!bienRepository.findAllByAppartientAndModeActiveFalseOrderByIdDesc(JwtRequestFilter.maPersonne()).isEmpty());
         }else if (JwtRequestFilter.maPersonne().getRoleId().getId() == 1){
-            validator.setIbau(JwtRequestFilter.maPersonne().getInfoBancaires() != null && JwtRequestFilter.maPersonne().getAdresse() != null);
-            validator.setReservation(JwtRequestFilter.maPersonne().getContratsLocationBailleur().isEmpty());
-            validator.setMel((JwtRequestFilter.maPersonne().getContratsBailleur().isEmpty()));
-            validator.setBiensNonMel(bienRepository.findAllByAppartientAndModeActiveFalseOrderByIdDesc(JwtRequestFilter.maPersonne()).isEmpty());
+            validator.setIbau(true);
+            validator.setReservation(false);
+            validator.setMel(true);
+            validator.setBiensNonMel(true);
         }
         return validator;
     }

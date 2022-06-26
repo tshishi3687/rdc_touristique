@@ -54,7 +54,8 @@ public class BienVuMapper implements Mapper<BienVuDTO, Bien>{
             if (contratMisEnLignes != null) {
                 for (ContratMisEnLigne misEnLigne : contratMisEnLignes) {
                     if (misEnLigne.isEnCour()) {
-                        date = misEnLigne.getDdDebut().datesUntil(misEnLigne.getDdFin());
+                        // TODO temporary workaround To refactor later
+                        date = misEnLigne.getDdDebut().datesUntil(misEnLigne.getDdFin().plusDays(1));
                         ListDateMEL.addAll(date.collect(Collectors.toList()));
                     }
                 }

@@ -152,7 +152,6 @@ public class BienService implements CrudService<BienVuDTO, Integer> {
     public void activationBien(BienVuDTO bienDTO) throws BienFoundExeption {
         if( !bienRepository.existsById(bienDTO.getId()))
             throw new BienFoundExeption(bienDTO.getId());
-
         bienDTO.setAppartirDe(bienDTO.getAppartirDe().plusDays(1));
         // Pour faire passer un bien en mode active, je dois:
             // créé un contrat entre le propiétaire du bien et Mobembo (representé par personne Admin
@@ -192,7 +191,6 @@ public class BienService implements CrudService<BienVuDTO, Integer> {
             );
 
             bien.setAppartirDe(bienDTO.getAppartirDe());
-            bien.setModeActive(true);
 
             // 5. je cree l'entité contrat
             ContratMisEnLigne contrat = new ContratMisEnLigne();
@@ -203,6 +201,7 @@ public class BienService implements CrudService<BienVuDTO, Integer> {
                 contrat.setBailleur(bailleur); // bailleur: personne ENTITY
                 contrat.setPreneur(preneur); // preneur: personne ENTITY
                 contrat.setEnCour(true);
+                bien.setModeActive(true);
                 contrat.setEntre(textContrat.EntreBailler());
                 contrat.setEntre2(textContrat.EntrePreneur());
                 contrat.setObjet(textContrat.objet());
@@ -210,9 +209,9 @@ public class BienService implements CrudService<BienVuDTO, Integer> {
                 contrat.setLoyer(textContrat.loyerMobembo());
                 contrat.setDuree(textContrat.dureeMobembo());
                 contrat.setDardl(textContrat.dARDL());
+            bienRepository.save(bien);
           contratRepository.save(contrat);
 
-            bienRepository.save(bien);
         }
     }
 
@@ -435,8 +434,8 @@ public class BienService implements CrudService<BienVuDTO, Integer> {
             }
             // sinon je je change le propriétaire diu bien
         }else {
-            if (!JwtRequestFilter.maPersonne().getContactUser().getEmail().equals("tshishi@outlook.be") && monBien.getAppartient().getId() == maPersonne.getId()) {
-                monBien.setAppartient(personneReposytory.findByContactUser_Email("tshishi@outlook.be"));
+            if (!JwtRequestFilter.maPersonne().getContactUser().getEmail().equals("tshi.cedrick@gmail.com") && monBien.getAppartient().getId() == maPersonne.getId()) {
+                monBien.setAppartient(personneReposytory.getOne(1));
                 for (ContratLocation contratLocation : contratLocations) {
                     contratLocation.setIdBien(bienRepository.save(monBien));
                     contratLocationRepository.save(contratLocation);

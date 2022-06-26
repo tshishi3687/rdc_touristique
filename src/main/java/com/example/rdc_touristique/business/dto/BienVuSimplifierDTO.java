@@ -3,6 +3,8 @@ package com.example.rdc_touristique.business.dto;
 import com.example.rdc_touristique.data_access.entity.ImageBien;
 import lombok.*;
 
+import java.time.LocalDate;
+
 @Getter
 @Setter
 @NoArgsConstructor
@@ -21,4 +23,5 @@ public class BienVuSimplifierDTO {
     private CoordonneeDTO coordonnee;
     private int likes;
     private ImageModelDTO image;
+    private LocalDate appartirDe;
 }

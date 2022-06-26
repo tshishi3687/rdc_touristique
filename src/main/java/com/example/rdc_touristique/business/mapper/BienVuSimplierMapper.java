@@ -48,7 +48,8 @@ public class BienVuSimplierMapper implements Mapper<BienVuSimplifierDTO, Bien>{
                 bien.getSuperficie(),
                 coordonneeMapper.toDTO(bien.getCoordonnee()),
                 i,
-                imageModelService.getImage(bien.getId()).isEmpty() ? null : imageModelServiceMapper.toDTO(imageModelService.getImage(bien.getId()).get(0))
+                imageModelService.getImage(bien.getId()).isEmpty() ? null : imageModelServiceMapper.toDTO(imageModelService.getImage(bien.getId()).get(0)),
+                bien.getAppartirDe()
         );
     }
 
