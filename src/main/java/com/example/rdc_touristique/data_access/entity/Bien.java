@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.time.LocalDate;
 import java.util.List;
 
 @Entity
@@ -73,5 +74,8 @@ public class Bien extends BaseEntity{
 
     @Column
     private boolean modeActive;
+
+    @Column
+    private LocalDate appartirDe;
 
 }

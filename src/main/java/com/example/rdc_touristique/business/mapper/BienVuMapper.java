@@ -54,7 +54,7 @@ public class BienVuMapper implements Mapper<BienVuDTO, Bien>{
             if (contratMisEnLignes != null) {
                 for (ContratMisEnLigne misEnLigne : contratMisEnLignes) {
                     if (misEnLigne.isEnCour()) {
-                        date = LocalDate.now().datesUntil(misEnLigne.getDdFin());
+                        date = misEnLigne.getDdDebut().datesUntil(misEnLigne.getDdFin());
                         ListDateMEL.addAll(date.collect(Collectors.toList()));
                     }
                 }
@@ -101,7 +101,8 @@ public class BienVuMapper implements Mapper<BienVuDTO, Bien>{
                 serviceDTOS,
                 0,
                 ListDateMEL,
-                ListDateReserv
+                ListDateReserv,
+                bien.getAppartirDe()
         );
     }
 

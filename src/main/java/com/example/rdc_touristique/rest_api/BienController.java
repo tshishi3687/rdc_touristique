@@ -83,6 +83,8 @@ public class BienController extends AbstratCrudController<BienVuDTO, Integer> {
     @PostMapping("/reservation")
     @ResponseStatus(HttpStatus.OK)
     public int reservation(@RequestBody PayPalRDTO payPalDTO) throws NoSuchAlgorithmException, InvalidKeySpecException, MessagingException, ContratLocationFoundExeption {
+        payPalDTO.getReservationBienDTO().setDdArrivee(payPalDTO.getReservationBienDTO().getDdArrivee().plusDays(1));
+        payPalDTO.getReservationBienDTO().setDdDepart(payPalDTO.getReservationBienDTO().getDdDepart().plusDays(1));
         return ((BienService) service).reservationBien(payPalDTO);
     }
 
@@ -95,6 +97,8 @@ public class BienController extends AbstratCrudController<BienVuDTO, Integer> {
     @PostMapping("/dispo")
     @ResponseStatus(HttpStatus.OK)
     public boolean isDisponible(@RequestBody ReservationBienDTO DTO) {
+        DTO.setDdArrivee(DTO.getDdArrivee().plusDays(1));
+        DTO.setDdDepart(DTO.getDdDepart().plusDays(1));
         return ((BienService) service).isDisponible(DTO);
     }
 

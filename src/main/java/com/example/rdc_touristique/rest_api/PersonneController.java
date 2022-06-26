@@ -47,8 +47,8 @@ public class PersonneController extends AbstratCrudController<PersonneSimpleDTO,
 
     @PostMapping("/ibau")
     @ResponseStatus(HttpStatus.OK)
-    public boolean verifIBAU() {
-        return ((PersonneService)service).infoBanAdreUser();
+    public ValidatorDTO verifIBAU() {
+        return ((PersonneService)service).validateElement();
     }
 
     @PostMapping("/email")

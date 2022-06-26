@@ -24,11 +24,11 @@ public class CoordonneeMapper implements Mapper<CoordonneeDTO, Coordonnee>{
         return new CoordonneeDTO(
                 coordonnee.getId(),
                 villeMapper.toDTO(coordonnee.getVille()),
-                coordonnee.getCpostal(),
-                coordonnee.getRue(),
-                coordonnee.getNum(),
-                coordonnee.getEmail(),
-                coordonnee.getTelephone(),
+                "****",
+                "****",
+                "****",
+                "****",
+                "****",
                 coordonnee.getDateCreation()
         );
     }

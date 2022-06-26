@@ -103,8 +103,20 @@ public class PersonneService implements CrudService<PersonneSimpleDTO, Integer> 
      }
 
     @Transactional
-    public boolean infoBanAdreUser() {
-            return JwtRequestFilter.maPersonne().getInfoBancaires() != null && JwtRequestFilter.maPersonne().getAdresse() != null;
+    public ValidatorDTO validateElement(){
+        ValidatorDTO validator = new ValidatorDTO();
+        if (JwtRequestFilter.maPersonne().getRoleId().getId() != 1) {
+            validator.setIbau(JwtRequestFilter.maPersonne().getInfoBancaires() != null && JwtRequestFilter.maPersonne().getAdresse() != null);
+            validator.setReservation(JwtRequestFilter.maPersonne().getContratsLocationsPreneur().isEmpty());
+            validator.setMel((JwtRequestFilter.maPersonne().getContratsPreneur().isEmpty()));
+            validator.setBiensNonMel(bienRepository.findAllByAppartientAndModeActiveFalseOrderByIdDesc(JwtRequestFilter.maPersonne()).isEmpty());
+        }else if (JwtRequestFilter.maPersonne().getRoleId().getId() == 1){
+            validator.setIbau(JwtRequestFilter.maPersonne().getInfoBancaires() != null && JwtRequestFilter.maPersonne().getAdresse() != null);
+            validator.setReservation(JwtRequestFilter.maPersonne().getContratsLocationBailleur().isEmpty());
+            validator.setMel((JwtRequestFilter.maPersonne().getContratsBailleur().isEmpty()));
+            validator.setBiensNonMel(bienRepository.findAllByAppartientAndModeActiveFalseOrderByIdDesc(JwtRequestFilter.maPersonne()).isEmpty());
+        }
+        return validator;
     }
 
     @Override

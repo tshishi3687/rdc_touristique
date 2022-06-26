@@ -65,6 +65,14 @@ public class Personne extends BaseEntity{
     @ToString.Exclude
     private List<ContratMisEnLigne> contratsBailleur;
 
+    @OneToMany(mappedBy = "preneur")
+    @ToString.Exclude
+    private List<ContratLocation> contratsLocationsPreneur;
+
+    @OneToMany(mappedBy = "bailleur")
+    @ToString.Exclude
+    private List<ContratLocation> contratsLocationBailleur;
+
     @ManyToMany
     @JoinTable(
             name = "personne_like_bien",

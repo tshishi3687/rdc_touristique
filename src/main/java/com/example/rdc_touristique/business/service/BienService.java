@@ -153,6 +153,7 @@ public class BienService implements CrudService<BienVuDTO, Integer> {
         if( !bienRepository.existsById(bienDTO.getId()))
             throw new BienFoundExeption(bienDTO.getId());
 
+        bienDTO.setAppartirDe(bienDTO.getAppartirDe().plusDays(1));
         // Pour faire passer un bien en mode active, je dois:
             // créé un contrat entre le propiétaire du bien et Mobembo (representé par personne Admin
 
@@ -171,7 +172,8 @@ public class BienService implements CrudService<BienVuDTO, Integer> {
                 contratRepository.save(cmel);
             }
         }
-        if (!bien.isModeActive() && personneService.infoBanAdreUser()){
+
+        if (!bien.isModeActive() && personneService.validateElement().getIbau()){
 
             // Préparation du contrat liant le propiétaire du bien et Mobembo.cd
             // 3. je cherche les deux partie
@@ -185,17 +187,19 @@ public class BienService implements CrudService<BienVuDTO, Integer> {
                     bailleur, // le Bailleur: personne ENTITY
                     preneur, // le Preneur: personne ENTITY
                     bien, // bien consernée: bienDTO
-                    LocalDate.now(), // jour-J
-                    LocalDate.now().plusDays(bienDTO.getIdNNuit()) // jour-J + nombre de nuit
+                    bienDTO.getAppartirDe(), // jour-J
+                    bienDTO.getAppartirDe().plusDays(bienDTO.getIdNNuit()) // jour-J + nombre de nuit
             );
+
+            bien.setAppartirDe(bienDTO.getAppartirDe());
+            bien.setModeActive(true);
 
             // 5. je cree l'entité contrat
             ContratMisEnLigne contrat = new ContratMisEnLigne();
                 contrat.setId(0); // id 0 pour la création
-                contrat.setDdDebut(LocalDate.now());
-                contrat.setDdFin(LocalDate.now().plusDays(bienDTO.getIdNNuit()));
+                contrat.setDdDebut(bienDTO.getAppartirDe());
+                contrat.setDdFin(bienDTO.getAppartirDe().plusDays(bienDTO.getIdNNuit()));
                 contrat.setIdBien(bien);
-                contrat.getIdBien().setModeActive(true);
                 contrat.setBailleur(bailleur); // bailleur: personne ENTITY
                 contrat.setPreneur(preneur); // preneur: personne ENTITY
                 contrat.setEnCour(true);
@@ -254,7 +258,6 @@ public class BienService implements CrudService<BienVuDTO, Integer> {
 
     @Transactional
     public int reservationBien(PayPalRDTO paypalDTO) throws NoSuchAlgorithmException, InvalidKeySpecException, MessagingException, ContratLocationFoundExeption {
-
         if (!isDisponible(paypalDTO.getReservationBienDTO()))
             throw new ContratLocationFoundExeption(404);
 
@@ -271,6 +274,7 @@ public class BienService implements CrudService<BienVuDTO, Integer> {
         );
 
         ContratLocation newContrat = new ContratLocation();
+
             newContrat.setId(0);
             newContrat.setDdDebut(paypalDTO.getReservationBienDTO().getDdArrivee());
             newContrat.setDdFin(paypalDTO.getReservationBienDTO().getDdDepart());

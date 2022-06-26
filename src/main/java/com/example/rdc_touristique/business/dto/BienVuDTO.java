@@ -32,4 +32,5 @@ public class BienVuDTO implements IdentifiedDTO<Integer>{
     private int idNNuit;
     private List<LocalDate> disponibles;
     private List<LocalDate> reservers;
+    private LocalDate appartirDe;
 }
