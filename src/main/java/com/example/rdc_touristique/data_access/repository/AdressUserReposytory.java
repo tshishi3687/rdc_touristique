@@ -9,3 +9,4 @@ public interface AdressUserReposytory extends JpaRepository<AdressePersonne, Int
     AdressePersonne findOneByAppartienA(Personne personne);
     boolean existsByAppartienA(Personne personne);
 }
+
