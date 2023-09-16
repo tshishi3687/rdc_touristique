@@ -1,0 +1,14 @@
+version: '3.8'
+services:
+  database:
+    image: 'mariadb:10.10'
+    container_name: rdc_tourism
+    restart: always
+    environment:
+      MYSQL_DATABASE: rdc_tourism
+      MYSQL_ROOT_PASSWORD: lilo
+    ports:
+      - '3306:3306'
+    volumes:
+      - ./sql-scripts:/docker-entrypoint-initdb.d
+
