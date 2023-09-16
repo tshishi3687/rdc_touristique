@@ -1,6 +1,6 @@
 spring:
   datasource:
-    url: jdbc:mysql://localhost:3306/mobembo.cd?serverTimezone=UTC
+    url: jdbc:mysql://localhost:3306/rdc_tourism?serverTimezone=UTC
     username: root
     password: lilo
   jpa:
